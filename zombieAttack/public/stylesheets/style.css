@@ -1,3 +1,7 @@
-.tooltip-inner {background-color: #D13127; color: #fff;}
-
-.tooltip.top .tooltip-arrow {border-top-color: #D13127;}
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: #00b7ff;
+}
