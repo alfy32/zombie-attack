@@ -22,7 +22,7 @@ app.set('view engine', 'ejs');
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
+app.use(express.cookieParser('zombiesarefun'));
 app.use(express.session());
 app.use(app.router);
 app.use(require('stylus').middleware(__dirname + '/public'));
@@ -35,7 +35,9 @@ if ('development' == app.get('env')) {
 
 //setup the users database
 
-var users = new(cradle.Connection)().database('users');
+var connection = new(cradle.Connection)('http://gdaniels13.iriscouch.com',5984,
+	{auth:{username:'zombie',password:'eatbrains'}});
+var users = connection.database('users');
 
 //app.get('/', routes.index);
 // app.get('/users', user.list);
@@ -44,10 +46,15 @@ app.post('/', function(req,res)
 {
 	var id = req.body.email;
 	var pass = req.body.password;
-	verify(id,pass,res);
+	verifyUser(id,pass,req,res);
 
 });
-app.post('/createUser',function(req,res){
+
+app.get('/secret',checkAuth,function(req,res){
+	res.send('you are authorized');
+})
+
+app.post('/createUser',checkAuth, function(req,res){
 	var user = new Object();
 	user['name'] = req.body.name;
 	user['password']= req.body.password;
@@ -57,10 +64,16 @@ app.post('/createUser',function(req,res){
 });
 
 
-function verify(id,pass,res)
+function checkAuth(req, res, next) {
+  if (!req.session.user_id) {
+    res.send('You are not authorized to view this page');
+  } else {
+    next();
+  }
+}
+
+function verifyUser(id,pass,req,res)
 {
-	console.log(id);
-	console.log(pass);
 	users.get(id, function(err,doc){
 		if(err)
 		{
@@ -69,7 +82,6 @@ function verify(id,pass,res)
 		}
 		else{
 			var newhash=doc.password;
-			console.log(doc);
 			bcrypt.compare(pass,newhash,function(err,result){
 				if(err){
 					console.log('failed to compare');
@@ -77,24 +89,13 @@ function verify(id,pass,res)
 				}
 
 				if(result){
+					req.session.user_id = doc.name;
 					res.redirect('/loginSuccess.html');
 				}
 				else{
 					res.redirect('/');
 				}
 			});
-
-
-
-			// if(newpass==pass)
-			// {
-			// 	console.log('success');
-			// 	res.redirect('/loginSuccess.html');
-			// }
-			// else
-			// {
-			// 	res.redirect('/');
-			// }
 		}
 	});
 }
