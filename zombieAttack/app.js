@@ -1,3 +1,5 @@
+//random constants and other things
+var TIMEOUT = 600000;
 
 /**
  * Module dependencies.
@@ -35,24 +37,31 @@ if ('development' == app.get('env')) {
 
 //setup the users database
 
-var connection = new(cradle.Connection)('http://gdaniels13.iriscouch.com',5984,
-	{auth:{username:'zombie',password:'eatbrains'}});
-var users = connection.database('users');
+//uncoment the next three lines if you want to use a remote database
+// var connection = new(cradle.Connection)('http://gdaniels13.iriscouch.com',5984,
+// 	{auth:{username:'zombie',password:'eatbrains'}});
+// var users = connection.database('users');
 
-//app.get('/', routes.index);
-// app.get('/users', user.list);
+//uncoment this line if you want to use the local database
+var users = new(cradle.Connection)().database('users');
+
 
 app.post('/', function(req,res)
 {
 	var id = req.body.email;
 	var pass = req.body.password;
 	verifyUser(id,pass,req,res);
-
 });
 
 app.get('/secret',checkAuth,function(req,res){
 	res.send('you are authorized');
-})
+});
+
+app.get('/logout', function(req,res){
+	delete req.session.user;
+	delete req.session.lastActivity;
+	res.redirect('/');
+});
 
 app.post('/createUser',checkAuth, function(req,res){
 	var user = new Object();
@@ -65,10 +74,26 @@ app.post('/createUser',checkAuth, function(req,res){
 
 
 function checkAuth(req, res, next) {
-  if (!req.session.user_id) {
+	var lastActivity = new Date().getTime() - req.session.lastActivity;
+	console.log(lastActivity);
+  if (!req.session.user) {
+  	console.log(lastActivity);
+  
     res.send('You are not authorized to view this page');
-  } else {
-    next();
+  } 
+  else {
+  	if(lastActivity>TIMEOUT)
+  	{
+  		delete req.session.user;
+  		delete req.session.lastActivity;
+  		res.send('you have been logged out due to innactivity, please login again');
+
+  	}
+  	else
+  	{
+  		req.session.lastActivity = new Date().getTime();
+		next();
+	}
   }
 }
 
@@ -89,7 +114,8 @@ function verifyUser(id,pass,req,res)
 				}
 
 				if(result){
-					req.session.user_id = doc.name;
+					req.session.user = doc;
+					req.session.lastActivity = new Date().getTime();
 					res.redirect('/loginSuccess.html');
 				}
 				else{
