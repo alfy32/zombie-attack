@@ -1,0 +1,14 @@
+---
+applications:
+  .:
+    name: zombie
+    framework:
+      name: node
+      info:
+        mem: 64M
+        description: Node.js Application
+        exec: 
+    infra: hp
+    url: zombie.hp.af.cm
+    mem: '128'
+    instances: 1

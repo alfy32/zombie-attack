@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="bootstrap/assets/ico/favicon.png">
+    <link rel="shortcut icon" href="images/favicon.ico">
 
     <title>ZOMBIE ATTACK!!!</title>
 
@@ -36,14 +36,15 @@
           <a class="navbar-brand" href="#">Zombie Attack Level Design</a>
         </div>
         <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" action="/" method = "POST">
+          <div id="user-info"></div>
+          <form id="login-form" class="navbar-form navbar-right" action='/' method = "POST">
             <div class="form-group">
-              <input type="text" placeholder="Email" name = "email" class="form-control">
+              <input type="text" id = "login-email" placeholder="Email" name = "email" class="form-control">
             </div>
             <div class="form-group">
-              <input type="password" placeholder="Password" name = "password" class="form-control">
+              <input type="password" id = "login-password" placeholder="Password" name = "password" class="form-control">
             </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
+            <button type="submit"  class="btn btn-success">Sign in</button>
           </form>
         </div><!--/.navbar-collapse -->
       </div>
@@ -90,7 +91,8 @@
       </footer>
     </div> <!-- /container -->
 
-
+    
+   <!-- <script data-main="javascripts/main" src="javascripts/require.js"></script>-->
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -104,5 +106,8 @@
         $("[rel='tooltip']").tooltip();
     });
     </script>
+
+  <script src="javascripts/login.js"></script>
+
   </body>
 </html>

@@ -50,7 +50,37 @@ app.post('/', function(req,res)
 {
 	var id = req.body.email;
 	var pass = req.body.password;
-	verifyUser(id,pass,req,res);
+	var response = Object();
+	response.result = "fail";
+
+	users.get(id, function(err,doc){
+		if(err){
+			console.log("failed to get user from database");
+			response.result = "Invalid userName or password";
+			res.json(response);
+		}
+		else{
+			var newhash=doc.password;
+			bcrypt.compare(pass,newhash,function(err,result){
+				if(err){
+					console.log('failed to compare');
+					response.result = "Invalid userName or password";
+					res.json(response);
+				}
+
+				if(result){
+					console.log(doc);
+					console.log("successfully authenticated " + doc._id)
+					req.session.user = doc;
+					req.session.lastActivity = new Date().getTime();
+					response.result = "Success";
+					res.json(response);
+				}
+				
+			});
+		}
+	});
+	
 });
 
 app.get('/secret',checkAuth,function(req,res){
@@ -97,34 +127,7 @@ function checkAuth(req, res, next) {
   }
 }
 
-function verifyUser(id,pass,req,res)
-{
-	users.get(id, function(err,doc){
-		if(err)
-		{
-			console.log("failed to get user from database");
-			res.redirect('/');
-		}
-		else{
-			var newhash=doc.password;
-			bcrypt.compare(pass,newhash,function(err,result){
-				if(err){
-					console.log('failed to compare');
-					res.redirect('/');
-				}
 
-				if(result){
-					req.session.user = doc;
-					req.session.lastActivity = new Date().getTime();
-					res.redirect('/loginSuccess.html');
-				}
-				else{
-					res.redirect('/');
-				}
-			});
-		}
-	});
-}
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
