@@ -13,7 +13,7 @@ var path = require('path');
 var fs = require('fs');
 var app = express();
 var cradle = require('cradle');
-//var bcrypt = require('bcrypt');
+var bcrypt = require('bcrypt-nodejs');
 
 var adduser = require('./usefulscripts/adduser');
 
