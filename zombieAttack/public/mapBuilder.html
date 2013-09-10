@@ -11,58 +11,54 @@
 
 	</head>
 	<body>
-		<div class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
 
-				</div>
-				<div class="navbar-collapse collapse">
-					<div id="user-info"></div>
-					<form id="login-form" class="navbar-form navbar-right" action='/' method = "POST">
-						<div class="form-group">
-							<input type="text" id = "login-email" placeholder="Email" name = "email" class="form-control">
+		<div class="col-md-4">
+			<div class="row">
+				<div class="controls" style="margin-bottom: 20px; margin-left: 50px;">
+					<div class="row">
+						<p>this is the control area</p>
+					</div>
+					<div class="row">
+						<input type="number" value="30"/>
+					</div>
+					<div class="row">
+						<div id="leftClick" class="col-sm-2" style="border: 1px dashed black;">
+							Left
 						</div>
-						<div class="form-group">
-							<input type="password" id = "login-password" placeholder="Password" name = "password" class="form-control">
+						<div id="rightClick" class="col-sm-2" style="border: 1px dashed black;">
+							Right
 						</div>
-						<button type="submit"  class="btn btn-success">Sign in</button>
-					</form>
+					</div>
 				</div>
 			</div>
-		</div>
-		
-		<div style="margin-top:60px;"></div>
-		
-		<div class="nav-tabs">
-			<ul class="nav nav-tabs" id="myTab">
-				<li class="active"><a href="#home" data-toggle="tab">Home</a></li>
-				<li><a href="#profile" data-toggle="tab">Profile</a></li>
-				<li><a href="#messages" data-toggle="tab">Messages</a></li>
-				<li><a href="#settings" data-toggle="tab">Settings</a></li>
-			</ul>
-
-			<div class="tab-content">
-				<div class="tab-pane active" id="home">Home</div>
+			<div class="row">
+				<div id="red" class="col-sm-1" style="background-color: red; border: 1px dashed black; height:30px;"></div>
+				<div id="orange" class="col-sm-1" style="background-color: orange; border: 1px dashed black; height:30px;"></div>
+				<div id="yellow" class="col-sm-1" style="background-color: yellow; border: 1px dashed black; height:30px;"></div>
+				<div id="green" class="col-sm-1" style="background-color: green; border: 1px dashed black; height:30px;"></div>
+				<div id="blue" class="col-sm-1" style="background-color: blue; border: 1px dashed black; height:30px;"></div>
+				<div id="purple" class="col-sm-1" style="background-color: purple; border: 1px dashed black; height:30px;"></div>
+			</div>
+			<div id="position" class="row">
 				
-				<div class="tab-pane" id="profile">Profile</div>
-				<div class="tab-pane" id="messages">Messages</div>
-				<div class="tab-pane" id="settings">Settings</div>
 			</div>
-
 		</div>
-
+		<div class="col-md-4">
+			<canvas id="map" width="600" height="600" style="border:1px solid #c3c3c3;">
+				Your browser does not support the HTML5 canvas tag.
+			</canvas>
+		</div>
 
 		<!-- Bootstrap core JavaScript
 		================================================== -->
 		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="bootstrap/assets/js/jquery.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
 		<script src="bootstrap/assets/js/holder.js"></script>
+
+		<!-- My JavaScript
+		================================================== -->
+		<script src="javascripts/mapBuilder.js"></script>
 	</body>
 </html>
