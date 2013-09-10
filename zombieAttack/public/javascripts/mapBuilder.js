@@ -1,19 +1,26 @@
-var rightClick;
-var leftClick;
+var rightColor = 'white';
+var leftColor = 'black';
 
-var boxSize = 30;
+var boxSize = 25;
 
 var clicked = false;
 
-$(document).ready(function() {
+var map = new Map('map');
+
+$(document).ready(function() {   
+   $('#blockSize').val(map.getBoxSize());
+   
+   $('#blockSize').change(function(event){
+      boxSize  = $(this).val();
+   });
 	$('.col-sm-1').mousedown(function(event) {
 		event.preventDefault();
 		if (event.which === 1) {
-			leftClick = $(this).css("background-color");
-			$('#leftClick').css("background-color", leftClick);
+			leftColor = $(this).css("background-color");
+			$('#leftClick').css("background-color", leftColor);
 		} else if (event.which === 3) {
-			rightClick = $(this).css("background-color");
-			$('#rightClick').css("background-color", rightClick);
+			rightColor = $(this).css("background-color");
+			$('#rightClick').css("background-color", rightColor);
 		}
 
 	});
@@ -32,20 +39,15 @@ $(document).ready(function() {
 		var x = Math.floor(event.offsetX / boxSize) * boxSize;
 		var y = Math.floor(event.offsetY / boxSize) * boxSize;
 
-		var c = document.getElementById("map");
-		var ctx = c.getContext("2d");
-
 		if (event.which === 1) {
 			html = "Button: Left<br/>";
 
-			ctx.fillStyle = leftClick;
-			ctx.fillRect(x, y, boxSize, boxSize);
+			drawRectangle('map', x, y, leftColor);
 
 		} else if (event.which === 3) {
 			html = "Button: Right<br/>";
 
-			ctx.fillStyle = rightClick;
-			ctx.fillRect(x, y, boxSize, boxSize);
+         drawRectangle('map', x, y, rightColor);
 		}
 		$('#position').html(html + "X: " + x + " Y: " + y + "<br/>Clicked: " + clicked);
 	});
@@ -57,20 +59,15 @@ $(document).ready(function() {
 			var x = Math.floor(event.offsetX / boxSize) * boxSize;
 			var y = Math.floor(event.offsetY / boxSize) * boxSize;
 
-			var c = document.getElementById("map");
-			var ctx = c.getContext("2d");
-
 			if (event.which === 1) {
 				html = "Button: Left<br/>";
-
-				ctx.fillStyle = leftClick;
-				ctx.fillRect(x, y, boxSize, boxSize);
+            
+            drawRectangle('map', x, y, leftColor);
 
 			} else if (event.which === 3) {
 				html = "Button: Right<br/>";
 
-				ctx.fillStyle = rightClick;
-				ctx.fillRect(x, y, boxSize, boxSize);
+            drawRectangle('map', x, y, rightColor);
 			}
 			$('#position').html(html + "X: " + x + " Y: " + y + "<br/>Clicked: " + clicked);
 		}
@@ -85,3 +82,22 @@ $(document).ready(function() {
 	});
 
 });
+
+function drawRectangle(id, x, y, color){
+   
+   var c = document.getElementById(id);
+	var ctx = c.getContext("2d");
+         
+   ctx.fillStyle = color;
+	ctx.fillRect(x, y, boxSize, boxSize);
+}
+
+function drawGrid(){
+   var c = document.getElementById("map");
+	var ctx = c.getContext("2d");
+
+   ctx.beginPath();
+   ctx.moveTo(25, 0);
+   ctx.lineTo(25, 600);
+   ctx.stroke();
+}
