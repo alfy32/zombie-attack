@@ -1,41 +1,34 @@
 
 define([], function () {
 
-function init () {
+	function init () {
 
-	$('#form-login-button').click(function(){
-		console.log('intercepted the post');
+		$('#form-login-button').click(function(){
+			console.log('intercepted the post');
 
-		var formdata = {'email':$('#login-email').val(),
-						'password':$('#login-password').val()};
-		// var formdata['email'] = $('#login-email').val();
-		// var formdata['password'] = $('#login-password').val();
-		console.log(formdata);
-		$.post("/", formdata, function(data){
-			if(data.result =="Success")
-			{
-				loadWelcome();
-			}
-
+			var formdata = {'email':$('#login-email').val(),
+							'password':$('#login-password').val()};
+			// var formdata['email'] = $('#login-email').val();
+			// var formdata['password'] = $('#login-password').val();
+			console.log(formdata);
+			$.post("/", formdata, function(data){
+				if(data.result =="Success"){
+					loadDiv('#user-info','userinfo.html');
+					loadDiv('#load-stuff-here','main.html')
+				}
+			});
 		});
-	});
-}
-
-return {init:init};
+	}
+	
+	return {init:init};
 });
 
-function loadWelcome(){
+function loadDiv(htmlTag,url){
 	$.ajax(
 		{type:"GET", 
-		url:"userinfo.html"
+		url:url
 	}).
 	done(function(htm){
-		$("#user-info").html(htm);
+		$(htmlTag).html(htm);
 	});
 }
-
-
-// function showNewUserModal()
-// {
-// 	console.log("I work!!!!");
-// }
