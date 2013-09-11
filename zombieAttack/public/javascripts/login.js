@@ -14,7 +14,7 @@ function init () {
 		$.post("/", formdata, function(data){
 			if(data.result =="Success")
 			{
-				$('#login-form').hide();
+				loadWelcome();
 			}
 
 		});
@@ -23,6 +23,16 @@ function init () {
 
 return {init:init};
 });
+
+function loadWelcome(){
+	$.ajax(
+		{type:"GET", 
+		url:"userinfo.html"
+	}).
+	done(function(htm){
+		$("#user-info").html(htm);
+	});
+}
 
 
 // function showNewUserModal()
