@@ -12,8 +12,10 @@ define([], function () {
 			console.log(formdata);
 			$.post("/", formdata, function(data){
 				if(data.result =="Success"){
-					loadDiv('#user-info','userinfo.html');
-					loadDiv('#load-stuff-here','main.html')
+					//loadDiv('#user-info','userinfo.html');
+					loadDiv('#load-stuff-here','main.html'), function() {
+        				$(this).trigger("pagecreate");
+        			}
 				}
 			});
 		});
