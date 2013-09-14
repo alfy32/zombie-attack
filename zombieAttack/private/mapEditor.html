@@ -1,0 +1,42 @@
+<div id="map-builder">
+	<div class="col-md-4">
+		<div class="row">
+			<div class="controls" style="margin-bottom: 20px; margin-left: 50px;">
+				<div class="row">
+					<p>this is the control area</p>
+				</div>
+
+				<div class="row">
+					<label>Left</label>
+					<!-- ******************** Required ******************** -->
+					<canvas id="leftClick" width="40" height="40" style="border:1px solid #c3c3c3;">						</canvas>
+					<!-- ******************** /Required ******************** -->
+					<label>Right</label>
+					<!-- ******************** Required ******************** -->
+					<canvas id="rightClick" width="40" height="40" style="border:1px solid #c3c3c3;"></canvas>
+					<!-- ******************** /Required ******************** -->
+				</div>
+			</div>
+		</div>
+		<!-- ******************** Required ******************** -->
+		<div id="choosers" class="row">Loading....</div>
+		<!-- ******************** /Required ******************** -->
+
+		<!-- ******************** Required ******************** -->
+		<div id="position" class="row"></div>
+		<!-- ******************** /Required ******************** -->
+	</div>
+	<div class="col-md-4">
+		<!-- ******************** Required ******************** -->
+		<canvas id="map" width="600" height="600" style="border:1px solid #c3c3c3;"></canvas>
+		<!-- ******************** /Required ******************** -->
+	</div>
+
+	<!--Alan's JavaScript -->
+	<!-- ******************** Required ******************** --> 
+	<!-- ================================================== --> 
+	<script src="javascripts/mapEditor/Choosers.js"></script>
+	<script src="javascripts/mapEditor/Map.js"></script>
+	<script src="javascripts/mapEditor/mapEditor.js"></script>
+	<!-- ******************** /Required ******************** -->
+</div>
