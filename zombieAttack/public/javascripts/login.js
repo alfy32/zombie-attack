@@ -1,7 +1,4 @@
-
-define([], function () {
-
-	function init () {
+function init () {
 
 		$('#form-login-button').click(function(){
 			console.log('intercepted the post');
