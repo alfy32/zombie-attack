@@ -20,6 +20,10 @@ function Choosers() {
 					.append(' ');
 
 			this.drawChooser(i);
+			
+			if(i%8 === 7){
+				$(_chooserDiv).append('<br/>');
+			}
 		}
 	};
 

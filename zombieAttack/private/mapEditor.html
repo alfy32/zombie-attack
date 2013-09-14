@@ -1,35 +1,59 @@
-<div id="map-builder">
-	<div class="col-md-4">
+<div id="map-editor">
+	<div class="container" style="padding: 20px;">
 		<div class="row">
-			<div class="controls" style="margin-bottom: 20px; margin-left: 50px;">
+			<div class="col-md-4">
 				<div class="row">
-					<p>this is the control area</p>
-				</div>
-
-				<div class="row">
-					<label>Left</label>
+				
+					<label>Left:</label>
 					<!-- ******************** Required ******************** -->
-					<canvas id="leftClick" width="40" height="40" style="border:1px solid #c3c3c3;">						</canvas>
+					<canvas id="leftClick" width="40" height="40" style="border:1px solid #c3c3c3;"></canvas>
 					<!-- ******************** /Required ******************** -->
-					<label>Right</label>
+				
+					<label>Right:</label>
 					<!-- ******************** Required ******************** -->
 					<canvas id="rightClick" width="40" height="40" style="border:1px solid #c3c3c3;"></canvas>
 					<!-- ******************** /Required ******************** -->
+				
 				</div>
+
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#base" data-toggle="tab">Base</a></li>
+					<li><a href="#middle" data-toggle="tab">Middle</a></li>
+					<li><a href="#top" data-toggle="tab">Top</a></li>
+					<li><a href="#options" data-toggle="tab">Options</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div class="tab-pane active" id="base">
+
+						<!-- ******************** Required ******************** -->
+						<div id="choosers" class="row">Loading....</div>
+						<!-- ******************** /Required ******************** -->
+
+						<!-- ******************** Required ******************** -->
+						<div id="position" class="row"></div>
+						<!-- ******************** /Required ******************** -->
+					</div>
+					<div class="tab-pane" id="middle">
+						Middle Stuff.
+					</div>
+					<div class="tab-pane" id="top">
+						Top Stuff
+					</div>
+					<div class="tab-pane" id="options">
+						Options
+					</div>
+				</div>
+
+
+
+			</div>
+			<div class="col-md-6">
+				<!-- ******************** Required ******************** -->
+				<canvas id="map" width="600" height="600" style="border:1px solid #c3c3c3;"></canvas>
+				<!-- ******************** /Required ******************** -->
 			</div>
 		</div>
-		<!-- ******************** Required ******************** -->
-		<div id="choosers" class="row">Loading....</div>
-		<!-- ******************** /Required ******************** -->
-
-		<!-- ******************** Required ******************** -->
-		<div id="position" class="row"></div>
-		<!-- ******************** /Required ******************** -->
-	</div>
-	<div class="col-md-4">
-		<!-- ******************** Required ******************** -->
-		<canvas id="map" width="600" height="600" style="border:1px solid #c3c3c3;"></canvas>
-		<!-- ******************** /Required ******************** -->
 	</div>
 
 	<!--Alan's JavaScript -->
