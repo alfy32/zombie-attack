@@ -10,6 +10,7 @@ $('#login-form').submit(function(){
 		if(data.result =="Success")
 		{
 			$('#login-form').hide();
+			$('#load-stuff-here').load('mapBuilder.html');
 		}
 
 	});

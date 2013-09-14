@@ -29,17 +29,19 @@ app.use(express.session());
 app.use(app.router);
 app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(checkAuth);
+app.use(express.static(path.join(__dirname, 'private')));
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-//setup the users database
+//setup the users database//
 
 //uncoment the next three lines if you want to use a remote database
  var connection = new(cradle.Connection)('http://zombie.cloudant.com',5984,
- 	{auth:{username:'zombie',password:'eatbrains'}});
+ 			{auth:{username:'zombie',password:'eatbrains'}});
  var users = connection.database('users');
 
 //uncoment this line if you want to use the local database
@@ -76,11 +78,11 @@ app.post('/', function(req,res)
 					response.result = "Success";
 					res.json(response);
 				}
-				
+
 			});
 		}
 	});
-	
+
 });
 
 app.get('/secret',checkAuth,function(req,res){
@@ -101,6 +103,7 @@ app.post('/createUser',checkAuth, function(req,res){
 	adduser.new(bcrypt,users,user);
 	res.send('<h1>success<h1>');
 });
+
 
 function checkAuth(req, res, next) {
 	var lastActivity = new Date().getTime() - req.session.lastActivity;
