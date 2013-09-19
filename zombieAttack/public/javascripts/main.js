@@ -12,12 +12,6 @@ function makeActive(tableItem)
 	tableItem.className = "list-group-item active";
 }
 
-function mapEditor() {
-	$('#load-stuff-here').load('mapEditor.html');
-define(["login"], function (login){
-    login.init();
-});
-
 function startMap()
 {
 	$('#load-stuff-here').load('mapEditor.html');
