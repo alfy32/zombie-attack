@@ -1,47 +1,41 @@
-define([], function () {
+define([], function() {
 
-	function init () {
+    function init() {
 
-		$('#form-login-button').click(function(){
-			console.log('intercepted the post');
+        $('#form-login-button').click(function() {
 
-			var formdata = {'email':$('#login-email').val(),
-							'password':$('#login-password').val()};
-			// var formdata['email'] = $('#login-email').val();
-			// var formdata['password'] = $('#login-password').val();
-			console.log(formdata);
-			$.post("/", formdata, function(data){
-				if(data.result ==="Success"){
-					//loadDiv('#user-info','userinfo.html');
-					loadDiv('#load-stuff-here','main.html'), function() {
-        				$(this).trigger("pagecreate");
-        			}
-				}
-			});
-		});
-                
-                $("#login-email").keyup(function(e){
-                    if(e.which === 13){
-                        $('#form-login-button').click();
-                    }
-                });
-                
-                $("#login-password").keyup(function(e){
-                    if(e.which === 13){
-                        $('#form-login-button').click();
-                    }
-                });
-	}
-	
-	return {init:init};
+            var formdata = {
+                email: $('#login-email').val(),
+                password: $('#login-password').val()
+            };
+
+            $('#login-form').html('<p>Loading...</p>').css('color', 'white');
+
+            $.post("/", formdata, function(data) {
+                console.log(data);
+                if (data.result === "Success") {
+                    $('#login-form').html("<p>" + data.user + "</p>");
+
+                    $('#load-stuff-here').load('main.html'), function() {
+                        $(this).trigger("pagecreate");
+                    };
+
+                }
+            });
+        });
+
+        $("#login-email").keyup(function(e) {
+            if (e.which === 13) {
+                $('#form-login-button').click();
+            }
+        });
+
+        $("#login-password").keyup(function(e) {
+            if (e.which === 13) {
+                $('#form-login-button').click();
+            }
+        });
+    }
+
+    return {init: init};
 });
-
-function loadDiv(htmlTag,url){
-	$.ajax(
-		{type:"GET", 
-		url:url
-	}).
-	done(function(htm){
-		$(htmlTag).html(htm);
-	});
-}
