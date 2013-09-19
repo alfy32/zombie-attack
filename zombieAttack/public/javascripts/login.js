@@ -11,7 +11,7 @@ define([], function () {
 			// var formdata['password'] = $('#login-password').val();
 			console.log(formdata);
 			$.post("/", formdata, function(data){
-				if(data.result =="Success"){
+				if(data.result ==="Success"){
 					//loadDiv('#user-info','userinfo.html');
 					loadDiv('#load-stuff-here','main.html'), function() {
         				$(this).trigger("pagecreate");
@@ -19,6 +19,18 @@ define([], function () {
 				}
 			});
 		});
+                
+                $("#login-email").keyup(function(e){
+                    if(e.which === 13){
+                        $('#form-login-button').click();
+                    }
+                });
+                
+                $("#login-password").keyup(function(e){
+                    if(e.which === 13){
+                        $('#form-login-button').click();
+                    }
+                });
 	}
 	
 	return {init:init};
