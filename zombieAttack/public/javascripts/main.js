@@ -1,3 +1,5 @@
+
+
 define(["login"], function(login) {
 	login.init();
 });
@@ -11,14 +13,21 @@ function makeActive(tableItem)
 	}
 	tableItem.className = "list-group-item active";
 }
-
-function mapEditor() {
-	$('#load-stuff-here').load('mapEditor.html');
-define(["login"], function (login){
-    login.init();
-});
-
 function startMap()
 {
+	fag = "editor";
 	$('#load-stuff-here').load('mapEditor.html');
+}
+
+function loadStartup()
+{
+	if(fag === "home")
+	{
+
+	}
+	else
+	{
+		fag = "home";
+		$('#load-stuff-here').load('startup.html');
+	}
 }
