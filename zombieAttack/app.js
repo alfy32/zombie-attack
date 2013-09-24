@@ -15,7 +15,7 @@ var app = express();
 var cradle = require('cradle');
 var bcrypt = require('bcrypt-nodejs');
 
-var adduser = require('./usefulscripts/adduser');
+var userFunctions = require('./usefulscripts/adduser');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -42,11 +42,11 @@ if ('development' === app.get('env')) {
 //uncoment the next three lines if you want to use a remote database
  var connection = new(cradle.Connection)('http://zombie.cloudant.com',5984,
  			{auth:{username:'zombie',password:'eatbrains'}});
- var users = connection.database('users');
+ // var users = connection.database('users');
 
 //uncoment this line if you want to use the local database
-//var users = new(cradle.Connection)().database('users');
-
+var users = new(cradle.Connection)().database('users');
+var userRequests_db = new(cradle.Connection)().database('user_requests');
 
 app.post('/', function(req,res)
 {
@@ -71,12 +71,11 @@ app.post('/', function(req,res)
 				}
 
 				if(result){
-					console.log(doc);
 					console.log("successfully authenticated " + doc._id);
 					req.session.user = doc;
 					req.session.lastActivity = new Date().getTime();
 					response.result = "Success";
-                                        response.user = req.body.email;
+                    response.user = req.body.email;
 					res.json(response);
 				}
 
@@ -96,12 +95,17 @@ app.get('/logout', function(req,res){
 	res.redirect('/');
 });
 
+app.post('/newuserrequest',function(req,res){
+	console.log(req.body);
+	userFunctions.newUserRequest(bcrypt,userRequests_db,req.body,res);
+});
+
 app.post('/createUser',checkAuth, function(req,res){
 	var user = new Object();
 	user['name'] = req.body.name;
 	user['password']= req.body.password;
 	user['email']=req.body.email;
-	adduser.new(bcrypt,users,user);
+	userFunctions.adduser(bcrypt,users,user);
 	res.send('<h1>success<h1>');
 });
 
