@@ -2,6 +2,8 @@
 
 define(["login"], function(login) {
 	login.init();
+        
+        $('#login-email').focus();
 });
 
 function makeActive(tableItem)
@@ -13,6 +15,7 @@ function makeActive(tableItem)
 	}
 	tableItem.className = "list-group-item active";
 }
+
 function startMap()
 {
 	fag = "editor";
@@ -31,3 +34,4 @@ function loadStartup()
 		$('#load-stuff-here').load('startup.html');
 	}
 }
+

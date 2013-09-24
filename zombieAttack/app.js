@@ -33,7 +33,7 @@ app.use(checkAuth);
 app.use(express.static(path.join(__dirname, 'private')));
 
 // development only
-if ('development' == app.get('env')) {
+if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
@@ -72,10 +72,11 @@ app.post('/', function(req,res)
 
 				if(result){
 					console.log(doc);
-					console.log("successfully authenticated " + doc._id)
+					console.log("successfully authenticated " + doc._id);
 					req.session.user = doc;
 					req.session.lastActivity = new Date().getTime();
 					response.result = "Success";
+                                        response.user = req.body.email;
 					res.json(response);
 				}
 
@@ -99,7 +100,7 @@ app.post('/createUser',checkAuth, function(req,res){
 	var user = new Object();
 	user['name'] = req.body.name;
 	user['password']= req.body.password;
-	user['email']=req.body.email
+	user['email']=req.body.email;
 	adduser.new(bcrypt,users,user);
 	res.send('<h1>success<h1>');
 });
