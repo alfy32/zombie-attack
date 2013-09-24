@@ -16,9 +16,8 @@ define([], function() {
                 if (data.result === "Success") {
                     $('#login-form').html("<p>" + data.user + "</p>");
 
-                    $('#load-stuff-here').load('main.html'), function() {
-                        $(this).trigger("pagecreate");
-                    };
+                    $('#load-stuff-here').load('main.html');
+                    fag = "main";
 
                 }
             });
