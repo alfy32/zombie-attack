@@ -3,10 +3,11 @@ var cradle = require('cradle');
 var bcrypt = require('bcrypt-nodejs');
 
 //uncoment the next three lines if you want to use a remote database
- var connection = new(cradle.Connection)('http://zombie.cloudant.com',5984,
+
+  var connection = new(cradle.Connection)('apt7.r.us',3005,
  			{auth:{username:'zombie',password:'eatbrains'}});
  var users = connection.database('users');
-
+// var userRequests_db = connection.database('users');
 
 // var requests = connection.database('user_requests');
 // requests.destroy();
@@ -52,7 +53,7 @@ var default_users = [{	name:'Greg Daniels',
 						avatar : false}];
 
 var users_db = connection.database('users');
-users_db.destroy();
+// users_db.destroy();
 users_db.exists(function(err,exists){
 	if(err){
 		console.log('error',err);

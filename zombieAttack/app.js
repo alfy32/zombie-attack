@@ -40,13 +40,18 @@ if ('development' === app.get('env')) {
 //setup the users database//
 
 //uncoment the next three lines if you want to use a remote database
- var connection = new(cradle.Connection)('http://zombie.cloudant.com',5984,
- 			{auth:{username:'zombie',password:'eatbrains'}});
+ // var connection = new(cradle.Connection)('http://zombie.cloudant.com',5984,
+ // 			{auth:{username:'zombie',password:'eatbrains'}});
  // var users = connection.database('users');
 
+ var connection = new(cradle.Connection)('apt7.r.us',3005,
+ 			{auth:{username:'zombie',password:'eatbrains'}});
+ var users = connection.database('users');
+var userRequests_db = connection.database('users');
+
 //uncoment this line if you want to use the local database
-var users = new(cradle.Connection)().database('users');
-var userRequests_db = new(cradle.Connection)().database('user_requests');
+// var users = new(cradle.Connection)().database('users');
+// var userRequests_db = new(cradle.Connection)().database('user_requests');
 
 app.post('/', function(req,res)
 {
