@@ -4,23 +4,14 @@ var bcrypt = require('bcrypt-nodejs');
 
 //uncoment the next three lines if you want to use a remote database
 
-  var connection = new(cradle.Connection)('apt7.r.us',3005,
+  var connection = new(cradle.Connection)('apt7r.us',3005,
  			{auth:{username:'zombie',password:'eatbrains'}});
  var users = connection.database('users');
-// var userRequests_db = connection.database('users');
 
-// var requests = connection.database('user_requests');
-// requests.destroy();
-// requests.create();
+var requests = connection.database('user_requests');
+requests.destroy();
+requests.create();
 
-//uncoment this line if you want to use the local databas
-
-// var users = new(cradle.Connection)().database('user');
-
-// var con = new (cradle.Connection)('localhost',5984,
-// 	{auth:{username:'greg',password:'greg'}});
-
-//test each database for existence if not exists create it
 
 //users if you want a user (for now, just create a new entry here and )
 var default_users = [{	name:'Greg Daniels',
