@@ -39,9 +39,9 @@ if ('development' === app.get('env')) {
 
 //setup the users database//
 
- var connection = new(cradle.Connection)('apt7r.us',3005,
+var connection = new(cradle.Connection)('apt7r.us',3005,
  			{auth:{username:'zombie',password:'eatbrains'}});
- var users = connection.database('users');
+var users = connection.database('users');
 var userRequests_db = connection.database('user_requests');
 
 
