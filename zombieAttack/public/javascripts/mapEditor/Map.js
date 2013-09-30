@@ -135,27 +135,31 @@ function Map() {
 		});
 	}
 
+	function getMousePositionRelativeToCanvas(event) {
+		var position = $(event.target).offset();
+
+		_mouseX = event.pageX - Math.round(position.left);
+		_mouseY = event.pageY - Math.round(position.top);
+	}
+
 	function bindMouseDown() {
 		$(_canvas).mousedown(function(event) {
+
 			_mouseButtonClicked = true;
 			_mouseover = true;
 
-			_mouseX = event.offsetX;
-			_mouseY = event.offsetY;
-
+			getMousePositionRelativeToCanvas(event);
 			setCurrentTile(event.which === 1 ? _leftClickTile : _rightClickTile);
-
-
 			writeMouseInfo(event);
 		});
 	}
 
 	function bindMouseOver() {
 		$(_canvas).mousemove(function(event) {
-			_mouseX = event.offsetX;
-			_mouseY = event.offsetY;
+
 			_mouseover = true;
 
+			getMousePositionRelativeToCanvas(event);
 			if (_mouseButtonClicked) {
 				setCurrentTile(event.which === 1 ? _leftClickTile : _rightClickTile);
 			}
@@ -165,13 +169,12 @@ function Map() {
 
 	function bindMouseUp() {
 		$(_canvas).mouseup(function(event) {
+
 			_mouseButtonClicked = false;
 			_mouseover = true;
-			_mouseX = event.offsetX;
-			_mouseY = event.offsetY;
 
+			getMousePositionRelativeToCanvas(event);
 			setCurrentTile(event.which === 1 ? _leftClickTile : _rightClickTile);
-
 			writeMouseInfo(event);
 		});
 	}
