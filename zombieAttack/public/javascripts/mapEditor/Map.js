@@ -2,8 +2,8 @@
 function Map() {
 	var _canvas = document.getElementById('map');
 	var _context = _canvas.getContext('2d');
-	var _mapWidth = _context.canvas.width;
-	var _mapHeight = _context.canvas.height;
+	var _canvasWidth = _context.canvas.width;
+	var _canvasHeight = _context.canvas.height;
 
 	var _mouseButtonClicked = false;
 	var _mouseover = false;
@@ -11,57 +11,78 @@ function Map() {
 	var _mouseY = 0;
 
 	var _tileSize = 40;
-	var _numRows = Math.floor(_mapHeight / _tileSize);
-	var _numCols = Math.floor(_mapWidth / _tileSize);
 	var _leftClickTile = -1;
 	var _rightClickTile = -1;
 	var _tileImage = new Image();
-	var _tiles;
+
+	var _map = {
+		title: 'NO_TITLE',
+		author: 'NO_AUTHOR',
+		width: Math.floor(_canvasHeight / _tileSize),
+		height: Math.floor(_canvasWidth / _tileSize),
+		x: 0,
+		y: 0,
+		events: [],
+		data: {
+			bottom: [],
+			middle: [],
+			top: []
+		},
+		env: "NO_ENV"
+	};
 
 	init();
 
 	function init() {
 		_context.font = "bold 30px sans-serif";
-		_context.fillText("Loading......", _mapWidth / 2 - 100, _mapHeight / 2);
+		_context.fillText("Loading......", _canvasWidth / 2 - 100, _canvasHeight / 2);
 
 		bindContextMenu();
 		bindMouseDown();
 		bindMouseOver();
 		bindMouseUp();
 		bindMouseOut();
-		initTiles();
+		initMapBottom();
 	}
 
-	function initTiles() {
-		_tiles = [];
-		for (var row = 0; row < _numRows; row++) {
-			_tiles[row] = [];
-			for (var col = 0; col < _numCols; col++) {
-				_tiles[row][col] = -1;
+	function initMapBottom() {
+		_map.data.bottom = [];
+		for (var y = 0; y < _map.height; y++) {
+			_map.data.bottom[y] = [];
+			for (var x = 0; x < _map.width; x++) {
+				_map.data.bottom[y][x] = -1;
 			}
 		}
 	}
+
+	this.setMap = function(map) {
+		_map = map;
+	};
+
+	this.getMap = function() {
+		return _map;
+	};
+
+	this.logJSON = function() {
+		console.log(_map);
+	};
+	
+	this.getImage = function() {
+		return _canvas.toDataURL();
+	};
+	
+	this.getTileSize = function(){
+		return _tileSize;
+	};
 
 	this.setTileImage = function(image) {
 		_tileImage = image;
 		drawMap();
 	};
 
-	this.getTile = function(row, col) {
-		return _tiles[row][col];
-	};
-
-	this.setTile = function(row, col, tileNumber) {
-		_tiles[row][col] = tileNumber;
-	};
-
-	function setCurrentTile(tileNumber) {
-		_tiles[currentBoxY()][currentBoxX()] = tileNumber;
+	function setCurrentBottomTile(tileNumber) {
+		_map.data.bottom[currentBoxY()][currentBoxX()] = tileNumber;
 	}
-
-	this.getTileSize = function() {
-		return _tileSize;
-	};
 
 	this.setLeftClick = function(tileIndex) {
 		_leftClickTile = tileIndex;
@@ -87,7 +108,7 @@ function Map() {
 	}
 
 	function drawMap() {
-		$(_tiles).each(function(row, rowArray) {
+		$(_map.data.bottom).each(function(row, rowArray) {
 			$(rowArray).each(function(col, cellValue) {
 				drawTileImage(cellValue, row, col);
 			});
@@ -104,18 +125,13 @@ function Map() {
 	}
 
 	this.printTiles = function() {
-		$(_tiles).each(function(index, row) {
+		$(_map.data.bottom).each(function(index, row) {
 			var rowStr = 'Row ' + index + ':	';
 			$(row).each(function(index, col) {
 				rowStr += col + ' ';
 			});
 			console.log(rowStr);
 		});
-	};
-
-	this.drawRectangle = function(x, y, color) {
-		_context.fillStyle = color;
-		_context.fillRect(x, y, _tileSize, _tileSize);
 	};
 
 	function currentBox() {
@@ -135,7 +151,7 @@ function Map() {
 		});
 	}
 
-	function getMousePositionRelativeToCanvas(event) {
+	function updateMousePositionRelativeToCanvas(event) {
 		var position = $(event.target).offset();
 
 		_mouseX = event.pageX - Math.round(position.left);
@@ -148,8 +164,8 @@ function Map() {
 			_mouseButtonClicked = true;
 			_mouseover = true;
 
-			getMousePositionRelativeToCanvas(event);
-			setCurrentTile(event.which === 1 ? _leftClickTile : _rightClickTile);
+			updateMousePositionRelativeToCanvas(event);
+			setCurrentBottomTile(event.which === 1 ? _leftClickTile : _rightClickTile);
 			writeMouseInfo(event);
 		});
 	}
@@ -159,9 +175,9 @@ function Map() {
 
 			_mouseover = true;
 
-			getMousePositionRelativeToCanvas(event);
+			updateMousePositionRelativeToCanvas(event);
 			if (_mouseButtonClicked) {
-				setCurrentTile(event.which === 1 ? _leftClickTile : _rightClickTile);
+				setCurrentBottomTile(event.which === 1 ? _leftClickTile : _rightClickTile);
 			}
 			writeMouseInfo(event);
 		});
@@ -173,8 +189,8 @@ function Map() {
 			_mouseButtonClicked = false;
 			_mouseover = true;
 
-			getMousePositionRelativeToCanvas(event);
-			setCurrentTile(event.which === 1 ? _leftClickTile : _rightClickTile);
+			updateMousePositionRelativeToCanvas(event);
+			setCurrentBottomTile(event.which === 1 ? _leftClickTile : _rightClickTile);
 			writeMouseInfo(event);
 		});
 	}
