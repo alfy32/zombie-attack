@@ -19,9 +19,11 @@ function Choosers() {
 			$(_chooserDiv).append(canvas)
 					.append(' ');
 
-			this.drawChooser(i);
-			
-			if(i%8 === 7){
+			if (i !== 38) { // 38 doesn't exist
+				this.drawChooser(i);
+			}
+
+			if (i % 8 === 7) {
 				$(_chooserDiv).append('<br/>');
 			}
 		}
@@ -60,6 +62,8 @@ function Choosers() {
 				updateLefttClickImage(tileNumber);
 			}
 		});
+		
+		$('#38').unbind('mousedown');
 	};
 
 	function updateRightClickImage(tileNumber) {
