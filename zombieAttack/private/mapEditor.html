@@ -4,7 +4,9 @@
 			<div class="col-md-4">
 				<div class="row" style="padding-bottom: 20px;">
 					<button onclick="startMap();">Refresh</button>
-					<!--<button onclick="save();">Save Map</button>-->
+					<button onclick="backToMain();">Back</button>
+					<button onclick="previewMap();">Preview</button>
+					<button onclick="save();">Save Map</button>
 				</div>
 
 				<div class="row">
@@ -50,13 +52,11 @@
 					</div>
 				</div>
 
-<!--				<div class="row" style="margin-bottom: 20px;">
-					<img src="" id="mapPreview"/>
-				</div>-->
-
-				<!--<button onclick="previewMap();">Show Map Preview</button>-->
-				<button onclick="backToMain();">Back To Main</button>
 				<button onclick="map.logJSON();">Log Map JSON</button>
+
+				<div class="row" style="margin-top: 20px;">
+					<img src="" id="mapPreview" height="200" width="200" style="border:1px solid #c3c3c3;"/>
+				</div>
 
 			</div>
 			<div class="col-md-6">
