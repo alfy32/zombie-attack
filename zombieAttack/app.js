@@ -82,6 +82,73 @@ app.post('/', function(req,res)
 
 });
 
+// ------------ MAP REQUESTS --------------- //
+app.post('/map', checkAuth, function(req, res) {
+	var map = req.body.map;
+
+	// TODO: implement
+
+	res.json({
+		result: 'this post request is not yet implemented.'
+	});
+});
+
+app.get('/map', checkAuth, function(req, res) {
+
+	res.json({
+		result: 'this get request is not yet implemented.',
+		maps: [] //returns a list of all maps in database that user has access to.
+	});
+});
+
+app.get('/map/:id?', checkAuth, function(req, res) {
+	var mapId = req.route.params.id;
+
+	res.json({
+		result: 'this get request is not yet implemented.',
+		map: {}// returns the map with the id given in the url.
+	});
+});
+
+app.post('/mapImage', checkAuth, function(req, res) {
+	var mapImage = req.body.mapImage;
+
+	// TODO: implement 
+	
+	//this will require a map image database. It would need simply the mapId and the image.
+
+	res.json({
+		result: 'this post request is not yet implemented.'
+	});
+});
+
+app.get('/mapImage', checkAuth, function(req, res) {
+
+	res.json({
+		result: 'this get request is not yet implemented.',
+		mapImages: [] //returns a list of all maps in database that user has access to.
+	});
+});
+
+app.get('/mapImage/:id?', checkAuth, function(req, res) {
+	var mapId = req.route.params.id;
+
+	res.json({
+		result: 'this get request is not yet implemented.',
+		mapImage: {} // returns the map with the id given in the url.
+	});
+});
+
+app.get('/playMap', checkAuth, function(req, res){
+	
+	res.json({
+		result: 'did the post to Dallin\'s server work',
+		url: 'dallin\'s map url'
+	});
+});
+
+// ------------------------------------------ //
+
 app.get('/secret',checkAuth,function(req,res){
 	res.send('you are authorized');
 });
