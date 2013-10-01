@@ -32,7 +32,7 @@ function Choosers() {
 	this.drawChooser = function(imageIndex) {
 		var ctx = document.getElementById(imageIndex).getContext('2d');
 
-		var _tileSize = map.getTileSize();
+		var _tileSize = map.getSpriteTileSize();
 
 		var tileTop = Math.floor(imageIndex / 8) * _tileSize;
 		var tileLeft = imageIndex % 8 * _tileSize;
@@ -69,7 +69,7 @@ function Choosers() {
 	function updateRightClickImage(tileNumber) {
 		var ctx = document.getElementById(_leftClickChooserId).getContext('2d');
 
-		var _tileSize = map.getTileSize();
+		var _tileSize = map.getSpriteTileSize();
 
 		var tileTop = Math.floor(tileNumber / 8) * _tileSize;
 		var tileLeft = tileNumber % 8 * _tileSize;
@@ -84,7 +84,7 @@ function Choosers() {
 	function updateLefttClickImage(tileNumber) {
 		var ctx = document.getElementById(_rightClickChooserId).getContext('2d');
 
-		var _tileSize = map.getTileSize();
+		var _tileSize = map.getSpriteTileSize();
 
 		var tileTop = Math.floor(tileNumber / 8) * _tileSize;
 		var tileLeft = tileNumber % 8 * _tileSize;
