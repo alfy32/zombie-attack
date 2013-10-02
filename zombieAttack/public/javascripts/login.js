@@ -18,19 +18,18 @@ define([], function() {
 
                     $('#load-stuff-here').load('main.html');
                     fag = "main";
-                    $.get("/mapsrequest", "blah", function(info) {
+                    $.get("/mapsrequest", {}, function(info) {
                         var list = document.getElementById('mainList');
                         for(var i = 0; i < info.length; ++i)
                         {
-                            var title = info[i].title;
+                            var title = info[i].value.title;
                             var entry = document.createElement('li');
                             entry.appendChild(document.createTextNode(title));
                             entry.setAttribute('class','list-group-item');
                             entry.setAttribute('onClick','makeActive(this)');
                             entry.setAttribute('style','text-align:center;');
                             list.appendChild(entry);
-                        }
-                    });
+                        }                    });
 
                 }
             });
