@@ -19,9 +19,11 @@ function Choosers() {
 			$(_chooserDiv).append(canvas)
 					.append(' ');
 
-			this.drawChooser(i);
-			
-			if(i%8 === 7){
+			if (i !== 38) { // 38 doesn't exist
+				this.drawChooser(i);
+			}
+
+			if (i % 8 === 7) {
 				$(_chooserDiv).append('<br/>');
 			}
 		}
@@ -30,7 +32,7 @@ function Choosers() {
 	this.drawChooser = function(imageIndex) {
 		var ctx = document.getElementById(imageIndex).getContext('2d');
 
-		var _tileSize = map.getTileSize();
+		var _tileSize = map.getSpriteTileSize();
 
 		var tileTop = Math.floor(imageIndex / 8) * _tileSize;
 		var tileLeft = imageIndex % 8 * _tileSize;
@@ -54,18 +56,28 @@ function Choosers() {
 
 			if (event.which === 1) {
 				map.setLeftClick(tileNumber);
-				updateRightClickImage(tileNumber);
+				updateLeftClickImage(tileNumber);
 			} else if (event.which === 3) {
 				map.setRightClick(tileNumber);
-				updateLefttClickImage(tileNumber);
+				updateRightClickImage(tileNumber);
 			}
 		});
+
+		$('#38').unbind('mousedown');
+	};
+
+	this.setLeftClickImage = function(tileNumber) {
+		updateLeftClickImage(tileNumber);
+	};
+
+	this.setRightClickImage = function(tileNumber) {
+		updateRightClickImage(tileNumber);
 	};
 
 	function updateRightClickImage(tileNumber) {
-		var ctx = document.getElementById(_leftClickChooserId).getContext('2d');
+		var ctx = document.getElementById(_rightClickChooserId).getContext('2d');
 
-		var _tileSize = map.getTileSize();
+		var _tileSize = map.getSpriteTileSize();
 
 		var tileTop = Math.floor(tileNumber / 8) * _tileSize;
 		var tileLeft = tileNumber % 8 * _tileSize;
@@ -77,10 +89,10 @@ function Choosers() {
 				_tileSize, _tileSize);
 	}
 
-	function updateLefttClickImage(tileNumber) {
-		var ctx = document.getElementById(_rightClickChooserId).getContext('2d');
+	function updateLeftClickImage(tileNumber) {
+		var ctx = document.getElementById(_leftClickChooserId).getContext('2d');
 
-		var _tileSize = map.getTileSize();
+		var _tileSize = map.getSpriteTileSize();
 
 		var tileTop = Math.floor(tileNumber / 8) * _tileSize;
 		var tileLeft = tileNumber % 8 * _tileSize;

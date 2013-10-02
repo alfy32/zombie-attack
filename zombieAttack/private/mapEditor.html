@@ -1,66 +1,79 @@
 <div id="map-editor">
-	<div class="container" style="padding: 20px;">
-		<div class="row">
-			<div class="col-md-4">
-				<div class="row">
-				
-					<label>Left:</label>
-					<!-- ******************** Required ******************** -->
-					<canvas id="leftClick" width="40" height="40" style="border:1px solid #c3c3c3;"></canvas>
-					<!-- ******************** /Required ******************** -->
-				
-					<label>Right:</label>
-					<!-- ******************** Required ******************** -->
-					<canvas id="rightClick" width="40" height="40" style="border:1px solid #c3c3c3;"></canvas>
-					<!-- ******************** /Required ******************** -->
-				
-				</div>
+    <div class="container" style="padding: 20px;">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row" style="padding-bottom: 20px;">
+                    <button onclick="startMap();">Refresh</button>
+                    <button onclick="backToMain();">Back</button>
+                    <button onclick="previewMap();">Preview</button>
+                    <button onclick="save();">Save Map</button>
+                </div>
 
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#base" data-toggle="tab">Base</a></li>
-					<li><a href="#middle" data-toggle="tab">Middle</a></li>
-					<li><a href="#top" data-toggle="tab">Top</a></li>
-					<li><a href="#options" data-toggle="tab">Options</a></li>
-				</ul>
+                <div class="row">
 
-				<div class="tab-content">
-					<div class="tab-pane active" id="base">
+                    <label>Left:</label>
+                    <!-- ******************** Required ******************** -->
+                    <canvas id="leftClick" width="40" height="40" style="border:1px solid #c3c3c3;"></canvas>
+                    <!-- ******************** /Required ******************** -->
 
-						<!-- ******************** Required ******************** -->
-						<div id="choosers" class="row">Loading....</div>
-						<!-- ******************** /Required ******************** -->
+                    <label>Right:</label>
+                    <!-- ******************** Required ******************** -->
+                    <canvas id="rightClick" width="40" height="40" style="border:1px solid #c3c3c3;"></canvas>
+                    <!-- ******************** /Required ******************** -->
 
-						<!-- ******************** Required ******************** -->
-						<div id="position" class="row"></div>
-						<!-- ******************** /Required ******************** -->
-					</div>
-					<div class="tab-pane" id="middle">
-						Middle Stuff.
-					</div>
-					<div class="tab-pane" id="top">
-						Top Stuff
-					</div>
-					<div class="tab-pane" id="options">
-						Options
-					</div>
-				</div>
+                </div>
 
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#base" data-toggle="tab">Base</a></li>
+                    <li><a href="#middle" data-toggle="tab">Middle</a></li>
+                    <li><a href="#top" data-toggle="tab">Top</a></li>
+                    <li><a href="#options" data-toggle="tab">Options</a></li>
+                </ul>
 
+                <div class="tab-content">
+                    <div class="tab-pane active" id="base">
 
-			</div>
-			<div class="col-md-6">
-				<!-- ******************** Required ******************** -->
-				<canvas id="map" width="600" height="600" style="border:1px solid #c3c3c3;"></canvas>
-				<!-- ******************** /Required ******************** -->
-			</div>
-		</div>
-	</div>
+                        <!-- ******************** Required ******************** -->
+                        <div id="choosers" class="row">Loading....</div>
+                        <!-- ******************** /Required ******************** -->
 
-	<!--Alan's JavaScript -->
-	<!-- ******************** Required ******************** --> 
-	<!-- ================================================== --> 
-	<script src="javascripts/mapEditor/Choosers.js"></script>
-	<script src="javascripts/mapEditor/Map.js"></script>
-	<script src="javascripts/mapEditor/mapEditor.js"></script>
-	<!-- ******************** /Required ******************** -->
+                        <!-- ******************** Required ******************** -->
+                        <div id="position" class="row"></div>
+                        <!-- ******************** /Required ******************** -->
+                    </div>
+                    <div class="tab-pane" id="middle">
+                        Middle Stuff.
+                    </div>
+                    <div class="tab-pane" id="top">
+                        Top Stuff
+                    </div>
+                    <div class="tab-pane" id="options">
+                        <div class="row">
+                            <input id="showGridCHK" type="checkbox" /><label>Show Grid</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="map.logJSON();">Log Map JSON</button>
+
+                <div class="row" style="margin-top: 20px;">
+                    <img src="" id="mapPreview" style="border:1px solid #c3c3c3;"/>
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <!-- ******************** Required ******************** -->
+                <canvas id="map" width="600" height="600" style="border:1px solid #c3c3c3;"></canvas>
+                <!-- ******************** /Required ******************** -->
+            </div>
+        </div>
+    </div>
+
+    <!--Alan's JavaScript -->
+    <!-- ******************** Required ******************** --> 
+    <!-- ================================================== --> 
+    <script src="javascripts/mapEditor/Choosers.js"></script>
+    <script src="javascripts/mapEditor/Map.js"></script>
+    <script src="javascripts/mapEditor/mapEditor.js"></script>
+    <!-- ******************** /Required ******************** -->
 </div>
