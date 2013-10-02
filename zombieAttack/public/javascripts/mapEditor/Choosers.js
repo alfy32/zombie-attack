@@ -56,18 +56,26 @@ function Choosers() {
 
 			if (event.which === 1) {
 				map.setLeftClick(tileNumber);
-				updateRightClickImage(tileNumber);
+				updateLeftClickImage(tileNumber);
 			} else if (event.which === 3) {
 				map.setRightClick(tileNumber);
-				updateLefttClickImage(tileNumber);
+				updateRightClickImage(tileNumber);
 			}
 		});
-		
+
 		$('#38').unbind('mousedown');
 	};
 
+	this.setLeftClickImage = function(tileNumber) {
+		updateLeftClickImage(tileNumber);
+	};
+
+	this.setRightClickImage = function(tileNumber) {
+		updateRightClickImage(tileNumber);
+	};
+
 	function updateRightClickImage(tileNumber) {
-		var ctx = document.getElementById(_leftClickChooserId).getContext('2d');
+		var ctx = document.getElementById(_rightClickChooserId).getContext('2d');
 
 		var _tileSize = map.getSpriteTileSize();
 
@@ -81,8 +89,8 @@ function Choosers() {
 				_tileSize, _tileSize);
 	}
 
-	function updateLefttClickImage(tileNumber) {
-		var ctx = document.getElementById(_rightClickChooserId).getContext('2d');
+	function updateLeftClickImage(tileNumber) {
+		var ctx = document.getElementById(_leftClickChooserId).getContext('2d');
 
 		var _tileSize = map.getSpriteTileSize();
 
