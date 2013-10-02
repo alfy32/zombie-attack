@@ -1,5 +1,3 @@
-
-
 define(["login"], function(login) {
 	login.init();
         
@@ -34,4 +32,3 @@ function loadStartup()
 		$('#load-stuff-here').load('startup.html');
 	}
 }
-

@@ -43,6 +43,7 @@ var connection = new(cradle.Connection)('apt7r.us',3005,
  			{auth:{username:'zombie',password:'eatbrains'}});
 var users = connection.database('users');
 var userRequests_db = connection.database('user_requests');
+var maps = connection.database('maps');
 
 
 app.post('/', function(req,res)
@@ -84,6 +85,17 @@ app.post('/', function(req,res)
 
 app.get('/secret',checkAuth,function(req,res){
 	res.send('you are authorized');
+});
+
+app.get('/mapsrequest', checkAuth, function(req, res){
+	maps.get('_design/company/_view/all', function(error, response){
+		if(error)
+			console.log('error');
+		else
+		{
+			res.json(response);
+		}
+	});
 });
 
 app.get('/logout', function(req,res){
