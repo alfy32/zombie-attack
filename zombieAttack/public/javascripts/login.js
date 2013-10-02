@@ -18,7 +18,7 @@ define([], function() {
 
                     $('#load-stuff-here').load('main.html');
                     fag = "main";
-                    $.get("/", "blah", function(info) {
+                    $.get("/mapsrequest", "blah", function(info) {
                         var list = document.getElementById('mainList');
                         for(var i = 0; i < info.length; ++i)
                         {
