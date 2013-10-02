@@ -14,21 +14,24 @@ function makeActive(tableItem)
 	tableItem.className = "list-group-item active";
 }
 
-function startMap()
+function startMap(item)
 {
-	fag = "editor";
+	makeActive(item);
+	pageName = "editor";
+	loadDelay();
 	$('#load-stuff-here').load('mapEditor.html');
 }
 
 function loadStartup()
 {
-	if(fag === "home")
+	if(pageName === "home")
 	{
 
 	}
 	else
 	{
-		fag = "home";
+		pageName = "home";
+		loadDelay();
 		$('#load-stuff-here').load('startup.html');
 	}
 }

@@ -10,7 +10,7 @@
     <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="bootstrap/examples/jumbotron/jumbotron.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <script>var fag = "home";</script>
+    <script>var pageName = "home";</script>
   </head>
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,7 +21,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <p class="navbar-brand" onClick="loadStartup()">Zombie Attack Level Design</p>
+          <a class="navbar-brand" onClick="loadStartup()">Zombie Attack Level Design</a>
         </div>
         <div class="navbar-collapse collapse">
           <div id="user-info">
@@ -50,6 +50,8 @@
         $("[rel='tooltip']").tooltip();
         $(document).ready(function()
         { 
+          $('#load-stuff-here').hide();
+          $('#load-stuff-here').delay().fadeIn(500);
           $('#load-stuff-here').load('startup.html');
         });
     });

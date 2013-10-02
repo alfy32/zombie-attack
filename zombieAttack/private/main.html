@@ -3,8 +3,8 @@
 		<div class="col-sm-3" style="top:60px;">
 			<div class="panel panel-info">
 				<div class="panel-heading" style="text-align:center; font-size:16px;">Maps</div>
-				<ul class="list-group" id="mainList" style="height:400px; overflow:auto">
-				  <a href="#" class="list-group-item" onClick="makeActive(this)" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>
+				<ul class="list-group" id="mainList" style="max-height:400px; overflow:auto">
+				  <a class="list-group-item" onmouseover="" onClick="startMap(this)" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>
 				</ul>
 			</div>
 		</div>
@@ -13,7 +13,6 @@
 			<table class="table table-bordered" style="width:400px;">
 				<tr><td colspan="3"><canvas style="border:solid;" height="372px" width="600px"></canvas></td></tr>
 				<tr><td><button>PLAY</button></td><td><button>EDIT</button></td><td><button>DELETE</button></td></tr>
-				<tr><td><button onClick="startMap()">DO SOMETHING COOL</button></td></tr>
 			</table>
 		</div>
 		<script src="javascripts/main.js"></script>

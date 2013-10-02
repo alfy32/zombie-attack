@@ -15,26 +15,11 @@ define([], function() {
                 console.log(data);
                 if (data.result === "Success") {
                     $('#login-form').html("<p>" + data.user + "</p>");
-
-                    $('#load-stuff-here').load('main.html');
-                    fag = "main";
-                    $.get("/mapsrequest", {}, function(info) {
-                        var list = document.getElementById('mainList');
-                        for(var i = 0; i < info.length; ++i)
-                        {
-                            var title = info[i].value.title;
-                            var entry = document.createElement('li');
-                            entry.appendChild(document.createTextNode(title));
-                            entry.setAttribute('class','list-group-item');
-                            entry.setAttribute('onClick','makeActive(this)');
-                            entry.setAttribute('style','text-align:center;');
-                            list.appendChild(entry);
-                        }                    });
-
+                    loadMainPage();
                 }
             });
+        //$('#load-stuff-here').fadeOut(1000);
         });
-
         $("#login-email").keyup(function(e) {
             if (e.which === 13) {
                 $('#form-login-button').click();
@@ -153,3 +138,29 @@ define([], function() {
     }
     return {init: init};
 });
+
+function loadMainPage()
+{
+    pageName = "main";
+    $.get("/mapsrequest", {}, function(info) {
+        var list = document.getElementById('mainList');
+        for(var i = 0; i < info.length; ++i)
+        {
+            var title = info[i].value.title;
+            var entry = document.createElement('li');
+            entry.appendChild(document.createTextNode(title));
+            entry.setAttribute('class','list-group-item');
+            entry.setAttribute('onClick','makeActive(this)');
+            entry.setAttribute('style','text-align:center;');
+            list.appendChild(entry);
+        }                    
+    });
+    loadDelay();
+    $('#load-stuff-here').load('main.html');
+}
+
+function loadDelay()
+{
+    $('#load-stuff-here').hide();
+    $('#load-stuff-here').delay().fadeIn(500);
+}
