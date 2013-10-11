@@ -1,3 +1,19 @@
 <div id="userSettings">
-	Welcome 
+	<div class="col-sm-1"></div>
+	<div class="col-sm-3" style="top:60px;">
+		<div class="panel panel-info">
+			<div class="panel-heading" style="text-align:center; font-size:16px;">If Admin, All Users</div>
+			<ul class="list-group" id="userList" style="max-height:400px; overflow:auto">
+			  <a class="list-group-item" onmouseover="" onClick="startMap(this)" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>
+			</ul>
+		</div>
+	</div>
+	<div class="col-sm-1"></div>
+	<div class="col-sm-1" style="top:60px;">
+		<table class="table table-bordered" style="width:400px;">
+			<tr><td colspan="4"><canvas style="border:solid;" height="372px" width="600px"></canvas></td></tr>
+			<tr><td><button>Edit User</button></td><td><button>Upgrade User</button></td><td><button>Delete User</button></td><td><button>Approve User</button></td></tr>
+		</table>
+	</div>
+	<script src="javascripts/userInfo.js"></script>
 </div>
