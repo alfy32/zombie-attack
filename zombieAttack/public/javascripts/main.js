@@ -18,7 +18,7 @@ function startMap(item)
 {
 	makeActive(item);
 	pageName = "editor";
-	loadDelay();
+	//loadDelay();
 	$('#load-stuff-here').load('mapEditor.html');
 }
 

@@ -155,9 +155,9 @@ function loadMainPage()
             entry.setAttribute('onClick','makeActive(this)');
             entry.setAttribute('style','text-align:center;');
             list.appendChild(entry);
-        }                    
+        }                  
     });
-    loadDelay();
+    //loadDelay();
     $('#load-stuff-here').load('main.html');
 }
 
