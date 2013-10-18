@@ -14,7 +14,6 @@ define([], function() {
             $.post("/", formdata, function(data) {
                 console.log(data);
                 if (data.result === "Success") {
-                    $('#login-form').html("<p>" + data.user + "</p>");
                     loadMainPage();
                 }
             });
@@ -142,6 +141,9 @@ define([], function() {
 function loadMainPage()
 {
     pageName = "main";
+    $('#login-form').html("<table><tr><td><button id=\"logout-text\"> Logout </button></td><td><button id=\"userInfo-text\"> UserInfo </button></td></tr></table>");
+    bindLogout();
+    bindUserInfo();
     $.get("/mapsrequest", {}, function(info) {
         var list = document.getElementById('mainList');
         for(var i = 0; i < info.length; ++i)
@@ -164,3 +166,36 @@ function loadDelay()
     $('#load-stuff-here').hide();
     $('#load-stuff-here').delay().fadeIn(500);
 }
+
+ function bindLogout()
+ {
+    $('#logout-text').click(function() {
+    
+    $.post('/logout', {}, function(info)
+        {
+            
+        });
+    window.location.href = "/";
+    });
+    return false;
+ }
+
+ function bindUserInfo()
+ {
+    $('#userInfo-text').click(function() {
+        $('#userInfo-text').html("Go Back");
+        bindBackToMain();
+        $('#load-stuff-here').load('userinfo.html');
+        return false;
+    });
+    
+ }
+ function bindBackToMain()
+ {
+    $('#userInfo-text').click(function()
+    {
+        loadMainPage();    
+        return false;  
+    });
+    return false;
+ }

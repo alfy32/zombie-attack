@@ -56,10 +56,10 @@ function sendSuccessRequestEmail(user){
         from: "Zombie Attack <zombieattackeditor@gmail.com>",
         to: user.email,
         subject:"Account Successfully Requested",
-        text: user.name + ", \n we here at the Zombie Defense center have successfully " +
-            "recieved your request to participate in the anhilation of the zombie hoard" + 
-            "expect a response from within 2 hours to 2 millenia (hopefully the battle hasnt been " +
-            "lost by that point) \n\n Regards, \n .Zombie Annihilation TEAM"
+        text: user.name + ", \n We here at the Zombie Defense center have successfully " +
+            "recieved your request to participate in the annihilation of the zombie hoard. " + 
+            "Expect a response from within 2 hours to 2 millenia (hopefully the battle hasnt been " +
+            "lost by that point). \n\n Regards, \n Zombie Annihilation TEAM"
     };
 
     smtpTransport.sendMail(mailOptions, function(error, response) {

@@ -22,6 +22,13 @@ function startMap(item)
 	$('#load-stuff-here').load('mapEditor.html');
 }
 
+function refreshMapEditor()
+{
+	pageName = "editor";
+	loadDelay();
+	$('#load-stuff-here').load('mapEditor.html');
+}
+
 function loadStartup()
 {
 	if(pageName === "home")

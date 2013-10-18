@@ -87,11 +87,21 @@ app.post('/', function(req,res)
 app.post('/map', checkAuth, function(req, res) {
 	var map = req.body.map;
 
-	// TODO: implement
-
-	res.json({
-		result: 'this post request is not yet implemented.'
+	console.log(map);
+	maps.save(map, function(err,res){
+		var p = Object();
+		if(err)
+		{
+			p.result = "failed to save map";
+		}
+		else
+		{
+			p.result = "Map Saved successfully"
+		}
+	res.json(p);
 	});
+
+
 });
 
 app.get('/map', checkAuth, function(req, res) {
