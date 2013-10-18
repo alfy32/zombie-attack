@@ -170,7 +170,7 @@ app.get('/mapsrequest', checkAuth, function(req, res){
 			console.log('error');
 		else
 		{
-			//console.log(response);
+			console.log("successfully retrievd maps");
 			res.json(response);
 		}
 	});
