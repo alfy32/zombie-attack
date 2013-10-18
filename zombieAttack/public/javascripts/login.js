@@ -147,7 +147,7 @@ function loadMainPage()
         for(var i = 0; i < info.length; ++i)
         {
             var title = info[i].value.title;
-            var entry = document.createElement('li');
+            var entry = document.createElement('a');
             entry.appendChild(document.createTextNode(title));
             entry.setAttribute('class','list-group-item');
             entry.setAttribute('onClick','makeActive(this)');
