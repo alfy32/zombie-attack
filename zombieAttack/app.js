@@ -14,7 +14,7 @@ var fs = require('fs');
 var app = express();
 var cradle = require('cradle');
 var bcrypt = require('bcrypt-nodejs');
-
+var request = require('request');
 var userFunctions = require('./usefulscripts/adduser');
 
 // all environments
@@ -150,19 +150,36 @@ app.get('/mapImage/:id?', checkAuth, function(req, res) {
 	});
 });
 
-app.get('/playMap', checkAuth, function(req, res){
-	
-	res.json({
-		result: 'did the post to Dallin\'s server work',
-		url: 'dallin\'s map url'
+//done
+app.post('/playMap', checkAuth, function(req, res){
+
+	var mapId = req.body.mapid; 
+	console.log(mapId);
+
+	maps.get(mapId,function(error, doc){
+		if(error){
+			console.log("error requesting map: " + mapId);
+			res.send("failure")
+		}
+		else{
+			delete doc._id;
+			delete doc._rev;
+
+			var options = {
+
+				method: 'POST',
+				url:"http://zombie-attack.aws.af.cm/uploadMap/d7f073fb-55c8-91bf-4d63-b65268a626d4",
+				json: {map:doc}
+			};
+			request(options, function(err, resp, body){
+				res.send(body);
+			});
+		}
 	});
 });
 
 // ------------------------------------------ //
 
-app.get('/secret',checkAuth,function(req,res){
-	res.send('you are authorized');
-});
 
 app.get('/mapsrequest', checkAuth, function(req, res){
 	maps.get('_design/company/_view/all', function(error, response){
@@ -176,17 +193,21 @@ app.get('/mapsrequest', checkAuth, function(req, res){
 	});
 });
 
+//done
 app.get('/logout', function(req,res){
 	delete req.session.user;
 	delete req.session.lastActivity;
 	res.redirect('/');
 });
 
+
+//done
 app.post('/newuserrequest',function(req,res){
 	console.log(req.body);
 	userFunctions.newUserRequest(bcrypt,userRequests_db,req.body,res);
 });
 
+//done
 app.post('/createUser',checkAuth, function(req,res){
 	var user = new Object();
 	user['name'] = req.body.name;
