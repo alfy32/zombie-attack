@@ -150,7 +150,8 @@ app.get('/mapImage/:id?', checkAuth, function(req, res) {
 	});
 });
 
-app.post('/playMap', /*checkAuth,*/ function(req, res){
+//done
+app.post('/playMap', checkAuth, function(req, res){
 
 	var mapId = req.body.mapid; 
 	console.log(mapId);
@@ -161,7 +162,6 @@ app.post('/playMap', /*checkAuth,*/ function(req, res){
 			res.send("failure")
 		}
 		else{
-	
 			delete doc._id;
 			delete doc._rev;
 
