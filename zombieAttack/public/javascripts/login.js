@@ -144,21 +144,22 @@ function loadMainPage()
     $('#login-form').html("<table><tr><td><button id=\"logout-text\"> Logout </button></td><td><button id=\"userInfo-text\"> UserInfo </button></td></tr></table>");
     bindLogout();
     bindUserInfo();
+    
+    $('#load-stuff-here').load('main.html');
     $.get("/mapsrequest", {}, function(info) {
         var list = document.getElementById('mainList');
         for(var i = 0; i < info.length; ++i)
         {
             var title = info[i].value.title;
+            console.log(title);
             var entry = document.createElement('a');
             entry.appendChild(document.createTextNode(title));
             entry.setAttribute('class','list-group-item');
             entry.setAttribute('onClick','makeActive(this)');
             entry.setAttribute('style','text-align:center;');
             list.appendChild(entry);
-        }                  
+        }        
     });
-    //loadDelay();
-    $('#load-stuff-here').load('main.html');
 }
 
 function loadDelay()
