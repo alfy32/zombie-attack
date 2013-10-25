@@ -184,19 +184,8 @@ function loadDelay()
  function bindUserInfo()
  {
     $('#userInfo-text').click(function() {
-        $('#userInfo-text').html("Go Back");
-        bindBackToMain();
-        $('#load-stuff-here').load('userinfo.html');
+        loadUserInfo();
         return false;
-    });
-    
+    });  
  }
- function bindBackToMain()
- {
-    $('#userInfo-text').click(function()
-    {
-        loadMainPage();    
-        return false;  
-    });
-    return false;
- }
+
