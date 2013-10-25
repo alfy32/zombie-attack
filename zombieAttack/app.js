@@ -83,6 +83,12 @@ app.post('/', function(req,res)
 
 });
 
+//done
+app.get('/currentuser', /*checkauth,*/ function(req,res){
+	console.log("getting current user");
+	res.json(req.session.user);
+});
+
 // ------------ MAP REQUESTS --------------- //
 app.post('/map', checkAuth, function(req, res) {
 	var map = req.body.map;
@@ -234,9 +240,9 @@ app.post('/createUser',checkAuth, function(req,res){
 
 function checkAuth(req, res, next) {
 	var lastActivity = new Date().getTime() - req.session.lastActivity;
-	console.log(lastActivity);
+	//console.log(lastActivity);
   if (!req.session.user) {
-  	console.log(lastActivity);
+  	//console.log(lastActivity);
   
     res.send('You are not authorized to view this page');
   } 
@@ -246,7 +252,6 @@ function checkAuth(req, res, next) {
   		delete req.session.user;
   		delete req.session.lastActivity;
   		res.send('you have been logged out due to innactivity, please login again');
-
   	}
   	else
   	{
