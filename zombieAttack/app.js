@@ -184,10 +184,24 @@ app.post('/playMap', checkAuth, function(req, res){
 app.get('/mapsrequest', checkAuth, function(req, res){
 	maps.get('_design/company/_view/all', function(error, response){
 		if(error)
-			console.log('error');
+			console.log('error requesting maps');
 		else
 		{
 			console.log("successfully retrievd maps");
+			res.json(response);
+		}
+	});
+});
+
+app.get('/users', /*checkAuth,*/function(req,res){
+	users.get('_design/company/_view/all', function(error, response){
+		if(error)
+		{
+			console.log('error requesting users')
+		}
+		else
+		{
+			console.log('successfully retrieved users');
 			res.json(response);
 		}
 	});
