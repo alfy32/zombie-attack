@@ -151,9 +151,12 @@ function loadMainPage()
         for(var i = 0; i < info.length; ++i)
         {
             var title = info[i].value.title;
+            var id = info[i].id;
+            console.log(id);
             console.log(title);
             var entry = document.createElement('a');
             entry.appendChild(document.createTextNode(title));
+            entry.setAttribute('mapId',id);
             entry.setAttribute('class','list-group-item');
             entry.setAttribute('onClick','makeActive(this)');
             entry.setAttribute('style','text-align:center;');

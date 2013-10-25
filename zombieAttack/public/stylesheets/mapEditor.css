@@ -1,0 +1,11 @@
+
+.left-col {
+    float: left;
+    width: 350px;
+    margin: 50px;    
+}
+
+.map-div {
+    display: inline-block;
+    margin: 50px;
+}
