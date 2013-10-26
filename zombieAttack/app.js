@@ -213,6 +213,83 @@ app.get('/users', /*checkAuth,*/function(req,res){
 	});
 });
 
+app.get('/userrequests', /*checkAuth,*/ function(req,res){
+	userRequests_db.get('_design/company/_view/all', function(error, response){
+		if(error)
+		{
+			console.log('error requesting users')
+		}
+		else
+		{
+			console.log('successfully retrieved users');
+			res.json(response);
+		}
+	});
+});
+
+app.post('/approve', /*checkAuth,*/ function(req,res){
+
+	var response = Object();
+	response.result = "failure";
+	console.log(response);
+	userRequests_db.get(req.body.id, function(error, newUser){
+		if(error){
+			console.log('error requesting ' + req.body.id);
+			res.json(response);
+		}
+		else
+		{
+			delete newUser._id;
+			delete newUser._rev;
+			newUser.admin = false;
+			newUser.player = true;
+			newUser.designer = false;
+			newUser.avatar = false;
+			users.save(newUser.email, newUser,function(err,respon){
+    		if(err)
+    		{
+
+    			console.log('failed to create user' + newUser.email);
+    			res.json(response);
+    		}
+    		else
+    		{
+    			console.log('successfully created user' + newUser.email);
+    			userRequests_db.remove(req.body.id,function(err,respons){
+    				if(err)
+    				{
+    					console.log('error deleting ' + req.body.id);
+    					res.json(response);
+    				}
+    				else{
+    					console.log('successfully deleted ' + req.body.id);
+    					response.result = "success";
+    					res.json(response);
+    				}
+    			});
+    		}
+    	});
+		}
+	});
+
+});
+
+app.post('/deleteuser', /*checkauth,*/ function(request, response){
+	//users.get(request.body.id, function(e,r){});
+	users.remove(request.body.id,function(error,res){
+		if(error)
+		{
+			response.json({"result":"failure"});
+		}
+		else
+		{
+			response.json({"result":"success"});
+		}
+	});
+
+});
+
+
 //done
 app.get('/logout', function(req,res){
 	delete req.session.user;
