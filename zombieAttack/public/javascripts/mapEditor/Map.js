@@ -3,16 +3,16 @@ function Map() {
 	var _canvas = document.getElementById('map');
 	var _context = _canvas.getContext('2d');
 	var _canvasTileSize = 40;
-        var _xOffset = 0;
-        var _yOffset = 0;
+	var _xOffset = 0;
+	var _yOffset = 0;
 	var _showGrid = true;
-        
-        var _zoomAmount = 5;
-        
-        var _backgroundColor = "grey";
-        var _gridColor = "black";
-        
-        var _showMouseLoc = false;
+
+	var _zoomAmount = 5;
+
+	var _backgroundColor = "grey";
+	var _gridColor = "black";
+
+	var _showMouseLoc = false;
 
 	var _mouseButtonClicked = false;
 	var _mouseover = false;
@@ -56,13 +56,13 @@ function Map() {
 	}
 
 	function initMapBottom() {
-            _map.data.bottom = [[]];
-            for (var row = 0; row < _map.height; row++) {
-                    _map.data.bottom[row] = [];
-                    for (var col = 0; col < _map.width; col++) {
-                            _map.data.bottom[row][col] = _initImageNumber;
-                    }
-            }
+		_map.data.bottom = [[]];
+		for (var row = 0; row < _map.height; row++) {
+			_map.data.bottom[row] = [];
+			for (var col = 0; col < _map.width; col++) {
+				_map.data.bottom[row][col] = _initImageNumber;
+			}
+		}
 	}
 
 	this.setMap = function(map) {
@@ -73,50 +73,54 @@ function Map() {
 	this.getMap = function() {
 		return JSON.parse(JSON.stringify(_map));
 	};
-        
-        this.setTitle = function(title) {
-            _map.title = title;
-        };
-        
-        this.getTitle = function() {
-            return _map.title;
-        };
-        
-        this.setCanvaTileSize = function(size) {
-            _canvasTileSize = size;
-            drawMap();
-        };
-        
-        this.zoomIn = function() {
-            _canvasTileSize += _zoomAmount;
-            
-            drawMap();
-        };
-        
-        this.zoomOut = function() {
-            _canvasTileSize -= _zoomAmount;
-            drawMap();
-        };
-        
-        this.moveRight = function() {
-            _xOffset += 1;
-            drawMap();
-        };
-        
-        this.moveLeft = function() {
-            _xOffset -= 1;
-            drawMap();
-        };
-        
-        this.moveUp = function() {
-            _yOffset -= 1;
-            drawMap();
-        };
-        
-        this.moveDown = function() {
-            _yOffset += 1;
-            drawMap();
-        };
+
+	this.setTitle = function(title) {
+		_map.title = title;
+	};
+
+	this.getTitle = function() {
+		return _map.title;
+	};
+
+	this.setCanvaTileSize = function(size) {
+		_canvasTileSize = size;
+		drawMap();
+	};
+
+	this.zoomIn = function() {
+		_canvasTileSize += _zoomAmount;
+		
+		drawMap();
+	};
+
+	this.zoomOut = function() {
+		_canvasTileSize -= _zoomAmount;
+		
+		if(_canvasTileSize <= 0)
+			_canvasTileSize = _zoomAmount;
+		
+		drawMap();
+	};
+
+	this.moveRight = function() {
+		_xOffset += 1;
+		drawMap();
+	};
+
+	this.moveLeft = function() {
+		_xOffset -= 1;
+		drawMap();
+	};
+
+	this.moveUp = function() {
+		_yOffset -= 1;
+		drawMap();
+	};
+
+	this.moveDown = function() {
+		_yOffset += 1;
+		drawMap();
+	};
 
 	this.logJSON = function() {
 		console.log(_map);
@@ -184,8 +188,8 @@ function Map() {
 		var x = currentBoxX();
 		var y = currentBoxY();
 
-		x = x > _map.width - 1 ? x - 1 : x < 0 ? 0 : x;
-		y = y > _map.height - 1 ? y - 1 : y < 0 ? 0 : y;
+		//x = x > _map.width - 1 ? x - 1 : x < 0 ? 0 : x;
+		//y = y > _map.height - 1 ? y - 1 : y < 0 ? 0 : y;
 
 		_map.data.bottom[y][x] = tileNumber;
 	}
@@ -208,49 +212,49 @@ function Map() {
 			_context.drawImage(_tileImage,
 					tileLeft, tileTop,
 					_spriteTileSize, _spriteTileSize,
-					(_xOffset*_canvasTileSize) + col * _canvasTileSize, (_yOffset*_canvasTileSize) + row * _canvasTileSize,
+					(_xOffset * _canvasTileSize) + col * _canvasTileSize, (_yOffset * _canvasTileSize) + row * _canvasTileSize,
 					_canvasTileSize, _canvasTileSize);
 		}
 	}
 
-	function drawMap() {            
+	function drawMap() {
 		_context.clearRect(0, 0, _canvas.width, _canvas.height);
-                
-                drawBackground();
 
-                for(var row = 0; row < _map.height; row++) {
-                    for(var col = 0; col < _map.width; col++){
-                        if(_map.data.bottom[row][col])
-                            drawTileImage(_map.data.bottom[row][col], row, col);
-                    }                    
-                }
-             
+		drawBackground();
+
+		for (var row = 0; row < _map.height; row++) {
+			for (var col = 0; col < _map.width; col++) {
+				if (_map.data.bottom[row][col])
+					drawTileImage(_map.data.bottom[row][col], row, col);
+			}
+		}
+
 		if (_showGrid) {
-                    drawGrid();
+			drawGrid();
 		}
 		drawMouseSquare();
 	}
-        
-        function drawBackground() {
-             _context.fillStyle = _backgroundColor;
-             _context.fillRect(0,0,_canvas.width, _canvas.height);
-        }
+
+	function drawBackground() {
+		_context.fillStyle = _backgroundColor;
+		_context.fillRect(0, 0, _canvas.width, _canvas.height);
+	}
 
 	function drawGrid() {
 		_context.strokeStyle = _gridColor;
 		_context.beginPath();
-                
-                var width = _map.width * _canvasTileSize;
-                var height = _map.height * _canvasTileSize;
 
-		for (var i = (_xOffset*_canvasTileSize); i <= width+(_xOffset*_canvasTileSize); i += _canvasTileSize) {
-			_context.moveTo(i, (_yOffset*_canvasTileSize));
-			_context.lineTo(i, height+(_yOffset*_canvasTileSize));
+		var width = _map.width * _canvasTileSize;
+		var height = _map.height * _canvasTileSize;
+
+		for (var i = (_xOffset * _canvasTileSize); i <= width + (_xOffset * _canvasTileSize); i += _canvasTileSize) {
+			_context.moveTo(i, (_yOffset * _canvasTileSize));
+			_context.lineTo(i, height + (_yOffset * _canvasTileSize));
 		}
 
-		for (var i = (_yOffset*_canvasTileSize); i <= height+(_yOffset*_canvasTileSize); i += _canvasTileSize) {
-			_context.moveTo((_xOffset*_canvasTileSize), i);
-			_context.lineTo(width+(_xOffset*_canvasTileSize), i);
+		for (var i = (_yOffset * _canvasTileSize); i <= height + (_yOffset * _canvasTileSize); i += _canvasTileSize) {
+			_context.moveTo((_xOffset * _canvasTileSize), i);
+			_context.lineTo(width + (_xOffset * _canvasTileSize), i);
 		}
 
 		_context.stroke();
@@ -259,7 +263,7 @@ function Map() {
 	function drawMouseSquare() {
 		if (_mouseover) {
 			_context.strokeStyle = 'blue';
-			_context.strokeRect(currentBoxX() * _canvasTileSize, currentBoxY() * _canvasTileSize,
+			_context.strokeRect((_xOffset*_canvasTileSize)+ currentBoxX() * _canvasTileSize, (_yOffset*_canvasTileSize) + currentBoxY() * _canvasTileSize,
 					_canvasTileSize, _canvasTileSize);
 		}
 	}
@@ -279,10 +283,10 @@ function Map() {
 	}
 
 	function currentBoxX() {
-		return Math.floor(_mouseX / _canvasTileSize);
+		return Math.floor(_mouseX / _canvasTileSize) - _xOffset;
 	}
 	function currentBoxY() {
-		return Math.floor(_mouseY / _canvasTileSize);
+		return Math.floor(_mouseY / _canvasTileSize) - _yOffset;
 	}
 
 	function bindContextMenu() {
@@ -302,11 +306,19 @@ function Map() {
 		if (_mouseY > _canvas.height)
 			_mouseY = _canvas.height;
 	}
-        
-        function inMapArea() {
-            return _mouseX > 0 && _mouseX < _map.width * _canvasTileSize && 
-                    _mouseY > 0 && _mouseY < _map.height * _canvasTileSize;
-        }
+
+	function inMapArea() {
+		var offX = _xOffset*_canvasTileSize;
+		var offY = _yOffset*_canvasTileSize;
+		
+		var mapLeft = 0 + offX;
+		var mapRight = _map.width * _canvasTileSize + offX;
+		var mapTop = 0 + offY;
+		var mapBottom =  _map.height * _canvasTileSize + offY;
+		
+		return _mouseX > mapLeft && _mouseX < mapRight &&
+				_mouseY > mapTop && _mouseY < mapBottom;
+	}
 
 	function bindMouseDown() {
 		$(_canvas).mousedown(function(event) {
@@ -315,14 +327,14 @@ function Map() {
 			_mouseover = true;
 
 			updateMousePositionRelativeToCanvas(event);
-                        if(inMapArea()) {
-                            if(event.which === 1) {
-                                setCurrentBottomTile(_leftClickTile);
-                            }
-                            if(event.which === 3) {
-                                setCurrentBottomTile(_rightClickTile);
-                            }
-                        }
+			if (inMapArea()) {
+				if (event.which === 1) {
+					setCurrentBottomTile(_leftClickTile);
+				}
+				if (event.which === 3) {
+					setCurrentBottomTile(_rightClickTile);
+				}
+			}
 			writeMouseInfo(event);
 		});
 	}
@@ -334,12 +346,12 @@ function Map() {
 
 			updateMousePositionRelativeToCanvas(event);
 			if (_mouseButtonClicked && inMapArea()) {
-                            if(event.which === 1) {
-                                setCurrentBottomTile(_leftClickTile);
-                            }
-                            if(event.which === 3) {
-                                setCurrentBottomTile(_rightClickTile);
-                            }
+				if (event.which === 1) {
+					setCurrentBottomTile(_leftClickTile);
+				}
+				if (event.which === 3) {
+					setCurrentBottomTile(_rightClickTile);
+				}
 			}
 			writeMouseInfo(event);
 		});
@@ -352,14 +364,14 @@ function Map() {
 			_mouseover = true;
 
 			updateMousePositionRelativeToCanvas(event);
-                        if(inMapArea()) {
-                            if(event.which === 1) {
-                                setCurrentBottomTile(_leftClickTile);
-                            }
-                            if(event.which === 3) {
-                                setCurrentBottomTile(_rightClickTile);
-                            }
-                        }
+			if (inMapArea()) {
+				if (event.which === 1) {
+					setCurrentBottomTile(_leftClickTile);
+				}
+				if (event.which === 3) {
+					setCurrentBottomTile(_rightClickTile);
+				}
+			}
 			writeMouseInfo(event);
 		});
 	}
@@ -373,14 +385,14 @@ function Map() {
 	}
 
 	function writeMouseInfo(event) {
-            if(_showMouseLoc) {
-		$('#position').html($('<p/>').append(
-				"Button: " + (event.which === 1 ? "Left" : "Right") + "<br/>" +
-				"X: " + _mouseX + " Y: " + _mouseY + "<br/>" +
-				"Clicked: " + _mouseButtonClicked
-				));
+		if (_showMouseLoc) {
+			$('#position').html($('<p/>').append(
+					"Button: " + (event.which === 1 ? "Left" : "Right") + "<br/>" +
+					"X: " + _mouseX + " Y: " + _mouseY + "<br/>" +
+					"Clicked: " + _mouseButtonClicked
+					));
 
-            }
-            drawMap();
+		}
+		drawMap();
 	}
 }
