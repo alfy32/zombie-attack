@@ -274,6 +274,22 @@ app.post('/approve', /*checkAuth,*/ function(req,res){
 
 });
 
+app.post('/deleteuser', /*checkauth,*/ function(request, response){
+	//users.get(request.body.id, function(e,r){});
+	users.remove(request.body.id,function(error,res){
+		if(error)
+		{
+			response.json({"result":"failure"});
+		}
+		else
+		{
+			response.json({"result":"success"});
+		}
+	});
+
+});
+
+
 //done
 app.get('/logout', function(req,res){
 	delete req.session.user;
