@@ -337,8 +337,8 @@ function Map() {
 			var currBox = currentBox();
 			
 			if(currBox) {
-				var top = _offset.x + currBox.x * _canvasTileSize;
-				var left = _offset.y + currBox.y * _canvasTileSize;
+				var top = (_offset.x + currBox.x) * _canvasTileSize;
+				var left = (_offset.y + currBox.y) * _canvasTileSize;
 				var width = currBox.width * _canvasTileSize;
 				var height = currBox.height * _canvasTileSize;
 			
