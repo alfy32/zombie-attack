@@ -3,12 +3,16 @@ function Map() {
 	var _canvas = document.getElementById('map');
 	var _context = _canvas.getContext('2d');
 	var _canvasTileSize = 40;
+        var _xOffset = 0;
+        var _yOffset = 0;
 	var _showGrid = true;
         
         var _zoomAmount = 5;
         
         var _backgroundColor = "grey";
         var _gridColor = "black";
+        
+        var _showMouseLoc = false;
 
 	var _mouseButtonClicked = false;
 	var _mouseover = false;
@@ -24,8 +28,8 @@ function Map() {
 	var _map = {
 		title: 'NO_TITLE',
 		author: 'NO_AUTHOR',
-		width: 10,
-		height: 10,
+		width: 15,
+		height: 12,
 		x: 0,
 		y: 0,
 		events: [],
@@ -52,13 +56,13 @@ function Map() {
 	}
 
 	function initMapBottom() {
-		_map.data.bottom = [];
-		for (var y = 0; y < _map.height; y++) {
-			_map.data.bottom[y] = [];
-			for (var x = 0; x < _map.width; x++) {
-				_map.data.bottom[y][x] = _initImageNumber;
-			}
-		}
+            _map.data.bottom = [[]];
+            for (var row = 0; row < _map.height; row++) {
+                    _map.data.bottom[row] = [];
+                    for (var col = 0; col < _map.width; col++) {
+                            _map.data.bottom[row][col] = _initImageNumber;
+                    }
+            }
 	}
 
 	this.setMap = function(map) {
@@ -70,6 +74,14 @@ function Map() {
 		return JSON.parse(JSON.stringify(_map));
 	};
         
+        this.setTitle = function(title) {
+            _map.title = title;
+        };
+        
+        this.getTitle = function() {
+            return _map.title;
+        };
+        
         this.setCanvaTileSize = function(size) {
             _canvasTileSize = size;
             drawMap();
@@ -77,11 +89,32 @@ function Map() {
         
         this.zoomIn = function() {
             _canvasTileSize += _zoomAmount;
+            
             drawMap();
         };
         
         this.zoomOut = function() {
             _canvasTileSize -= _zoomAmount;
+            drawMap();
+        };
+        
+        this.moveRight = function() {
+            _xOffset += 1;
+            drawMap();
+        };
+        
+        this.moveLeft = function() {
+            _xOffset -= 1;
+            drawMap();
+        };
+        
+        this.moveUp = function() {
+            _yOffset -= 1;
+            drawMap();
+        };
+        
+        this.moveDown = function() {
+            _yOffset += 1;
             drawMap();
         };
 
@@ -175,7 +208,7 @@ function Map() {
 			_context.drawImage(_tileImage,
 					tileLeft, tileTop,
 					_spriteTileSize, _spriteTileSize,
-					col * _canvasTileSize, row * _canvasTileSize,
+					(_xOffset*_canvasTileSize) + col * _canvasTileSize, (_yOffset*_canvasTileSize) + row * _canvasTileSize,
 					_canvasTileSize, _canvasTileSize);
 		}
 	}
@@ -185,34 +218,22 @@ function Map() {
                 
                 drawBackground();
 
-                for(var row = 0; row < _map.width; row++) {
-                    for(var col = 0; col < _map.height; col++){
-                        if(!_map.data.bottom[row][col])
-                            _map.data.bottom[row][col] = _initImageNumber;
-                        drawTileImage(_map.data.bottom[row][col], row, col);
+                for(var row = 0; row < _map.height; row++) {
+                    for(var col = 0; col < _map.width; col++){
+                        if(_map.data.bottom[row][col])
+                            drawTileImage(_map.data.bottom[row][col], row, col);
                     }                    
                 }
-                
-//                for(var row = 0; row < _map.width; row++) {
-//                    for(var col = 0; col < _map.height; col++){
-//                        drawTileImage(_map.data.middle[row][col], row, col);
-//                    }                    
-//                }
-//                
-//                for(var row = 0; row < _map.width; row++) {
-//                    for(var col = 0; col < _map.height; col++){
-//                        drawTileImage(_map.data.top[row][col], row, col);
-//                    }                    
-//                }
+             
 		if (_showGrid) {
-			drawGrid();
+                    drawGrid();
 		}
 		drawMouseSquare();
 	}
         
         function drawBackground() {
              _context.fillStyle = _backgroundColor;
-             _context.fillRect(0,0,600, 600);
+             _context.fillRect(0,0,_canvas.width, _canvas.height);
         }
 
 	function drawGrid() {
@@ -222,14 +243,14 @@ function Map() {
                 var width = _map.width * _canvasTileSize;
                 var height = _map.height * _canvasTileSize;
 
-		for (var i = 0; i <= width; i += _canvasTileSize) {
-			_context.moveTo(i, 0);
-			_context.lineTo(i, height);
+		for (var i = (_xOffset*_canvasTileSize); i <= width+(_xOffset*_canvasTileSize); i += _canvasTileSize) {
+			_context.moveTo(i, (_yOffset*_canvasTileSize));
+			_context.lineTo(i, height+(_yOffset*_canvasTileSize));
 		}
 
-		for (var i = 0; i <= height; i += _canvasTileSize) {
-			_context.moveTo(0, i);
-			_context.lineTo(width, i);
+		for (var i = (_yOffset*_canvasTileSize); i <= height+(_yOffset*_canvasTileSize); i += _canvasTileSize) {
+			_context.moveTo((_xOffset*_canvasTileSize), i);
+			_context.lineTo(width+(_xOffset*_canvasTileSize), i);
 		}
 
 		_context.stroke();
@@ -284,7 +305,7 @@ function Map() {
         
         function inMapArea() {
             return _mouseX > 0 && _mouseX < _map.width * _canvasTileSize && 
-                    _mouseY > 0 && _mouseY < _map.width * _canvasTileSize;
+                    _mouseY > 0 && _mouseY < _map.height * _canvasTileSize;
         }
 
 	function bindMouseDown() {
@@ -295,7 +316,12 @@ function Map() {
 
 			updateMousePositionRelativeToCanvas(event);
                         if(inMapArea()) {
-                            setCurrentBottomTile(event.which === 1 ? _leftClickTile : _rightClickTile);
+                            if(event.which === 1) {
+                                setCurrentBottomTile(_leftClickTile);
+                            }
+                            if(event.which === 3) {
+                                setCurrentBottomTile(_rightClickTile);
+                            }
                         }
 			writeMouseInfo(event);
 		});
@@ -308,7 +334,12 @@ function Map() {
 
 			updateMousePositionRelativeToCanvas(event);
 			if (_mouseButtonClicked && inMapArea()) {
-				setCurrentBottomTile(event.which === 1 ? _leftClickTile : _rightClickTile);
+                            if(event.which === 1) {
+                                setCurrentBottomTile(_leftClickTile);
+                            }
+                            if(event.which === 3) {
+                                setCurrentBottomTile(_rightClickTile);
+                            }
 			}
 			writeMouseInfo(event);
 		});
@@ -322,7 +353,12 @@ function Map() {
 
 			updateMousePositionRelativeToCanvas(event);
                         if(inMapArea()) {
-                            setCurrentBottomTile(event.which === 1 ? _leftClickTile : _rightClickTile);
+                            if(event.which === 1) {
+                                setCurrentBottomTile(_leftClickTile);
+                            }
+                            if(event.which === 3) {
+                                setCurrentBottomTile(_rightClickTile);
+                            }
                         }
 			writeMouseInfo(event);
 		});
@@ -337,12 +373,14 @@ function Map() {
 	}
 
 	function writeMouseInfo(event) {
+            if(_showMouseLoc) {
 		$('#position').html($('<p/>').append(
 				"Button: " + (event.which === 1 ? "Left" : "Right") + "<br/>" +
 				"X: " + _mouseX + " Y: " + _mouseY + "<br/>" +
 				"Clicked: " + _mouseButtonClicked
 				));
 
-		drawMap();
+            }
+            drawMap();
 	}
 }
