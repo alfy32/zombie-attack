@@ -12,8 +12,24 @@
 		<div class="col-sm-1" style="top:60px;">
 			<table class="table table-bordered" style="width:400px;">
 				<tr><td colspan="3"><canvas style="border:solid;" height="372px" width="600px"></canvas></td></tr>
-				<tr><td><button>PLAY</button></td><td><button>EDIT</button></td><td><button>DELETE</button></td></tr>
+				<tr><td><button href="#play-map-modal" data-toggle="modal" onclick="playMap()">PLAY</button></td><td><button onclick="editMap()">EDIT</button></td><td><button onclick="deleteMap()">DELETE</button></td></tr>
 			</table>
 		</div>
+		<div id="play-map-modal" class="modal fade">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title"></h4>
+		      </div>  
+		      <div class="modal-body">
+		      	<iframe class="play-area" src="" width="100%" height="500">
+
+		      	</iframe>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 		<script src="javascripts/main.js"></script>
+		<script src="javascripts/userInfo.js"></script>
 	</div>

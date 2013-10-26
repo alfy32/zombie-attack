@@ -151,9 +151,12 @@ function loadMainPage()
         for(var i = 0; i < info.length; ++i)
         {
             var title = info[i].value.title;
+            var id = info[i].id;
+            console.log(id);
             console.log(title);
             var entry = document.createElement('a');
             entry.appendChild(document.createTextNode(title));
+            entry.setAttribute('mapId',id);
             entry.setAttribute('class','list-group-item');
             entry.setAttribute('onClick','makeActive(this)');
             entry.setAttribute('style','text-align:center;');
@@ -184,19 +187,8 @@ function loadDelay()
  function bindUserInfo()
  {
     $('#userInfo-text').click(function() {
-        $('#userInfo-text').html("Go Back");
-        bindBackToMain();
-        $('#load-stuff-here').load('userinfo.html');
+        loadUserInfo();
         return false;
-    });
-    
+    });  
  }
- function bindBackToMain()
- {
-    $('#userInfo-text').click(function()
-    {
-        loadMainPage();    
-        return false;  
-    });
-    return false;
- }
+
