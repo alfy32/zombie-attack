@@ -155,7 +155,7 @@ function loadMainPage()
         }
         if(info.designer)
         {
-            $("#mainList").append('<a class="list-group-item" onmouseover="" onClick="startMap(this)" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>');
+            $("#mainList").append('<a class="list-group-item" onmouseover="" href="#make-map-modal" data-toggle="modal" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>');
             $(tr).append('<td><button onclick="editMap()">EDIT</button></td>');
         }
         if(info.admin)

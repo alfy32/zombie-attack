@@ -14,12 +14,16 @@ function makeActive(tableItem)
 	tableItem.className = "list-group-item active";
 }
 
-function startMap(item)
+function startMap()
 {
-	makeActive(item);
 	pageName = "editor";
-	//loadDelay();
+	newMapModal();
 	$('#load-stuff-here').load('mapEditor.html');
+}
+
+function newMapModal()
+{
+
 }
 
 function refreshMapEditor()
@@ -68,3 +72,10 @@ function deleteMap()
 {
 	console.log("delete");
 }
+
+$('#make-map-submit-btn').click(function(){
+	$('.modal-backdrop').click();
+	setTimeout(function(){
+    	startMap();
+	}, 500);
+});
