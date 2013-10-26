@@ -145,6 +145,26 @@ function loadMainPage()
     bindLogout();
     bindUserInfo();
     
+    $.get("/currentuser", {}, function(info)
+    {
+        var tr = $("<tr>");
+        console.log(info);
+        if(info.player)
+        {
+            $(tr).append('<td><button href="#play-map-modal" data-toggle="modal" onclick="playMap()">PLAY</button></td>');
+        }
+        if(info.designer)
+        {
+            $("#mainList").append('<a class="list-group-item" onmouseover="" href="#make-map-modal" data-toggle="modal" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>');
+            $(tr).append('<td><button onclick="editMap()">EDIT</button></td>');
+        }
+        if(info.admin)
+        {
+            $(tr).append('<td><button onclick="deleteMap()">DELETE</button></td>');
+        }
+        $("#load-table").append(tr);
+    });
+
     $('#load-stuff-here').load('main.html');
     $.get("/mapsrequest", {}, function(info) {
         var list = document.getElementById('mainList');

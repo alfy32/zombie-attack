@@ -6,6 +6,8 @@ var choosers = new Choosers();
 map.showGrid(true);
 $('#showGridCHK').prop('checked', true);
 bindShowGrid();
+bindMapName();
+bindKeyDown();
 
 var tileImage = new Image();
 tileImage.src = '/images/bottom.png';//'https://raw.github.com/CS-3450-Software-Engineering/class_documents/master/other_documents/bottom.png';
@@ -28,7 +30,7 @@ function backToMain() {
 
 function save() {
 	$.post('/map', {map: map.getMap()}, function(data) {
-		console.log(data);
+		console.log(JSON.stringify(data));
 	});
 
 	$.post('/mapImage', {mapImage: map.getImage({width: 300})}, function(data) {
@@ -44,5 +46,39 @@ function previewMap() {
 function bindShowGrid() {
 	$('#showGridCHK').change(function() {
 		map.showGrid($('#showGridCHK').prop('checked'));
+	});
+}
+
+function bindMapName() {
+	$('#map-title').val(map.getTitle());
+	$('#map-title').keyup(function() {
+		map.setTitle($('#map-title').val());
+	});
+}
+
+function bindKeyDown() {
+	$(document).keydown(function(e) {
+		switch (e.which) {
+			case 37: //left
+				map.moveLeft();
+				break;
+			case 38: //up
+				map.moveUp();
+				break;
+			case 40: //down
+				map.moveDown();
+				break;
+			case 39: //right
+				map.moveRight();
+				break;
+			case 187: //plus
+			case 107:
+				map.zoomIn();
+				break;
+			case 189: //minus
+			case 109:
+				map.zoomOut();
+				break;
+		}
 	});
 }

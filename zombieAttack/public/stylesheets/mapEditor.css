@@ -5,7 +5,17 @@
     margin: 50px;    
 }
 
+.map-info {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.map-info label {
+    display: inline-block;
+    width: 100px;
+}
+
 .map-div {
     display: inline-block;
-    margin: 50px;
+    margin-top: 50px;
 }

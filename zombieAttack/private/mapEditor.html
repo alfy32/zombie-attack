@@ -2,13 +2,16 @@
     <link href="stylesheets/mapEditor.css" rel="stylesheet">
     
             <div class="left-col" style="display: inline-block; width: 350px; margin">
+                <div class="map-info">
+                    <label>Title</label><input id="map-title"/>
+                </div>
                 <div style="padding-bottom: 20px;">
                     <button onclick="refreshMapEditor();">Refresh</button>
                     <button onclick="backToMain();">Back</button>
                     <button onclick="previewMap();">Preview</button>
                     <button onclick="save();">Save Map</button>
                 </div>
-
+                
                 <div>
 
                     <label>Left:</label>
@@ -54,21 +57,28 @@
                             <button onclick="map.zoomOut()">Zoom Out</button>
                             <button onclick="map.setCanvaTileSize(40)">Reset Zoom</button>
                         </p>                        
-                                              
+                       <div>
+                            <button onclick="map.moveUp()">Move Up</button>
+                            <button onclick="map.moveDown()">Move Down</button>
+                        </div>
+                        <div>
+                            <button onclick="map.moveLeft()">Move Left</button>
+                            <button onclick="map.moveRight()">Move Right</button>
+                        </div>                       
                     </div>
                 </div>
 
-                <button onclick="map.logJSON();">Log Map JSON</button>
+                <!--<button onclick="map.logJSON();">Log Map JSON</button>-->
 
-                <div style="margin-top: 20px;">
+<!--                <div style="margin-top: 20px;">
                     <img src="" id="mapPreview" style="border:1px solid #c3c3c3;"/>
-                </div>
+                </div>-->
 
             </div>
             <div class="map-div">
                 
                 <!-- ******************** Required ******************** -->
-                <canvas id="map" width="600" height="600" style="border:1px solid #c3c3c3;"></canvas>
+                <canvas id="map" width="700" height="550" style="border:1px solid #c3c3c3;"></canvas>
                 <!-- ******************** /Required ******************** -->
             </div>
 

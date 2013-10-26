@@ -92,10 +92,10 @@ app.get('/currentuser', /*checkauth,*/ function(req,res){
 // ------------ MAP REQUESTS --------------- //
 app.post('/map', checkAuth, function(req, res) {
 	var map = req.body.map;
-
-	console.log(map);
+        
+        var result = {};
 	maps.save(map, function(err,res){
-		var p = Object();
+		result = res;
 		if(err)
 		{
 			p.result = "failed to save map";
@@ -104,10 +104,9 @@ app.post('/map', checkAuth, function(req, res) {
 		{
 			p.result = "Map Saved successfully"
 		}
-	res.json(p);
 	});
 
-
+        res.json(result);
 });
 
 app.get('/map', checkAuth, function(req, res) {
@@ -231,7 +230,6 @@ app.post('/approve', /*checkAuth,*/ function(req,res){
 
 	var response = Object();
 	response.result = "failure";
-	console.log(response);
 	userRequests_db.get(req.body.id, function(error, newUser){
 		if(error){
 			console.log('error requesting ' + req.body.id);
@@ -289,6 +287,22 @@ app.post('/deleteuser', /*checkauth,*/ function(request, response){
 
 });
 
+app.post('/deny', /*checkauth,*/ function(request, response){
+	//users.get(request.body.id, function(e,r){});
+	userRequests_db.remove(request.body.id,function(error,res){
+		if(error)
+		{
+			response.json({"result":"failure"});
+		}
+		else
+		{
+			response.json({"result":"success"});
+		}
+	});
+
+});
+
+
 
 //done
 app.get('/logout', function(req,res){
@@ -313,6 +327,79 @@ app.post('/createUser',checkAuth, function(req,res){
 	userFunctions.adduser(bcrypt,users,user);
 	res.send('<h1>success<h1>');
 });
+
+app.post('/editpassword',checkAuth,function(request, response){
+	var password = request.body.password;
+	var user = request.session.user;
+
+	bcrypt.hash(password, null, null, function(err,hash){
+			user.password = hash;
+			users.save(user._id, user._rev,user, function(er, re){
+				if(er)
+				{
+					response.json({"result":"failure"})
+				}
+				else
+				{
+					response.json({"result":"success"})
+				}
+		});
+	});
+});
+
+app.post('/editname',checkAuth,function(request, response){
+	
+	var user = request.session.user;
+
+	user.name =  request.body.name;
+	users.save(user._id, user._rev,user, function(er, re){
+		if(er)
+		{
+			response.json({"result":"failure"});
+		}
+		else
+		{
+			response.json({"result":"success"});
+		}
+	});
+});
+
+function evaluateStringBoolean(string)
+{
+	if(string =='true')
+		return true;
+	else
+		return false;
+}
+
+app.post('/upgrade',/*checkAuth,*/function(request, response){
+	
+	
+	users.get(request.body.id, function(err, user){
+		user.admin =  evaluateStringBoolean( request.body.admin);
+		user.player =  evaluateStringBoolean( request.body.player);
+		user.designer =  evaluateStringBoolean( request.body.designer);
+
+		if(err){
+			response.json({"result":"failure"})
+		}
+		else {
+			users.save(user._id, user._rev,user, function(er, re){
+				if(er)
+				{
+					response.json({"result":"failure"})
+				}
+				else
+				{
+					response.json({"result":"success"})
+				}
+			});
+		}
+	});
+});
+
+
+
 
 
 function checkAuth(req, res, next) {
