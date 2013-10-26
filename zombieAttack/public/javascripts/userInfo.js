@@ -1,4 +1,5 @@
 var selectedUser;
+var currentUser;
 function loadUserInfo()
 {
     pageName = "userInfo";
@@ -10,9 +11,13 @@ function loadUserInfo()
     $.get("/currentuser", {}, function(user)
     {
         selectedUser = user._id;
+        currentUser = user._id;
         if(user.admin)
         {
             $('#approveUserData').hide();
+            $('#denyUserData').hide();
+            $('#upgradeUserData').hide();
+            $('#deleteUserData').hide();
             $('#userSidePanel').hide();
             $.get("/users", {}, function(info) {
                 var list = document.getElementById('userList');
@@ -21,7 +26,7 @@ function loadUserInfo()
                     var name = info[i].value.name;
                     var entry = document.createElement('li');
                     entry.appendChild(document.createTextNode(name));
-                    if(info[i].value._id == list)
+                    if(info[i].value._id == currentUser)
                     {
                         entry.setAttribute('class','list-group-item active');
                     }
@@ -29,7 +34,7 @@ function loadUserInfo()
                     {
                         entry.setAttribute('class','list-group-item');
                     }
-                    entry.setAttribute('userId', info[i].value_id);
+                    entry.setAttribute('userId', info[i].value._id);
                     entry.setAttribute('approvedUser', true);
                     entry.setAttribute('onClick','makeUserActive(this)');
                     entry.setAttribute('style','text-align:center;');
@@ -51,8 +56,8 @@ function loadUserInfo()
                     {
                         entry.setAttribute('class','list-group-item');
                     }
-                    entry.setAttribute('userId', info[i].value_id);
-                    entry.setAttribute('approvedUser', false);
+                    entry.setAttribute('userId', info[i].value._id);
+                    entry.setAttribute('approvedUser', "false");
                     entry.setAttribute('onClick','makeUserActive(this)');
                     entry.setAttribute('style','text-align:center;');
                     list.appendChild(entry);
@@ -65,6 +70,7 @@ function loadUserInfo()
             $('#deleteUserData').hide();
             $('#approveUserData').hide();
             $('#adminSidePanel').hide();
+            $('#denyUserData').hide();
         }
 
     });
@@ -89,20 +95,25 @@ function loadUserInfo()
         tableElements[i].className = "list-group-item";
     }
     tableItem.className = "list-group-item active";
-    $.get("/currentuser", {}, function(userInfoReturn)
-    {
-        $('#username').html(userInfoReturn.id);
-    });
-    selectedUser = tableItem.userId;
-    var apr = tableItem.approvedUser;
-    if(apr)
+    selectedUser = tableItem.getAttribute("userId");
+    var apr = tableItem.getAttribute("approvedUser");
+    if(apr == "true")
     {
         $('#upgradeUserData').show();
         $('#deleteUserData').show();
+        $('#editUserData').show();
     }
     else
     {
+        $('#editUserData').hide();
         $('#approveUserData').show();
+        $('#denyUserData').show();
+    }
+    console.log(selectedUser + " " + currentUser);
+    if(selectedUser == currentUser)
+    {
+        $('#upgradeUserData').hide();
+        $('#deleteUserData').hide();
     }
 }
 function approveUser()
@@ -114,8 +125,22 @@ function approveUser()
             var tableElements = $(li[useId=selectedUser]);
             for (var i = 0; i < tableElements.length; ++i)
             {
-                tableElements[i].approvedUser = true;
+                tableElements[i].setAttribute("approvedUser", "true");
                 tableElements[i].html(tableElements[i].html().substring(0,tableElements[i].html().length-3));
+            }
+        }
+    });
+}
+function denyUser()
+{
+    $.post("/deny", {id:selectedUser}, function(res)
+    {
+        if(res.result == 'success')
+        {
+            var tableElements = $(li[useId=selectedUser]);
+            for (var i = 0; i < tableElements.length; ++i)
+            {
+                tableElements[i].hide();
             }
         }
     });
