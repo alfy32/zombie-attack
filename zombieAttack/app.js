@@ -92,10 +92,10 @@ app.get('/currentuser', /*checkauth,*/ function(req,res){
 // ------------ MAP REQUESTS --------------- //
 app.post('/map', checkAuth, function(req, res) {
 	var map = req.body.map;
-
-	console.log(map);
+        
+        var result = {};
 	maps.save(map, function(err,res){
-		var p = Object();
+		result = res;
 		if(err)
 		{
 			p.result = "failed to save map";
@@ -104,10 +104,9 @@ app.post('/map', checkAuth, function(req, res) {
 		{
 			p.result = "Map Saved successfully"
 		}
-	res.json(p);
 	});
 
-
+        res.json(result);
 });
 
 app.get('/map', checkAuth, function(req, res) {
