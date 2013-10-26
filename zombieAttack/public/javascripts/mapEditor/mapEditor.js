@@ -6,6 +6,7 @@ var choosers = new Choosers();
 map.showGrid(true);
 $('#showGridCHK').prop('checked', true);
 bindShowGrid();
+bindMapName();
 
 var tileImage = new Image();
 tileImage.src = '/images/bottom.png';//'https://raw.github.com/CS-3450-Software-Engineering/class_documents/master/other_documents/bottom.png';
@@ -28,7 +29,7 @@ function backToMain() {
 
 function save() {
 	$.post('/map', {map: map.getMap()}, function(data) {
-		console.log(data);
+		console.log(JSON.stringify(data));
 	});
 
 	$.post('/mapImage', {mapImage: map.getImage({width: 300})}, function(data) {
@@ -45,4 +46,11 @@ function bindShowGrid() {
 	$('#showGridCHK').change(function() {
 		map.showGrid($('#showGridCHK').prop('checked'));
 	});
+}
+
+function bindMapName() {
+    $('#map-title').val(map.getTitle());
+    $('#map-title').keyup(function() {
+        map.setTitle($('#map-title').val());
+    });
 }

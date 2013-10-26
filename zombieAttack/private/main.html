@@ -4,15 +4,13 @@
 			<div class="panel panel-info">
 				<div class="panel-heading" style="text-align:center; font-size:16px;">Maps</div>
 				<ul class="list-group" id="mainList" style="max-height:400px; overflow:auto">
-				  <a class="list-group-item" onmouseover="" onClick="startMap(this)" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>
 				</ul>
 			</div>
 		</div>
 		<div class="col-sm-1"></div>
 		<div class="col-sm-1" style="top:60px;">
-			<table class="table table-bordered" style="width:400px;">
+			<table id="load-table" class="table table-bordered" style="width:400px;">
 				<tr><td colspan="3"><canvas style="border:solid;" height="372px" width="600px"></canvas></td></tr>
-				<tr><td><button href="#play-map-modal" data-toggle="modal" onclick="playMap()">PLAY</button></td><td><button onclick="editMap()">EDIT</button></td><td><button onclick="deleteMap()">DELETE</button></td></tr>
 			</table>
 		</div>
 		<div id="play-map-modal" class="modal fade">
@@ -27,6 +25,32 @@
 
 		      	</iframe>
 		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+		<div id="make-map-modal" class="modal fade">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title">Zombie Attack User Login Request</h4>
+		      </div>
+		      <form id = "new-user-request">     
+		      <div class="modal-body">
+		              <div class="input-group">
+		                  <input type="text" class="form-control" id = "new-request-name" placeholder="Name">
+		                  <input  id = "new-request-email" type="text" class="form-control" placeholder="Email">
+		                  <input  id="new-request-password" type="password" class="form-control" placeholder="Password">
+		                  <input  id="new-request-password-verify" type="password" class="form-control" placeholder="Verify Password">
+		              </div>          
+		      </div>
+		      
+		      <div class="modal-footer">
+		        <button type="button" id = "new-request-close-btn" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" id = "make-map-submit-btn" makeActiveclass="btn btn-primary" data-dismiss="modal">Submit Request</button>
+		      </div>
+		      
+		      </form>
 		    </div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
 		</div><!-- /.modal -->
