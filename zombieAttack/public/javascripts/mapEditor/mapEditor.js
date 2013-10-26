@@ -57,6 +57,8 @@ function bindMapName() {
 }
 
 function bindKeyDown() {
+	$(document).unbind("keydown");
+	
 	$(document).keydown(function(e) {
 		switch (e.which) {
 			case 37: //left

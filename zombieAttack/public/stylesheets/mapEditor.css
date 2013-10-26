@@ -19,3 +19,35 @@
     display: inline-block;
     margin-top: 50px;
 }
+
+.tab-pane div {
+	margin-top: 5px;
+}
+
+.tab-pane div button{
+	width: 45%;
+	height: 50px;
+	border: 2px solid grey;
+	border-radius: 5px;
+	background-color: black;
+	color: white;
+}
+
+.tab-pane div button:hover {
+	background-color: grey;
+}
+
+.tab-pane div.zoom-options button {
+	width: 30%;
+}
+
+.show-grid-check {
+	width: 90%;
+	height: 50px;
+	border: 2px solid grey;
+	border-radius: 5px;
+	background-color: black;
+	color: white;
+	text-align: center;
+	padding-top: 10px;
+}

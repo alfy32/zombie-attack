@@ -56,12 +56,14 @@
 				Top Stuff
 			</div>
 			<div class="tab-pane" id="options">
-				<p><input id="showGridCHK" type="checkbox" /><label>Show Grid</label></p>
-				<p>
+				<div class="show-grid-check">
+					<input id="showGridCHK" type="checkbox" /><label>Show Grid</label>
+				</div>
+				<div class="zoom-options">
 					<button onclick="map.zoomIn()">Zoom In</button> 
 					<button onclick="map.zoomOut()">Zoom Out</button>
 					<button onclick="map.setCanvaTileSize(40)">Reset Zoom</button>
-				</p>                        
+				</div>                        
 				<div>
 					<button onclick="map.moveUp()">Move Up</button>
 					<button onclick="map.moveDown()">Move Down</button>
