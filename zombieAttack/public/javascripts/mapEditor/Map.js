@@ -110,6 +110,88 @@ function Map() {
 		}
 	}
 	
+	this.increaseMapWidth = function() {
+		_map.width += 1;
+		
+		var tileNum = findMostCommonTileInCol(_map.data.bottom, _map.width-2);
+		
+		for(var row = 0; row < _map.height; row++) {
+			_map.data.bottom[row].push(tileNum);
+		}
+		
+		drawMap();
+	};
+	
+	this.decreaseMapWidth = function() {
+		_map.width -= 1;
+		
+		for(var row = 0; row < _map.height; row++) {
+			_map.data.bottom[row].pop();
+		}	
+		
+		drawMap();	
+	};
+	
+	this.increaseMapHeight = function() {
+		_map.height += 1;
+		
+		var tileNum = findMostCommonTileInRow(_map.data.bottom, _map.height-2);
+		
+		var row = [];
+		for(var col = 0; col < _map.width; col++) {
+			row.push(tileNum);
+		}
+		_map.data.bottom.push(row);
+		
+		drawMap();
+	};
+	
+	this.decreaseMapHeight = function() {
+		_map.height -= 1;
+		
+		_map.data.bottom.pop();	
+		
+		drawMap();
+	};
+	
+	function findMostCommonTileInRow(layer, row) {
+		var count = [];
+		
+		for(var i = 0; i < _map.height; i++) {
+			count[i] = 0;
+		}
+		
+		for(var col = 0; col < _map.height; col++) {
+			count[layer[row][col]]++;
+		}
+		
+		return layer[row][maxIndex(count)];
+	}
+	
+	function findMostCommonTileInCol(layer, col) {
+		var count = [];
+		
+		for(var i = 0; i < _map.width; i++) {
+			count[i] = 0;
+		}
+		
+		for(var row = 0; row < _map.height; row++) {
+			count[layer[row][col]]++;
+		}
+		
+		return layer[maxIndex(count)][col];
+	}
+	
+	function maxIndex(array) {
+		var maxKey = 0;
+		
+		for(var key in array) {
+			if(array[key] > array[maxKey]) 
+				maxKey = key;
+		}
+		return +maxKey;
+	}
+	
 	this.increaseSelectSize = function() {
 		_selectSize += 1;
 		
