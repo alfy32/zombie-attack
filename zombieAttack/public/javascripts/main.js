@@ -133,7 +133,7 @@ function playMap()
 
 function editMap()
 {
-	console.log("edit");
+    startMap($('.active').attr('mapid'));
 }
 
 function deleteMap()
