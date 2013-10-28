@@ -31,8 +31,6 @@ function loadMainPage()
         {
             var title = info[i].value.title;
             var id = info[i].id;
-            console.log(id);
-            console.log(title);
             var entry = document.createElement('a');
             entry.appendChild(document.createTextNode(title));
             entry.setAttribute('mapId',id);
@@ -118,13 +116,11 @@ function playMap()
 {
 	var mapID = document.getElementsByClassName('list-group-item active');
 	$(".modal-title").html($(mapID).html());
-	console.log(mapID);
 	var request = {
 		mapid : $(mapID).attr('mapid')
 	};
 	$.post("/playMap", request, function(info)
 	{
-		console.log(info);
 		$(".play-area").attr('src',info.url);
 	});
 	console.log("play");
