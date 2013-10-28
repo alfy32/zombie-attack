@@ -1,8 +1,9 @@
 
 .left-col {
     float: left;
-    width: 350px;
-    margin: 50px;    
+    width: 400px;
+    margin-left: 50px;    
+    margin-top: 50px;    
 }
 
 .map-info {
