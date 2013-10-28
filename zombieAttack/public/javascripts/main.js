@@ -85,9 +85,10 @@ function loadDelay()
 	tableItem.className = "list-group-item active";
 }
 
-function startMap()
+function startMap(id)
 {
 	pageName = "editor";
+        mapId = id;
 	newMapModal();
 	$('#load-stuff-here').load('mapEditor.html');
 }
@@ -142,7 +143,7 @@ function playMap()
 
 function editMap()
 {
-	console.log("edit");
+    startMap($('.active').attr('mapid'));
 }
 
 function deleteMap()

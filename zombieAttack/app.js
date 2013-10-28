@@ -163,7 +163,7 @@ app.post('/playMap', checkAuth, function(req, res){
 	maps.get(mapId,function(error, doc){
 		if(error){
 			console.log("error requesting map: " + mapId);
-			res.send("failure")
+			res.send("failure");
 		}
 		else{
 			delete doc._id;
