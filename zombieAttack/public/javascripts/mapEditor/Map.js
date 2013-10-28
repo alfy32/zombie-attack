@@ -71,28 +71,7 @@ function Map() {
 	}
 
 	this.setMap = function(map) {
-		_map = {
-			title: map.title ? map.title : "NO_TITLE",
-			author: map.author ? map.author : "NO_AUTHOR",
-			width: map.width ? +map.width : 0,
-			height: map.height ? +map.height : 0,
-			x: map.x ? +map.x : 0,
-			y: map.y ? +map.y : 0,
-			events: [],
-			data: {
-				bottom: [[]],
-				middle: [[]],
-				top: [[]]
-			},
-			env: map.env ? map.env : "NO_ENV"
-		};
-		
-		for(var row = 0; row < _map.height; row++) {
-			_map.data.bottom[row] = [];
-			for(var col = 0; col < _map.width; col++) {
-				_map.data.bottom[row][col] = map.data.bottom[row][col];
-			}
-		}
+                _map = JSON.parse(JSON.stringify(map));
 		
 		drawMap();
 	};
