@@ -84,7 +84,7 @@ app.post('/', function(req,res)
 });
 
 //done
-app.get('/currentuser', /*checkauth,*/ function(req,res){
+app.get('/currentuser', checkAuth, function(req,res){
 	console.log("getting current user");
 	res.json(req.session.user);
 });
@@ -158,8 +158,7 @@ app.get('/mapImage/:id?', checkAuth, function(req, res) {
 //done
 app.post('/playMap', checkAuth, function(req, res){
 
-	var mapId = req.body.mapid; 
-	console.log(mapId);
+	var mapId = req.body.mapid;
 
 	maps.get(mapId,function(error, doc){
 		if(error){
@@ -314,7 +313,6 @@ app.get('/logout', function(req,res){
 
 //done
 app.post('/newuserrequest',function(req,res){
-	console.log(req.body);
 	userFunctions.newUserRequest(bcrypt,userRequests_db,req.body,res);
 });
 
