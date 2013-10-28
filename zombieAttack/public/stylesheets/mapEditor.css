@@ -3,6 +3,7 @@
     float: left;
     width: 400px;
     margin-left: 50px;  
+    margin-top: 30px;
 }
 
 .map-info {
@@ -17,7 +18,7 @@
 
 .map-div {
     display: inline-block;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 .tab-pane div {
@@ -26,7 +27,7 @@
 
 .tab-pane div button{
 	width: 45%;
-	height: 50px;
+	height: 40px;
 	border: 2px solid grey;
 	border-radius: 5px;
 	background-color: black;
