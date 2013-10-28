@@ -9,43 +9,42 @@ function loadMainPage()
     
 
     $('#load-stuff-here').load('main.html',function(){
-    
-    $.get("/currentuser", {}, function(info)
-    {
-        var tr = $("<tr>");
-        if(info.player)
+        $.get("/currentuser", {}, function(info)
         {
-            $(tr).append('<td><button onclick="playMap()">PLAY</button></td>');
-        }
-        if(info.designer)
-        {
-            $("#mainList").append('<a class="list-group-item" onmouseover="" href="#make-map-modal" data-toggle="modal" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>');
-            $(tr).append('<td><button onclick="editMap()">EDIT</button></td>');
-        }
-        if(info.admin)
-        {
-            $(tr).append('<td><button onclick="deleteMap()">DELETE</button></td>');
-        }
-        $("#load-table").append(tr);
+            var tr = $("<tr>");
+            if(info.player)
+            {
+                $(tr).append('<td><button onclick="playMap()">PLAY</button></td>');
+            }
+            if(info.designer)
+            {
+                $("#mainList").append('<a class="list-group-item" onmouseover="" href="#make-map-modal" data-toggle="modal" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>');
+                $(tr).append('<td><button onclick="editMap()">EDIT</button></td>');
+            }
+            if(info.admin)
+            {
+                $(tr).append('<td><button onclick="deleteMap()">DELETE</button></td>');
+            }
+            $("#load-table").append(tr);
+            $.get("/mapsrequest", {}, function(info) {
+                var list = document.getElementById('mainList');
+                for(var i = 0; i < info.length; ++i)
+                {
+                    var title = info[i].value.title;
+                    var id = info[i].id;
+                    var entry = document.createElement('a');
+                    entry.appendChild(document.createTextNode(title));
+                    entry.setAttribute('mapId',id);
+                    entry.setAttribute('mapWidth',info[i].value.width);
+                    entry.setAttribute('mapHeight',info[i].value.height);
+                    entry.setAttribute('class','list-group-item');
+                    entry.setAttribute('onClick','makeActive(this)');
+                    entry.setAttribute('style','text-align:center;');
+                    list.appendChild(entry);
+                }        
+            });
+        });
     });
-    $.get("/mapsrequest", {}, function(info) {
-        var list = document.getElementById('mainList');
-        for(var i = 0; i < info.length; ++i)
-        {
-            var title = info[i].value.title;
-            var id = info[i].id;
-            var entry = document.createElement('a');
-            entry.appendChild(document.createTextNode(title));
-            entry.setAttribute('mapId',id);
-            entry.setAttribute('mapWidth',info[i].value.width);
-            entry.setAttribute('mapHeight',info[i].value.height);
-            entry.setAttribute('class','list-group-item');
-            entry.setAttribute('onClick','makeActive(this)');
-            entry.setAttribute('style','text-align:center;');
-            list.appendChild(entry);
-        }        
-    });
-            } );
 }
 
 function loadDelay()
