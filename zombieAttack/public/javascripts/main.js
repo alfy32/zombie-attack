@@ -1,3 +1,5 @@
+ $('#login-email').focus();
+
 function loadMainPage()
 {
     pageName = "main";
