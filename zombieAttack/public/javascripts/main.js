@@ -8,7 +8,8 @@ function loadMainPage()
     bindUserInfo();
     
 
-    $('#load-stuff-here').load('main.html');
+    $('#load-stuff-here').load('main.html',function(){
+    
     $.get("/currentuser", {}, function(info)
     {
         var tr = $("<tr>");
@@ -42,6 +43,7 @@ function loadMainPage()
             list.appendChild(entry);
         }        
     });
+            } );
 }
 
 function loadDelay()
