@@ -71,7 +71,24 @@ function Map() {
 	}
 
 	this.setMap = function(map) {
-                _map = JSON.parse(JSON.stringify(map));
+        _map = JSON.parse(JSON.stringify(map));
+		
+		_map.title = _map.title | "";
+		_map.author = _map.author | "";
+		_map.width = +_map.width | 0;
+		_map.height = +_map.height | 0;
+		_map.x = +_map.x | 0;
+		_map.y = _map.y | 0;
+		
+		_map.data = _map.data | { bottom: [[]], middle: [[]], top: [[]] };
+		
+		_map.data.bottom = _map.data.bottom | [];
+		for(var row = 0; row < _map.height; row++) {
+			_map.data.bottom[row] = _map.data.bottom[row] | [];
+			for(var col = 0; col < _map.width; col++) {
+				_map.data.bottom[row][col] = +_map.data.bottom[row][col];
+			}
+		}
 		
 		drawMap();
 	};
