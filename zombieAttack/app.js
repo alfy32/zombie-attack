@@ -1,5 +1,5 @@
 //random constants and other things
-var TIMEOUT = 600000;
+var TIMEOUT = 200000;
 
 /**
  * Module dependencies.
@@ -45,7 +45,7 @@ var users = connection.database('users');
 var userRequests_db = connection.database('user_requests');
 var maps = connection.database('maps');
 
-
+//done
 app.post('/', function(req,res)
 {
 	var id = req.body.email;
@@ -92,7 +92,7 @@ app.get('/currentuser', checkAuth, function(req,res){
 // ------------ MAP REQUESTS --------------- //
 
 //done
-app.post('/map', checkAuth, function(req, res) {
+app.post('/map', checkAuth, checkDesigner, function(req, res) {
 
 	var map = req.body.map;
         console.log(map);
@@ -134,8 +134,10 @@ app.post('/map', checkAuth, function(req, res) {
 });
 
 
+
+
 //done
-app.get('/map/:id?', /*checkAuth,*/ function(req, res) {
+app.get('/map/:id?', checkAuth, checkDesigner,function(req, res) {
 	var mapId = req.route.params.id;
 	maps.get(mapId, function(error, map){
 		if(error)
@@ -152,7 +154,7 @@ app.get('/map/:id?', /*checkAuth,*/ function(req, res) {
 
 
 //done
-app.post('/playMap', checkAuth, function(req, res){
+app.post('/playMap', checkAuth, checkPlayer, function(req, res){
 
 	var mapId = req.body.mapid;
 
@@ -193,7 +195,7 @@ app.get('/mapsrequest', checkAuth, function(req, res){
 	});
 });
 
-app.get('/users', /*checkAuth,*/function(req,res){
+app.get('/users', checkAuth, checkAdmin, function(req,res){
 	users.get('_design/company/_view/all', function(error, response){
 		if(error)
 		{
@@ -207,7 +209,7 @@ app.get('/users', /*checkAuth,*/function(req,res){
 	});
 });
 
-app.get('/userrequests', /*checkAuth,*/ function(req,res){
+app.get('/userrequests', checkAuth,checkAdmin ,function(req,res){
 	userRequests_db.get('_design/company/_view/all', function(error, response){
 		if(error)
 		{
@@ -221,7 +223,7 @@ app.get('/userrequests', /*checkAuth,*/ function(req,res){
 	});
 });
 
-app.post('/approve', /*checkAuth,*/ function(req,res){
+app.post('/approve', checkAuth,checkAdmin, function(req,res){
 
 	var response = Object();
 	response.result = "failure";
@@ -267,8 +269,7 @@ app.post('/approve', /*checkAuth,*/ function(req,res){
 
 });
 
-app.post('/deleteuser', /*checkauth,*/ function(request, response){
-	//users.get(request.body.id, function(e,r){});
+app.post('/deleteuser', checkAuth,checkAdmin, function(request, response){
 	users.remove(request.body.id,function(error,res){
 		if(error)
 		{
@@ -282,8 +283,7 @@ app.post('/deleteuser', /*checkauth,*/ function(request, response){
 
 });
 
-app.post('/deny', /*checkauth,*/ function(request, response){
-	//users.get(request.body.id, function(e,r){});
+app.post('/deny', checkAuth, checkAdmin, function(request, response){
 	userRequests_db.remove(request.body.id,function(error,res){
 		if(error)
 		{
@@ -313,7 +313,7 @@ app.post('/newuserrequest',function(req,res){
 });
 
 //done
-app.post('/createUser',checkAuth, function(req,res){
+app.post('/createUser',checkAuth,checkAdmin, function(req,res){
 	var user = new Object();
 	user['name'] = req.body.name;
 	user['password']= req.body.password;
@@ -322,6 +322,8 @@ app.post('/createUser',checkAuth, function(req,res){
 	res.send('<h1>success<h1>');
 });
 
+
+//done
 app.post('/editpassword',checkAuth,function(request, response){
 	var password = request.body.password;
 	var user = request.session.user;
@@ -366,7 +368,7 @@ function evaluateStringBoolean(string)
 		return false;
 }
 
-app.post('/upgrade',/*checkAuth,*/function(request, response){
+app.post('/upgrade',checkAuth, checkAdmin,function(request, response){
 	
 	
 	users.get(request.body.id, function(err, user){
@@ -393,7 +395,40 @@ app.post('/upgrade',/*checkAuth,*/function(request, response){
 });
 
 
+function checkAdmin(req, res, next)
+{
+	if(req.session.user.admin)
+	{
+		next();
+	}
+	else
+	{
+		res.json({"result":"failure","message":"you are not an administrator"});
+	}
+}
 
+function checkPlayer(req,res,next)
+{
+	if(req.session.user.player)
+	{
+		next();
+	}
+	else
+	{
+		res.json({"result":"failure","message":"you are not a player"})
+	}
+}
+function checkDesigner(req,res,next)
+{
+	if(req.session.user.designer)
+	{
+		next();
+	}
+	else
+	{
+		res.json({"result":"failure","message":"you are not a designer"})
+	}
+}
 
 
 function checkAuth(req, res, next) {
