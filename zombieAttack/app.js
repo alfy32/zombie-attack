@@ -97,6 +97,8 @@ app.post('/map', checkAuth, checkDesigner, function(req, res) {
 	var map = req.body.map;
         console.log(map);
     
+    map.author = req.session.user.name;
+
 	if(map._id){
 		var mapId;	
 		mapId = map._id;
@@ -151,6 +153,19 @@ app.get('/map/:id?', checkAuth, checkDesigner,function(req, res) {
 	});
 });
 
+app.delete('/map', checkAuth, checkDesigner, function(request, response){
+	maps.remove(request.body.id,function(error,res){
+		if(error)
+		{
+			response.json({"result":"failure"});
+		}
+		else
+		{
+			response.json({"result":"success"});
+		}
+	});
+
+});
 
 
 //done
@@ -222,7 +237,7 @@ app.get('/userrequests', checkAuth,checkAdmin ,function(req,res){
 		}
 	});
 });
-
+//done
 app.post('/approve', checkAuth,checkAdmin, function(req,res){
 
 	var response = Object();
@@ -269,6 +284,7 @@ app.post('/approve', checkAuth,checkAdmin, function(req,res){
 
 });
 
+//done
 app.post('/deleteuser', checkAuth,checkAdmin, function(request, response){
 	users.remove(request.body.id,function(error,res){
 		if(error)
@@ -283,6 +299,7 @@ app.post('/deleteuser', checkAuth,checkAdmin, function(request, response){
 
 });
 
+//done
 app.post('/deny', checkAuth, checkAdmin, function(request, response){
 	userRequests_db.remove(request.body.id,function(error,res){
 		if(error)
