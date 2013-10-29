@@ -90,70 +90,66 @@ app.get('/currentuser', checkAuth, function(req,res){
 });
 
 // ------------ MAP REQUESTS --------------- //
+
+//done
 app.post('/map', checkAuth, function(req, res) {
+
 	var map = req.body.map;
-        
-        var result = {};
-	maps.save(map, function(err,res){
-		result = res;
-		if(err)
+        console.log(map);
+    
+	if(map._id){
+		var mapId;	
+		mapId = map._id;
+	    delete map._rev;
+
+	    var toReturn = {};
+		maps.save(mapId,map, function(err,reso){
+			console.log(reso);
+			if(err)
+			{
+				toReturn.result = "failure";
+			}
+			else
+			{
+				toReturn.mapData = reso
+				toReturn.result = "success"
+			}
+	        res.json(toReturn);
+		});
+	}
+	else
+	maps.save(map, function(err,reso){
+			console.log(reso);
+			if(err)
+			{
+				toReturn.result = "failure";
+			}
+			else
+			{
+				toReturn.mapData = reso;
+				toReturn.result = "success"
+			}
+	        res.json(toReturn);
+		});
+});
+
+
+//done
+app.get('/map/:id?', /*checkAuth,*/ function(req, res) {
+	var mapId = req.route.params.id;
+	maps.get(mapId, function(error, map){
+		if(error)
 		{
-			p.result = "failed to save map";
+			res.json({"result":"failure"});
 		}
 		else
 		{
-			p.result = "Map Saved successfully"
+			res.json(map);
 		}
 	});
-
-        res.json(result);
 });
 
-app.get('/map', checkAuth, function(req, res) {
 
-	res.json({
-		result: 'this get request is not yet implemented.',
-		maps: [] //returns a list of all maps in database that user has access to.
-	});
-});
-
-app.get('/map/:id?', checkAuth, function(req, res) {
-	var mapId = req.route.params.id;
-
-	res.json({
-		result: 'this get request is not yet implemented.',
-		map: {}// returns the map with the id given in the url.
-	});
-});
-
-app.post('/mapImage', checkAuth, function(req, res) {
-	var mapImage = req.body.mapImage;
-
-	// TODO: implement 
-	
-	//this will require a map image database. It would need simply the mapId and the image.
-
-	res.json({
-		result: 'this post request is not yet implemented.'
-	});
-});
-
-app.get('/mapImage', checkAuth, function(req, res) {
-
-	res.json({
-		result: 'this get request is not yet implemented.',
-		mapImages: [] //returns a list of all maps in database that user has access to.
-	});
-});
-
-app.get('/mapImage/:id?', checkAuth, function(req, res) {
-	var mapId = req.route.params.id;
-
-	res.json({
-		result: 'this get request is not yet implemented.',
-		mapImage: {} // returns the map with the id given in the url.
-	});
-});
 
 //done
 app.post('/playMap', checkAuth, function(req, res){
