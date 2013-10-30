@@ -28,7 +28,10 @@ function Map() {
 	var _rightClickTile = -1;
 	var _tileImage = new Image();
 	var _initImageNumber = 22;
-
+	
+	var _mapHistory = [];
+	var _historyIndex = -1;
+	
 	var _map = {
 		title: 'NO_TITLE',
 		author: 'NO_AUTHOR',
@@ -69,6 +72,41 @@ function Map() {
 			}
 		}
 	}
+	
+	this.getHistory = function() {
+		return _mapHistory;
+	};
+	
+	this.getHistoryIndex = function() {
+		return _historyIndex;
+	};
+	
+	function pushHistory() {
+		_mapHistory.splice(_historyIndex+1,_mapHistory.length);
+		
+		_mapHistory[++_historyIndex] = JSON.stringify(_map);
+	}
+	
+	this.undo = function() {
+		_historyIndex--;
+		if(_historyIndex < 0) 
+			_historyIndex = 0;
+		
+		_map = JSON.parse(_mapHistory[_historyIndex]);
+		
+		drawMap();
+	};
+	
+	this.redo = function() {
+		_historyIndex++;
+		if(_historyIndex >= _mapHistory.length) {
+			_historyIndex = _mapHistory.length-1;
+		}
+		
+		_map = JSON.parse(_mapHistory[_historyIndex]);
+		
+		drawMap();
+	};
 
 	this.setMap = function(map) {
         _map = JSON.parse(JSON.stringify(map));
@@ -100,6 +138,9 @@ function Map() {
 					_map.data.bottom[row][col] = -1;
 			}
 		}
+		
+		if(_map.width && _map.height)
+			pushHistory();
 		
 		drawMap();
 	};
@@ -314,16 +355,35 @@ function Map() {
 			return _showGrid;
 		}
 	};
-
-	function setCurrentBottomTiles(tileNumber) {
+	
+	function changed(tileNumber) {
 		var curr = currentBox();
 		
 		if(curr) {
 			for(var row = curr.y; row < curr.y+curr.height; row++) {
 				for(var col = curr.x; col < curr.x+curr.width; col++){
-					_map.data.bottom[row][col] = tileNumber;
+					if(_map.data.bottom[row][col] !== tileNumber)
+						return true;
 				}
 			}			
+		}
+		
+		return false;
+	}
+
+	function setCurrentBottomTiles(tileNumber) {
+		var curr = currentBox();
+		
+		if(changed(tileNumber)) {
+			
+			for(var row = curr.y; row < curr.y+curr.height; row++) {
+				for(var col = curr.x; col < curr.x+curr.width; col++){
+					_map.data.bottom[row][col] = tileNumber;
+				}
+			}
+			
+			if(_mouseButtonClicked)
+				pushHistory();
 		}
 	}
 
