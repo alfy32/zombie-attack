@@ -44,15 +44,6 @@ function save() {
 	$.post('/map', {map: map.getMap()}, function(data) {
 		console.log(JSON.stringify(data));
 	});
-
-	$.post('/mapImage', {mapImage: map.getImage({width: 300})}, function(data) {
-		console.log(data);
-	});
-}
-
-function previewMap() {
-	var width = 300;
-	$('#mapPreview').attr('src', map.getImage({width: width}));
 }
 
 function bindShowGrid() {
