@@ -99,12 +99,13 @@ app.post('/map', checkAuth, checkDesigner, function(req, res) {
     
     map.author = req.session.user.name;
 
+	var toReturn = {};
+
 	if(map._id){
 		var mapId;	
 		mapId = map._id;
 	    delete map._rev;
 
-	    var toReturn = {};
 		maps.save(mapId,map, function(err,reso){
 			console.log(reso);
 			if(err)
