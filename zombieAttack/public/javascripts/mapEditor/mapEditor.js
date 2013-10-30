@@ -1,13 +1,12 @@
 var map = new Map();
+var saveTime = new Date();
 
 if (mapId !== undefined) {
-    $.get('/mapsrequest', {}, function(data) {
-        for (var m in data) {
-            if (data[m].id === mapId) {
-                map.setMap(data[m].value);
-                setTitle(data[m].value.title);
-            }
-        }
+	map.setMap({width:0, height:0});
+	
+    $.get('/map/' + mapId, {}, function(data) {
+		map.setMap(data);
+        setTitle(data.title);
     });
 }
 
@@ -42,17 +41,30 @@ function backToMain() {
 
 function save() {
 	$.post('/map', {map: map.getMap()}, function(data) {
-		console.log(JSON.stringify(data));
-	});
-
-	$.post('/mapImage', {mapImage: map.getImage({width: 300})}, function(data) {
-		console.log(data);
+		if(data.result === "success") {
+			saveTime = new Date();
+		} else {
+			alert("Save failed: " + data);
+		}
 	});
 }
 
-function previewMap() {
-	var width = 300;
-	$('#mapPreview').attr('src', map.getImage({width: width}));
+function saveCopy() {
+	var m = map.getMap();
+	m.title += " - Copy";
+	delete m._id;
+	delete m._rev;
+	
+	$.post('/map', {map: m}, function(data) {
+		if(data.result === "success") {
+			saveTime = new Date();
+			m._id = data.mapData.id;
+			map.setMap(m);
+			setTitle(m.title);
+		} else {
+			alert("Save failed: " + data);
+		}
+	});
 }
 
 function bindShowGrid() {
