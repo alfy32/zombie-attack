@@ -136,6 +136,48 @@ app.post('/map', checkAuth, checkDesigner, function(req, res) {
 		});
 });
 
+app.post('/updatemap', checkDesigner, function(req, res) {
+
+	var lastActivity = new Date().getTime() - req.session.lastActivity;
+	var toReturn = {};
+
+  if (!req.session.user) {
+  	toReturn.result = "failure"
+  	toReturn.message = "Unauthorized"
+    res.json(toReturn);
+  } 
+  else {
+  	if(lastActivity>TIMEOUT)
+  	{
+  		delete req.session.user;
+  		delete req.session.lastActivity;
+  		toReturn.result = "failure"
+  		toReturn.messge = 'you have been logged out due to innactivity, please login again';
+  		res.json(toReturn);
+  	}
+  }
+
+	var map = req.body.map;
+        console.log(map);
+    
+    	var mapId= map._id;
+	    delete map._rev;
+		maps.save(mapId,map, function(err,reso){
+			console.log(reso);
+			if(err)
+			{
+				toReturn.result = "failure";
+				toReturn.message = "Database Error"
+			}
+			else
+			{
+				toReturn.mapData = reso
+				toReturn.result = "success"
+			}
+	        res.json(toReturn);
+		});
+	
+});
 
 
 
@@ -153,6 +195,8 @@ app.get('/map/:id?', checkAuth, checkDesigner,function(req, res) {
 		}
 	});
 });
+
+
 
 app.delete('/map', checkAuth, checkDesigner, function(request, response){
 	maps.remove(request.body.id,function(error,res){

@@ -192,6 +192,7 @@ function Map() {
 
 	this.setTitle = function(title) {
 		_map.title = title;
+		_hasChanged = true;
 	};
 
 	this.getTitle = function() {

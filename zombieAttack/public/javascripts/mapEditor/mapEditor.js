@@ -55,7 +55,7 @@ var interval = setInterval(function(){
 
 	if((time - saveTime) >= saveInterval && map.getChanged()) {
 		$("#save-time").html("Saving...");
-		save();
+		autoSave();
 		map.setChanged(false);
 	}
 }, 1000);
@@ -96,6 +96,17 @@ function save() {
 			setSaveTime();
 		} else {
 			alert("Save failed: " + data);
+		}
+	});
+}
+
+function autoSave() {
+	$.post('/updatemap', {map: map.getMap()}, function(data) {
+		if(data.result === "success") {
+			saveTime = new Date();
+			setSaveTime();
+		} else {
+			alert("Save failed: " + data.message);
 		}
 	});
 }
