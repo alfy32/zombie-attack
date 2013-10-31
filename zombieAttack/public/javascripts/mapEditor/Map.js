@@ -405,13 +405,12 @@ function Map() {
 		}
 	};
 	
-	function changed(tileNumber) {
-		var curr = currentBox();
+	function changed(tileNumber, curr) {
 		
 		if(curr) {
 			for(var row = curr.y; row < curr.y+curr.height; row++) {
 				for(var col = curr.x; col < curr.x+curr.width; col++){
-					if(_map.data.bottom[row][col] !== tileNumber) {
+					if(_map.data.bottom[row][col] != tileNumber) {
 						_hasChanged = true;
 						return true;
 					}
@@ -425,7 +424,7 @@ function Map() {
 	function setCurrentBottomTiles(tileNumber) {
 		var curr = currentBox();
 		
-		if(changed(tileNumber)) {
+		if(changed(tileNumber, curr)) {
 			
 			for(var row = curr.y; row < curr.y+curr.height; row++) {
 				for(var col = curr.x; col < curr.x+curr.width; col++){
