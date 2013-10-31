@@ -1,5 +1,7 @@
 var map = new Map();
 var saveTime = new Date();
+setSaveTime();
+var saveInterval = 15000;
 
 if (mapId !== undefined) {
 	map.setMap({width:0, height:0});
@@ -9,6 +11,45 @@ if (mapId !== undefined) {
         setTitle(data.title);
     });
 }
+
+function refresh() {
+	clearInterval(interval);
+	refreshMapEditor()
+}
+
+function setSaveTime(time) {
+	saveTime = new Date();
+	$("#save-time").html("Last Saved: " + formatTime(saveTime));
+}
+
+function formatTime(date) {
+	var h = +date.getHours();
+	var m = +date.getMinutes();
+	var s = +date.getSeconds();
+
+	if(h > 12) {
+		h = h - 12;
+	}
+
+	if(h < 10) {
+		h = "0" + h;
+	}
+
+	if(m < 10) {
+		m = "0" + m;
+	}
+
+	if(s < 10) {
+		s = "0" + s;
+	}
+
+	return h + ":" + m + ":" + s;
+}
+
+var interval = setInterval(function(){
+	$("#save-time").html("Saving...");
+	save();
+}, saveInterval);
 
 var choosers = new Choosers();
 
@@ -42,7 +83,7 @@ function backToMain() {
 function save() {
 	$.post('/map', {map: map.getMap()}, function(data) {
 		if(data.result === "success") {
-			saveTime = new Date();
+			setSaveTime();
 		} else {
 			alert("Save failed: " + data);
 		}
@@ -57,7 +98,7 @@ function saveCopy() {
 	
 	$.post('/map', {map: m}, function(data) {
 		if(data.result === "success") {
-			saveTime = new Date();
+			setSaveTime();
 			m._id = data.mapData.id;
 			map.setMap(m);
 			setTitle(m.title);

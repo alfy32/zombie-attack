@@ -1,12 +1,13 @@
 <div id="map-editor">
     <link href="stylesheets/mapEditor.css" rel="stylesheet">
+    <label id="save-time"></label>
 
 	<div class="left-col">
 		<div class="map-info">
 			<label>Title</label><input id="map-title"/>
 		</div>
 		<div style="padding-bottom: 20px;">
-			<button onclick="refreshMapEditor();">Refresh</button>
+			<button onclick="refresh();">Refresh</button>
 			<button onclick="backToMain();">Back</button>
 			<button onclick="save();">Save Map</button>
 			<button onclick="saveCopy();">Save Copy</button>
