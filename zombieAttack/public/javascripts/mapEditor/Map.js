@@ -72,6 +72,37 @@ function Map() {
 			}
 		}
 	}
+
+	var _copyArea;
+
+	this.copy = function() {
+		var curr = currentBox();
+
+		_copyArea = [];
+		for(var row = 0; row < curr.height; row++) {
+			_copyArea[row] = [];
+			for(var col = 0; col < curr.width; col++) {
+				_copyArea[row][col] = _map.data.bottom[curr.y+row][curr.x+col];
+			}
+		}
+	};
+
+	this.paste = function () {
+		var curr = currentBox();
+
+		if(curr.width && curr.height) {
+
+			for(var row = 0; row < _copyArea.length; row++) {
+				for(var col = 0; col < _copyArea[row].length; col++) {
+					_map.data.bottom[curr.y+row][curr.x+col] = _copyArea[row][col];
+				}
+			}
+
+			pushHistory();
+
+			drawMap();
+		}
+	};
 	
 	this.getHistory = function() {
 		return _mapHistory;
@@ -187,6 +218,8 @@ function Map() {
 			_map.data.bottom[row].push(_map.data.bottom[row][_map.width-2]);
 		}
 		
+		pushHistory();
+
 		drawMap();
 	};
 	
@@ -197,6 +230,8 @@ function Map() {
 			_map.data.bottom[row].pop();
 		}	
 		
+		pushHistory();
+
 		drawMap();	
 	};
 	
@@ -209,6 +244,8 @@ function Map() {
 		}
 		_map.data.bottom.push(row);
 		
+		pushHistory();
+
 		drawMap();
 	};
 	
@@ -217,6 +254,8 @@ function Map() {
 		
 		_map.data.bottom.pop();	
 		
+		pushHistory();
+
 		drawMap();
 	};
 	

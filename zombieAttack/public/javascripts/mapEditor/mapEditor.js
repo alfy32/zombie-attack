@@ -105,6 +105,12 @@ function bindKeyDown() {
 			case 109:
 				map.zoomOut();
 				break;
+			case 67: //c
+				map.copy();
+				break;
+			case 86: //v
+				map.paste();
+				break;
 		}
 	});
 }
