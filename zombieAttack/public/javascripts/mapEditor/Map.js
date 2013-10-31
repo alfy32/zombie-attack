@@ -31,6 +31,8 @@ function Map() {
 	
 	var _mapHistory = [];
 	var _historyIndex = -1;
+
+	var _hasChanged = false;
 	
 	var _map = {
 		title: 'NO_TITLE',
@@ -103,6 +105,14 @@ function Map() {
 			drawMap();
 		}
 	};
+
+	this.getChanged = function() {
+		return _hasChanged;
+	};
+
+	this.setChanged = function(changed) {
+		_hasChanged = changed;
+	}
 	
 	this.getHistory = function() {
 		return _mapHistory;
@@ -401,8 +411,10 @@ function Map() {
 		if(curr) {
 			for(var row = curr.y; row < curr.y+curr.height; row++) {
 				for(var col = curr.x; col < curr.x+curr.width; col++){
-					if(_map.data.bottom[row][col] !== tileNumber)
+					if(_map.data.bottom[row][col] !== tileNumber) {
+						_hasChanged = true;
 						return true;
+					}
 				}
 			}			
 		}

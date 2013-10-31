@@ -17,9 +17,12 @@ function refresh() {
 	refreshMapEditor()
 }
 
-function setSaveTime(time) {
-	saveTime = new Date();
-	$("#save-time").html("Last Saved: " + formatTime(saveTime));
+function setSaveTime() {
+	if(map.getChanged()) {
+		$("#save-time").html("Time: " + formatTime(new Date()) + " Last Save: " + formatTime(saveTime));
+	} else {
+		$("#save-time").html("Time: " + formatTime(new Date()) + " No Changes since: " + formatTime(saveTime));
+	}
 }
 
 function formatTime(date) {
@@ -47,9 +50,15 @@ function formatTime(date) {
 }
 
 var interval = setInterval(function(){
-	$("#save-time").html("Saving...");
-	save();
-}, saveInterval);
+	setSaveTime();
+	var time = new Date();
+
+	if((time - saveTime) >= saveInterval && map.getChanged()) {
+		$("#save-time").html("Saving...");
+		save();
+		map.setChanged(false);
+	}
+}, 1000);
 
 var choosers = new Choosers();
 
@@ -83,6 +92,7 @@ function backToMain() {
 function save() {
 	$.post('/map', {map: map.getMap()}, function(data) {
 		if(data.result === "success") {
+			saveTime = new Date();
 			setSaveTime();
 		} else {
 			alert("Save failed: " + data);
@@ -98,6 +108,7 @@ function saveCopy() {
 	
 	$.post('/map', {map: m}, function(data) {
 		if(data.result === "success") {
+			saveTime = new Date();
 			setSaveTime();
 			m._id = data.mapData.id;
 			map.setMap(m);
