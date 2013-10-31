@@ -56,7 +56,6 @@ var interval = setInterval(function(){
 	if((time - saveTime) >= saveInterval && map.getChanged()) {
 		$("#save-time").html("Saving...");
 		autoSave();
-		map.setChanged(false);
 	}
 }, 1000);
 
@@ -94,6 +93,7 @@ function save() {
 		if(data.result === "success") {
 			saveTime = new Date();
 			setSaveTime();
+			map.setChanged(false);
 		} else {
 			alert("Save failed: " + data);
 		}
@@ -105,6 +105,7 @@ function autoSave() {
 		if(data.result === "success") {
 			saveTime = new Date();
 			setSaveTime();
+			map.setChanged(false);
 		} else {
 			alert("Save failed: " + data.message);
 		}
@@ -124,6 +125,7 @@ function saveCopy() {
 			m._id = data.mapData.id;
 			map.setMap(m);
 			setTitle(m.title);
+			map.setChanged(false);
 		} else {
 			alert("Save failed: " + data);
 		}
