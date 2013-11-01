@@ -41,6 +41,7 @@ function loadMainPage()
                     entry.setAttribute('onClick','makeActive(this)');
                     entry.setAttribute('style','text-align:center;');
                     list.appendChild(entry);
+                    $(entry).data(info[i].value);
                 }        
             });
         });
@@ -82,6 +83,7 @@ function loadDelay()
 		tableElements[i].className = "list-group-item";
 	}
 	tableItem.className = "list-group-item active";
+    drawMap('canvas', spriteImage, $(tableItem).data());
 }
 
 function startMap(id)
