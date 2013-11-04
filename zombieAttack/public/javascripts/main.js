@@ -77,12 +77,7 @@ function loadDelay()
 	var tableElements = document.getElementsByClassName('list-group-item active');
 	tableElements.className = "list-group-item";
 	tableItem.className = "list-group-item active";
-<<<<<<< HEAD
-    
-
-=======
     drawMap('canvas', spriteImage, $(tableItem).data());
->>>>>>> 4b1565d4ad9a9de8ee244b83614d0c6a432c9285
 }
 
 function startMap(id)
