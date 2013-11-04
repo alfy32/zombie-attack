@@ -28,7 +28,12 @@ function Map() {
 	var _rightClickTile = -1;
 	var _tileImage = new Image();
 	var _initImageNumber = 22;
+	
+	var _mapHistory = [];
+	var _historyIndex = -1;
 
+	var _hasChanged = false;
+	
 	var _map = {
 		title: 'NO_TITLE',
 		author: 'NO_AUTHOR',
@@ -70,29 +75,113 @@ function Map() {
 		}
 	}
 
+	var _copyArea;
+
+	this.copy = function() {
+		var curr = currentBox();
+
+		_copyArea = [];
+		for(var row = 0; row < curr.height; row++) {
+			_copyArea[row] = [];
+			for(var col = 0; col < curr.width; col++) {
+				_copyArea[row][col] = _map.data.bottom[curr.y+row][curr.x+col];
+			}
+		}
+	};
+
+	this.paste = function () {
+		var curr = currentBox();
+
+		if(curr.width && curr.height) {
+
+			for(var row = 0; row < _copyArea.length; row++) {
+				for(var col = 0; col < _copyArea[row].length; col++) {
+					_map.data.bottom[curr.y+row][curr.x+col] = _copyArea[row][col];
+				}
+			}
+
+			pushHistory();
+
+			drawMap();
+		}
+	};
+
+	this.getChanged = function() {
+		return _hasChanged;
+	};
+
+	this.setChanged = function(changed) {
+		_hasChanged = changed;
+	}
+	
+	this.getHistory = function() {
+		return _mapHistory;
+	};
+	
+	this.getHistoryIndex = function() {
+		return _historyIndex;
+	};
+	
+	function pushHistory() {
+		_mapHistory.splice(_historyIndex+1,_mapHistory.length);
+		
+		_mapHistory[++_historyIndex] = JSON.stringify(_map);
+	}
+	
+	this.undo = function() {
+		_historyIndex--;
+		if(_historyIndex < 0) 
+			_historyIndex = 0;
+		
+		_map = JSON.parse(_mapHistory[_historyIndex]);
+		
+		drawMap();
+	};
+	
+	this.redo = function() {
+		_historyIndex++;
+		if(_historyIndex >= _mapHistory.length) {
+			_historyIndex = _mapHistory.length-1;
+		}
+		
+		_map = JSON.parse(_mapHistory[_historyIndex]);
+		
+		drawMap();
+	};
+
 	this.setMap = function(map) {
-		_map = {
-			title: map.title ? map.title : "NO_TITLE",
-			author: map.author ? map.author : "NO_AUTHOR",
-			width: map.width ? +map.width : 0,
-			height: map.height ? +map.height : 0,
-			x: map.x ? +map.x : 0,
-			y: map.y ? +map.y : 0,
-			events: [],
-			data: {
+        _map = JSON.parse(JSON.stringify(map));
+		
+//		_map.title = _map.title | "";
+//		_map.author = _map.author | "";
+		_map.width = +_map.width | 0;
+		_map.height = +_map.height | 0;
+		_map.x = +_map.x | 0;
+		_map.y = +_map.y | 0;
+		
+		if(!_map.data) {
+			_map.data = {
 				bottom: [[]],
 				middle: [[]],
 				top: [[]]
-			},
-			env: map.env ? map.env : "NO_ENV"
-		};
+			};
+		}
 		
 		for(var row = 0; row < _map.height; row++) {
-			_map.data.bottom[row] = [];
+			
+			if(!_map.data.bottom[row])
+				_map.data.bottom[row] = [];
+			
 			for(var col = 0; col < _map.width; col++) {
-				_map.data.bottom[row][col] = map.data.bottom[row][col];
+				if(_map.data.bottom[row][col])
+					_map.data.bottom[row][col] = +_map.data.bottom[row][col];
+				else
+					_map.data.bottom[row][col] = -1;
 			}
 		}
+		
+		if(_map.width && _map.height)
+			pushHistory();
 		
 		drawMap();
 	};
@@ -103,6 +192,7 @@ function Map() {
 
 	this.setTitle = function(title) {
 		_map.title = title;
+		_hasChanged = true;
 	};
 
 	this.getTitle = function() {
@@ -139,6 +229,8 @@ function Map() {
 			_map.data.bottom[row].push(_map.data.bottom[row][_map.width-2]);
 		}
 		
+		pushHistory();
+
 		drawMap();
 	};
 	
@@ -149,6 +241,8 @@ function Map() {
 			_map.data.bottom[row].pop();
 		}	
 		
+		pushHistory();
+
 		drawMap();	
 	};
 	
@@ -161,6 +255,8 @@ function Map() {
 		}
 		_map.data.bottom.push(row);
 		
+		pushHistory();
+
 		drawMap();
 	};
 	
@@ -169,6 +265,8 @@ function Map() {
 		
 		_map.data.bottom.pop();	
 		
+		pushHistory();
+
 		drawMap();
 	};
 	
@@ -307,16 +405,36 @@ function Map() {
 			return _showGrid;
 		}
 	};
-
-	function setCurrentBottomTiles(tileNumber) {
-		var curr = currentBox();
+	
+	function changed(tileNumber, curr) {
 		
 		if(curr) {
 			for(var row = curr.y; row < curr.y+curr.height; row++) {
 				for(var col = curr.x; col < curr.x+curr.width; col++){
-					_map.data.bottom[row][col] = tileNumber;
+					if(_map.data.bottom[row][col] != tileNumber) {
+						_hasChanged = true;
+						return true;
+					}
 				}
 			}			
+		}
+		
+		return false;
+	}
+
+	function setCurrentBottomTiles(tileNumber) {
+		var curr = currentBox();
+		
+		if(changed(tileNumber, curr)) {
+			
+			for(var row = curr.y; row < curr.y+curr.height; row++) {
+				for(var col = curr.x; col < curr.x+curr.width; col++){
+					_map.data.bottom[row][col] = tileNumber;
+				}
+			}
+			
+			if(_mouseButtonClicked)
+				pushHistory();
 		}
 	}
 

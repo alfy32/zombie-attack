@@ -1,5 +1,5 @@
 //random constants and other things
-var TIMEOUT = 600000;
+var TIMEOUT = 200000;
 
 /**
  * Module dependencies.
@@ -45,7 +45,7 @@ var users = connection.database('users');
 var userRequests_db = connection.database('user_requests');
 var maps = connection.database('maps');
 
-
+//done
 app.post('/', function(req,res)
 {
 	var id = req.body.email;
@@ -90,73 +90,131 @@ app.get('/currentuser', checkAuth, function(req,res){
 });
 
 // ------------ MAP REQUESTS --------------- //
-app.post('/map', checkAuth, function(req, res) {
+
+//done
+app.post('/map', checkAuth, checkDesigner, function(req, res) {
+
 	var map = req.body.map;
-        
-        var result = {};
-	maps.save(map, function(err,res){
-		result = res;
-		if(err)
+        console.log(map);
+    
+    map.author = req.session.user.name;
+
+	var toReturn = {};
+
+	if(map._id){
+		var mapId;	
+		mapId = map._id;
+	    delete map._rev;
+
+		maps.save(mapId,map, function(err,reso){
+			console.log(reso);
+			if(err)
+			{
+				toReturn.result = "failure";
+			}
+			else
+			{
+				toReturn.mapData = reso
+				toReturn.result = "success"
+			}
+	        res.json(toReturn);
+		});
+	}
+	else
+	maps.save(map, function(err,reso){
+			console.log(reso);
+			if(err)
+			{
+				toReturn.result = "failure";
+			}
+			else
+			{
+				toReturn.mapData = reso;
+				toReturn.result = "success"
+			}
+	        res.json(toReturn);
+		});
+});
+
+app.post('/updatemap', checkDesigner, function(req, res) {
+
+	var lastActivity = new Date().getTime() - req.session.lastActivity;
+	var toReturn = {};
+
+  if (!req.session.user) {
+  	toReturn.result = "failure"
+  	toReturn.message = "Unauthorized"
+    res.json(toReturn);
+  } 
+  else {
+  	if(lastActivity>TIMEOUT)
+  	{
+  		delete req.session.user;
+  		delete req.session.lastActivity;
+  		toReturn.result = "failure"
+  		toReturn.messge = 'you have been logged out due to innactivity, please login again';
+  		res.json(toReturn);
+  	}
+  }
+
+	var map = req.body.map;
+        console.log(map);
+    
+    	var mapId= map._id;
+	    delete map._rev;
+		maps.save(mapId,map, function(err,reso){
+			console.log(reso);
+			if(err)
+			{
+				toReturn.result = "failure";
+				toReturn.message = "Database Error"
+			}
+			else
+			{
+				toReturn.mapData = reso
+				toReturn.result = "success"
+			}
+	        res.json(toReturn);
+		});
+	
+});
+
+
+
+//done
+app.get('/map/:id?', checkAuth, checkDesigner,function(req, res) {
+	var mapId = req.route.params.id;
+	maps.get(mapId, function(error, map){
+		if(error)
 		{
-			p.result = "failed to save map";
+			res.json({"result":"failure"});
 		}
 		else
 		{
-			p.result = "Map Saved successfully"
+			res.json(map);
+		}
+	});
+});
+
+
+
+app.delete('/map', checkAuth, checkDesigner, function(request, response){
+	maps.remove(request.body.id,function(error,res){
+		if(error)
+		{
+			response.json({"result":"failure"});
+		}
+		else
+		{
+			response.json({"result":"success"});
 		}
 	});
 
-        res.json(result);
 });
 
-app.get('/map', checkAuth, function(req, res) {
-
-	res.json({
-		result: 'this get request is not yet implemented.',
-		maps: [] //returns a list of all maps in database that user has access to.
-	});
-});
-
-app.get('/map/:id?', checkAuth, function(req, res) {
-	var mapId = req.route.params.id;
-
-	res.json({
-		result: 'this get request is not yet implemented.',
-		map: {}// returns the map with the id given in the url.
-	});
-});
-
-app.post('/mapImage', checkAuth, function(req, res) {
-	var mapImage = req.body.mapImage;
-
-	// TODO: implement 
-	
-	//this will require a map image database. It would need simply the mapId and the image.
-
-	res.json({
-		result: 'this post request is not yet implemented.'
-	});
-});
-
-app.get('/mapImage', checkAuth, function(req, res) {
-
-	res.json({
-		result: 'this get request is not yet implemented.',
-		mapImages: [] //returns a list of all maps in database that user has access to.
-	});
-});
-
-app.get('/mapImage/:id?', checkAuth, function(req, res) {
-	var mapId = req.route.params.id;
-
-	res.json({
-		result: 'this get request is not yet implemented.',
-		mapImage: {} // returns the map with the id given in the url.
-	});
-});
 
 //done
-app.post('/playMap', checkAuth, function(req, res){
+app.post('/playMap', checkAuth, checkPlayer, function(req, res){
 
 	var mapId = req.body.mapid;
 
@@ -197,7 +255,7 @@ app.get('/mapsrequest', checkAuth, function(req, res){
 	});
 });
 
-app.get('/users', /*checkAuth,*/function(req,res){
+app.get('/users', checkAuth, checkAdmin, function(req,res){
 	users.get('_design/company/_view/all', function(error, response){
 		if(error)
 		{
@@ -211,7 +269,7 @@ app.get('/users', /*checkAuth,*/function(req,res){
 	});
 });
 
-app.get('/userrequests', /*checkAuth,*/ function(req,res){
+app.get('/userrequests', checkAuth,checkAdmin ,function(req,res){
 	userRequests_db.get('_design/company/_view/all', function(error, response){
 		if(error)
 		{
@@ -224,8 +282,8 @@ app.get('/userrequests', /*checkAuth,*/ function(req,res){
 		}
 	});
 });
-
-app.post('/approve', /*checkAuth,*/ function(req,res){
+//done
+app.post('/approve', checkAuth,checkAdmin, function(req,res){
 
 	var response = Object();
 	response.result = "failure";
@@ -271,8 +329,8 @@ app.post('/approve', /*checkAuth,*/ function(req,res){
 
 });
 
-app.post('/deleteuser', /*checkauth,*/ function(request, response){
-	//users.get(request.body.id, function(e,r){});
+//done
+app.post('/deleteuser', checkAuth,checkAdmin, function(request, response){
 	users.remove(request.body.id,function(error,res){
 		if(error)
 		{
@@ -286,8 +344,8 @@ app.post('/deleteuser', /*checkauth,*/ function(request, response){
 
 });
 
-app.post('/deny', /*checkauth,*/ function(request, response){
-	//users.get(request.body.id, function(e,r){});
+//done
+app.post('/deny', checkAuth, checkAdmin, function(request, response){
 	userRequests_db.remove(request.body.id,function(error,res){
 		if(error)
 		{
@@ -317,7 +375,7 @@ app.post('/newuserrequest',function(req,res){
 });
 
 //done
-app.post('/createUser',checkAuth, function(req,res){
+app.post('/createUser',checkAuth,checkAdmin, function(req,res){
 	var user = new Object();
 	user['name'] = req.body.name;
 	user['password']= req.body.password;
@@ -326,6 +384,8 @@ app.post('/createUser',checkAuth, function(req,res){
 	res.send('<h1>success<h1>');
 });
 
+
+//done
 app.post('/editpassword',checkAuth,function(request, response){
 	var password = request.body.password;
 	var user = request.session.user;
@@ -370,7 +430,7 @@ function evaluateStringBoolean(string)
 		return false;
 }
 
-app.post('/upgrade',/*checkAuth,*/function(request, response){
+app.post('/upgrade',checkAuth, checkAdmin,function(request, response){
 	
 	
 	users.get(request.body.id, function(err, user){
@@ -397,7 +457,40 @@ app.post('/upgrade',/*checkAuth,*/function(request, response){
 });
 
 
+function checkAdmin(req, res, next)
+{
+	if(req.session.user.admin)
+	{
+		next();
+	}
+	else
+	{
+		res.json({"result":"failure","message":"you are not an administrator"});
+	}
+}
 
+function checkPlayer(req,res,next)
+{
+	if(req.session.user.player)
+	{
+		next();
+	}
+	else
+	{
+		res.json({"result":"failure","message":"you are not a player"})
+	}
+}
+function checkDesigner(req,res,next)
+{
+	if(req.session.user.designer)
+	{
+		next();
+	}
+	else
+	{
+		res.json({"result":"failure","message":"you are not a designer"})
+	}
+}
 
 
 function checkAuth(req, res, next) {

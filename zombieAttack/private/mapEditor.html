@@ -6,10 +6,12 @@
 			<label>Title</label><input id="map-title"/>
 		</div>
 		<div style="padding-bottom: 20px;">
-			<button onclick="refreshMapEditor();">Refresh</button>
+			<button onclick="refresh();">Refresh</button>
 			<button onclick="backToMain();">Back</button>
-			<button onclick="previewMap();">Preview</button>
 			<button onclick="save();">Save Map</button>
+			<button onclick="saveCopy();">Save Copy</button>
+			<button onclick="map.undo();">Undo</button>
+			<button onclick="map.redo();">Redo</button>
 		</div>
 
 		<div>
@@ -100,7 +102,10 @@
 		<canvas id="map" width="700" height="500" style="border:1px solid #c3c3c3;"></canvas>
 		<!-- ******************** /Required ******************** -->
 	</div>
-
+	<div>
+		<label id="save-time"></label>
+	</div>
+	
     <!--Alan's JavaScript -->
     <!-- ******************** Required ******************** --> 
     <!-- ================================================== --> 

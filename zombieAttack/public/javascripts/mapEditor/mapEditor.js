@@ -1,15 +1,63 @@
 var map = new Map();
+var saveTime = new Date();
+setSaveTime();
+var saveInterval = 15000;
 
 if (mapId !== undefined) {
-    $.get('/mapsrequest', {}, function(data) {
-        for (var m in data) {
-            if (data[m].id === mapId) {
-                map.setMap(data[m].value);
-                setTitle(data[m].value.title);
-            }
-        }
+	map.setMap({width:0, height:0});
+	
+    $.get('/map/' + mapId, {}, function(data) {
+		map.setMap(data);
+        setTitle(data.title);
     });
 }
+
+function refresh() {
+	clearInterval(interval);
+	refreshMapEditor()
+}
+
+function setSaveTime() {
+	if(map.getChanged()) {
+		$("#save-time").html("Time: " + formatTime(new Date()) + " Last Save: " + formatTime(saveTime));
+	} else {
+		$("#save-time").html("Time: " + formatTime(new Date()) + " No Changes since: " + formatTime(saveTime));
+	}
+}
+
+function formatTime(date) {
+	var h = +date.getHours();
+	var m = +date.getMinutes();
+	var s = +date.getSeconds();
+
+	if(h > 12) {
+		h = h - 12;
+	}
+
+	if(h < 10) {
+		h = "0" + h;
+	}
+
+	if(m < 10) {
+		m = "0" + m;
+	}
+
+	if(s < 10) {
+		s = "0" + s;
+	}
+
+	return h + ":" + m + ":" + s;
+}
+
+var interval = setInterval(function(){
+	setSaveTime();
+	var time = new Date();
+
+	if((time - saveTime) >= saveInterval && map.getChanged()) {
+		$("#save-time").html("Saving...");
+		autoSave();
+	}
+}, 1000);
 
 var choosers = new Choosers();
 
@@ -42,17 +90,46 @@ function backToMain() {
 
 function save() {
 	$.post('/map', {map: map.getMap()}, function(data) {
-		console.log(JSON.stringify(data));
-	});
-
-	$.post('/mapImage', {mapImage: map.getImage({width: 300})}, function(data) {
-		console.log(data);
+		if(data.result === "success") {
+			saveTime = new Date();
+			setSaveTime();
+			map.setChanged(false);
+		} else {
+			alert("Save failed: " + data);
+		}
 	});
 }
 
-function previewMap() {
-	var width = 300;
-	$('#mapPreview').attr('src', map.getImage({width: width}));
+function autoSave() {
+	$.post('/updatemap', {map: map.getMap()}, function(data) {
+		if(data.result === "success") {
+			saveTime = new Date();
+			setSaveTime();
+			map.setChanged(false);
+		} else {
+			alert("Save failed: " + data.message);
+		}
+	});
+}
+
+function saveCopy() {
+	var m = map.getMap();
+	m.title += " - Copy";
+	delete m._id;
+	delete m._rev;
+	
+	$.post('/map', {map: m}, function(data) {
+		if(data.result === "success") {
+			saveTime = new Date();
+			setSaveTime();
+			m._id = data.mapData.id;
+			map.setMap(m);
+			setTitle(m.title);
+			map.setChanged(false);
+		} else {
+			alert("Save failed: " + data);
+		}
+	});
 }
 
 function bindShowGrid() {
@@ -92,6 +169,12 @@ function bindKeyDown() {
 			case 189: //minus
 			case 109:
 				map.zoomOut();
+				break;
+			case 67: //c
+				map.copy();
+				break;
+			case 86: //v
+				map.paste();
 				break;
 		}
 	});
