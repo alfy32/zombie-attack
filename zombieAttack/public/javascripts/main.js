@@ -14,7 +14,7 @@ function loadMainPage()
             var tr = $("<tr>");
             if(info.player)
             {
-                $(tr).append('<td><button onclick="playMap()">PLAY</button></td>');
+                $(tr).append('<td><button href="#play-map-modal" data-toggle="modal" onclick="playMap()">PLAY</button></td>');
             }
             if(info.designer)
             {
@@ -34,13 +34,11 @@ function loadMainPage()
                     var id = info[i].id;
                     var entry = document.createElement('a');
                     entry.appendChild(document.createTextNode(title));
-                    entry.setAttribute('mapId',id);
-                    entry.setAttribute('mapWidth',info[i].value.width);
-                    entry.setAttribute('mapHeight',info[i].value.height);
                     entry.setAttribute('class','list-group-item');
                     entry.setAttribute('onClick','makeActive(this)');
                     entry.setAttribute('style','text-align:center;');
                     list.appendChild(entry);
+                    $(entry).data(info[i].value);
                 }        
             });
         });
@@ -77,11 +75,10 @@ function loadDelay()
  function makeActive(tableItem)
 {
 	var tableElements = document.getElementsByClassName('list-group-item active');
-	for (var i = 0; i < tableElements.length; ++i)
-	{
-		tableElements[i].className = "list-group-item";
-	}
+	tableElements.className = "list-group-item";
 	tableItem.className = "list-group-item active";
+    
+
 }
 
 function startMap(id)
@@ -120,6 +117,20 @@ function loadStartup()
 
 function playMap()
 {
+    var mapID = $(".active").data("_id");
+        $(".modal-title").html($(".active").data("title"));
+        console.log(mapID);
+        var request = {
+                mapid : mapID
+        };
+        $.post("/playMap", request, function(info)
+        {
+                console.log(info);
+                $(".play-area").attr('src',info.url);
+                $(".play-area").focus();
+        });
+        console.log("play");
+        /*
 	var mapID = $("#mainList .active").attr('mapid');
     var mapHeight = $('#mainList .active').attr('mapHeight');
     var mapWidth = $('#mainList .active').attr('mapWidth');
@@ -138,6 +149,7 @@ function playMap()
 		});
 		console.log("play");
 	});
+ */
 }
 
 function editMap()
