@@ -1,5 +1,29 @@
 var selectedUser;
 var currentUser;
+function setMe()
+{
+    $('#approveUserData').hide();
+    $('#denyUserData').hide();
+    $('#upgradeUserData').hide();
+    $('#deleteUserData').hide();
+    $('#editUserData').show();
+}
+function setRequest()
+{
+    $('#approveUserData').show();
+    $('#denyUserData').show();
+    $('#upgradeUserData').hide();
+    $('#deleteUserData').hide();
+    $('#editUserData').hide();
+}
+function setOther()
+{
+    $('#approveUserData').hide();
+    $('#denyUserData').hide();
+    $('#upgradeUserData').show();
+    $('#deleteUserData').show();
+    $('#editUserData').show();
+}
 function loadUserInfo()
 {
     pageName = "userInfo";
@@ -14,11 +38,8 @@ function loadUserInfo()
         currentUser = user._id;
         if(user.admin)
         {
-            $('#approveUserData').hide();
-            $('#denyUserData').hide();
-            $('#upgradeUserData').hide();
-            $('#deleteUserData').hide();
             $('#userSidePanel').hide();
+            setMe();
             $.get("/users", {}, function(info) {
                 var list = document.getElementById('userList');
                 for(var i = 0; i < info.length; ++i)
@@ -66,11 +87,8 @@ function loadUserInfo()
         }
         else
         {
-            $('#upgradeUserData').hide();
-            $('#deleteUserData').hide();
-            $('#approveUserData').hide();
+            setMe();
             $('#adminSidePanel').hide();
-            $('#denyUserData').hide();
         }
 
     });
@@ -99,49 +117,74 @@ function loadUserInfo()
     var apr = tableItem.getAttribute("approvedUser");
     if(apr == "true")
     {
-        $('#upgradeUserData').show();
-        $('#deleteUserData').show();
-        $('#editUserData').show();
+        setOther();
     }
     else
     {
-        $('#editUserData').hide();
-        $('#approveUserData').show();
-        $('#denyUserData').show();
+        setRequest();
     }
     console.log(selectedUser + " " + currentUser);
     if(selectedUser == currentUser)
     {
-        $('#upgradeUserData').hide();
-        $('#deleteUserData').hide();
+        setMe();
     }
 }
 function approveUser()
 {
     $.post("/approve", {id:selectedUser}, function(res)
     {
-        if(res.result == 'success')
+        var tableElements = $("userList");
+        for (var i = 0; i < tableElements.length; ++i)
         {
-            var tableElements = $(li[useId=selectedUser]);
-            for (var i = 0; i < tableElements.length; ++i)
-            {
-                tableElements[i].setAttribute("approvedUser", "true");
-                tableElements[i].html(tableElements[i].html().substring(0,tableElements[i].html().length-3));
+            if(tableElemnents[i].getAttribute("userId") == selectedUser)
+           {
+                if(res.result == "success")
+                    tableElements[i].hide();
+                else
+                    tableElement[i].html("ERROR");
             }
         }
+        if(res.result == "success")
+            loadUserInfo(); 
     });
 }
 function denyUser()
 {
     $.post("/deny", {id:selectedUser}, function(res)
     {
-        if(res.result == 'success')
+        var tableElements = $("userList");
+        for (var i = 0; i < tableElements.length; ++i)
         {
-            var tableElements = $(li[useId=selectedUser]);
-            for (var i = 0; i < tableElements.length; ++i)
+            if(tableElemnents[i].getAttribute("userId") == selectedUser)
             {
-                tableElements[i].hide();
+                if(res.result == "success")
+                    tableElements[i].hide();
+                else
+                    tableElement[i].html("ERROR");
             }
         }
+        if(res.result == "success")
+            loadUserInfo();
     });
+
+}
+function deleteUser()
+{
+    $.post("/deleteuser", {id:selectedUser}, function(res)
+    {
+        var tableElements = $("userList");
+        for (var i = 0; i < tableElements.length; ++i)
+        {
+            if(tableElemnents[i].getAttribute("userId") == selectedUser)
+            {
+                if(res.result == "success")
+                    tableElements[i].hide();
+                else
+                    tableElement[i].html("ERROR");
+            }
+        }
+        if(res.result == "success")
+            loadUserInfo();
+    });
+
 }
