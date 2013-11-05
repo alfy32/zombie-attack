@@ -55,7 +55,7 @@ var interval = setInterval(function(){
 
 	if((time - saveTime) >= saveInterval && map.getChanged()) {
 		$("#save-time").html("Saving...");
-		autoSave();
+		save();
 	}
 }, 1000);
 
@@ -95,22 +95,22 @@ function save() {
 			setSaveTime();
 			map.setChanged(false);
 		} else {
-			alert("Save failed: " + data);
+			console.log("Save failed: " + data);
 		}
 	});
 }
 
-function autoSave() {
-	$.post('/updatemap', {map: map.getMap()}, function(data) {
-		if(data.result === "success") {
-			saveTime = new Date();
-			setSaveTime();
-			map.setChanged(false);
-		} else {
-			alert("Save failed: " + data.message);
-		}
-	});
-}
+// function autoSave() {
+// 	$.post('/updatemap', {map: map.getMap()}, function(data) {
+// 		if(data.result === "success") {
+// 			saveTime = new Date();
+// 			setSaveTime();
+// 			map.setChanged(false);
+// 		} else {
+// 			alert("Save failed: " + data.message);
+// 		}
+// 	});
+// }
 
 function saveCopy() {
 	var m = map.getMap();
