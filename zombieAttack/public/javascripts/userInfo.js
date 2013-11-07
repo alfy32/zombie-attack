@@ -272,7 +272,7 @@ function upgradeuser()
         d = "true";
         p = "true";
     }
-    $.post("/upgrade", {admin: a, player: p, designer: d}, function(res)
+    $.post("/upgrade", {id:selectedUser, admin: a, player: p, designer: d}, function(res)
     {
         console.log("upgrade: ", res);
     });
