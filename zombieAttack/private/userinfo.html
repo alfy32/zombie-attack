@@ -16,34 +16,36 @@
 			<tr>
 				<td colspan="5">
 					<table>
+						<tr style="width:600px">
+							<td>Email: </td><td id="tdemail"></td>
 						<tr>
 							<td>
-								<canvas style="border:solid;" height="150px" width="300px"></canvas>
+								<canvas style="border:solid;" height="250px" width="300px"></canvas>
 							</td>
 							<td>
-								<table>
+								<table id="editTable">
 									<tr>
-										<td>Email: </td><td></td>
+										<td>Name: </td><td><input type="text" name="name" id="inname"></td>
 									</tr>
 									<tr>
-										<td>Name: </td><td><input type="text" name="name"></td>
+										<td>Password: </td><td><input type="password" name="pass" id="inpass"></td>
 									</tr>
 									<tr>
-										<td>Password: </td><td><input type="password" name="pass"></td>
+										<td>Password Again: </td><td><input type="password" name="pass2" id="inpass2"></td>
 									</tr>
   								</table>
-  								<table>
+  								<table id="permTable">
 									<tr>
 										<td>User Type: </td><td></td>
 									</tr>
 									<tr>
-										<td><input type="checkbox" name="vehicle" value="Bike"></td><td>Administrator</td>
+										<td><input type="checkbox" name="perm" value="Administrator" id="cha"></td><td>Administrator</td>
 									</tr>
 									<tr>
-										<td><input type="checkbox" name="vehicle" value="Bike"></td><td>Designer</td>
+										<td><input type="checkbox" name="perm" value="Designer" id="chd"></td><td>Designer</td>
 									</tr> 
 									<tr>
-										<td><input type="checkbox" name="vehicle" value="Bike"></td><td>Player</td>
+										<td><input type="checkbox" name="perm" value="Player" id="chp"></td><td>Player</td>
 									</tr> 
   								</table>
 							</td>
@@ -52,8 +54,8 @@
 				</td>
 			</tr>
 			<tr>
-				<td id="editUserData"><button onclick="edituser()">Edit User</button></td>
-				<td id="upgradeUserData"><button onclick="upgradeuser()">Upgrade User</button></td>
+				<td id="editUserData"><button onclick="edituser()">Edit Name/Password</button></td>
+				<td id="upgradeUserData"><button onclick="upgradeuser()">Upgrade Permissions</button></td>
 				<td id="deleteUserData"><button onclick="deleteUser()">Delete User</button></td>
 				<td id="approveUserData"><button onclick="approveUser()">Approve User</button></td>
 				<td id="denyUserData"><button onclick="denyUser()">Deny User</button></td>

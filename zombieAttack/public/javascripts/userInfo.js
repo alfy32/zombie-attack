@@ -7,6 +7,9 @@ function setMe()
     $('#upgradeUserData').hide();
     $('#deleteUserData').hide();
     $('#editUserData').show();
+
+    $('#permTable').hide();
+    $('#editTable').show();
 }
 function setRequest()
 {
@@ -15,6 +18,9 @@ function setRequest()
     $('#upgradeUserData').hide();
     $('#deleteUserData').hide();
     $('#editUserData').hide();
+
+    $('#permTable').hide();
+    $('#editTable').hide();
 }
 function setOther()
 {
@@ -22,7 +28,10 @@ function setOther()
     $('#denyUserData').hide();
     $('#upgradeUserData').show();
     $('#deleteUserData').show();
-    $('#editUserData').show();
+    $('#editUserData').hide();
+
+    $('#permTable').show();
+    $('#editTable').hide();
 }
 function loadUserInfo()
 {
@@ -36,6 +45,7 @@ function loadUserInfo()
     {
         selectedUser = user._id;
         currentUser = user._id;
+        setUserUI(user._id, user.name, user.admin, user.designer, user.player);
         if(user.admin)
         {
             $('#userSidePanel').hide();
@@ -56,6 +66,10 @@ function loadUserInfo()
                         entry.setAttribute('class','list-group-item');
                     }
                     entry.setAttribute('userId', info[i].value._id);
+                    entry.setAttribute('userName', info[i].value.name);
+                    entry.setAttribute('userA', info[i].value.admin);
+                    entry.setAttribute('userD', info[i].value.designer);
+                    entry.setAttribute('userP', info[i].value.player);
                     entry.setAttribute('approvedUser', true);
                     entry.setAttribute('onClick','makeUserActive(this)');
                     entry.setAttribute('style','text-align:center;');
@@ -114,7 +128,12 @@ function loadUserInfo()
     }
     tableItem.className = "list-group-item active";
     selectedUser = tableItem.getAttribute("userId");
+    var nm = tableItem.getAttribute("userName");
+    var ad = tableItem.getAttribute("userA");
+    var des = tableItem.getAttribute("userD");
+    var pl = tableItem.getAttribute("userP");
     var apr = tableItem.getAttribute("approvedUser");
+    setUserUI(selectedUser, nm, ad, des, pl);
     if(apr == "true")
     {
         setOther();
@@ -136,12 +155,12 @@ function approveUser()
         var tableElements = $("userList");
         for (var i = 0; i < tableElements.length; ++i)
         {
-            if(tableElemnents[i].getAttribute("userId") == selectedUser)
+            if(tableElements[i].getAttribute("userId") == selectedUser)
            {
                 if(res.result == "success")
                     tableElements[i].hide();
                 else
-                    tableElement[i].html("ERROR");
+                    tableElements[i].html("ERROR");
             }
         }
         if(res.result == "success")
@@ -155,12 +174,12 @@ function denyUser()
         var tableElements = $("userList");
         for (var i = 0; i < tableElements.length; ++i)
         {
-            if(tableElemnents[i].getAttribute("userId") == selectedUser)
+            if(tableElements[i].getAttribute("userId") == selectedUser)
             {
                 if(res.result == "success")
                     tableElements[i].hide();
                 else
-                    tableElement[i].html("ERROR");
+                    tableElements[i].html("ERROR");
             }
         }
         if(res.result == "success")
@@ -187,4 +206,74 @@ function deleteUser()
             loadUserInfo();
     });
 
+}
+function setUserUI(id, name, admin, designer, player)
+{
+    $('#tdemail').html(id);
+    $('#inname').val(name);
+    console.log("Admin: ", admin);
+    if(admin == "true")
+    {
+        console.log("Admin true");
+        $('#cha').prop("checked", true);
+    }
+    else
+    {
+        console.log("Admin false");
+        $('#cha').prop("checked", false);
+    }
+    if(designer == "true")
+    {
+        console.log("Des true");
+        $('#chd').prop("checked", true);
+    }
+    else
+    {
+        console.log("Des false");
+        $('#chd').prop("checked", false);
+    }
+    if(player == "true")
+    {
+        console.log("Play true");
+        $('#chp').prop("checked", true);
+    }
+    else
+    {
+        console.log("Play false");
+        $('#chp').prop("checked", false);
+    }
+}
+function edituser()
+{
+    var n = document.getElementById('inname').value;
+    var p1 = document.getElementById('inpass').value
+    var p2 = document.getElementById('inpass2').value;
+    if(p1 != p2 || p1.length < 5)
+    {
+        console.log("Error: invalid password...");
+        return;
+    }
+    $.post("/editpassword", {password:p1}, function(res)
+    {
+        console.log("EditPass: ", res);
+    });
+    $.post("/editname", {name:n}, function(res)
+    {
+        console.log("EditName: ", res);
+    });
+}
+function upgradeuser()
+{
+    var a = document.getElementById('cha').checked;
+    var d = document.getElementById('chd').checked;
+    var p = document.getElementById('chp').checked;
+    if(a == "true")
+    {
+        d = "true";
+        p = "true";
+    }
+    $.post("/upgrade", {admin: a, player: p, designer: d}, function(res)
+    {
+        console.log("upgrade: ", res);
+    });
 }
