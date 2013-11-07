@@ -253,11 +253,11 @@ function edituser()
         console.log("Error: invalid password...");
         return;
     }
-    $.post("/editpassword", {password:p1}, function(res)
+    $.post("/editpassword", {id:selectedUser, password:p1}, function(res)
     {
         console.log("EditPass: ", res);
     });
-    $.post("/editname", {name:n}, function(res)
+    $.post("/editname", {id:selectedUser, name:n}, function(res)
     {
         console.log("EditName: ", res);
     });
