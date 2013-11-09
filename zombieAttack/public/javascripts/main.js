@@ -153,7 +153,7 @@ function playMap()
 
 function editMap()
 {
-    startMap($('.active').attr('mapid'));
+    startMap($('.active').data('_id'));
 }
 
 function deleteMap()

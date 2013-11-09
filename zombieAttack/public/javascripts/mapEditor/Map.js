@@ -468,7 +468,7 @@ function Map() {
 
 		for (var row = 0; row < _map.height; row++) {
 			for (var col = 0; col < _map.width; col++) {
-				if (_map.data.bottom[row][col])
+				if (_map.data.bottom[row][col] !== undefined)
 					drawTileImage(_map.data.bottom[row][col], row, col);
 			}
 		}
