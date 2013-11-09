@@ -1,99 +1,99 @@
 <div id="map-editor">
-    <link href="stylesheets/mapEditor.css" rel="stylesheet">
+  <link href="stylesheets/mapEditor.css" rel="stylesheet">
+  <link href="stylesheets/tiles.css" rel="stylesheet">
 
 	<div class="left-col">
-		<div class="map-info">
-			<label>Title</label><input id="map-title"/>
-		</div>
-		<div style="padding-bottom: 20px;">
-			<button onclick="refresh();">Refresh</button>
-			<button onclick="backToMain();">Back</button>
-			<button onclick="save();">Save Map</button>
-			<button onclick="saveCopy();">Save Copy</button>
-			<button onclick="map.undo();">Undo</button>
-			<button onclick="map.redo();">Redo</button>
-		</div>
 
-		<div>
+ <!--    <form role="form" class="title-form">
+      <div class="form-group">
+        <label for="map-title">Title</label>
+        <input type="text" class="form-control" id="map-title" placeholder="Map Title">
+      </div>
+    </form> -->
 
-			<label>Left:</label>
-			<!-- ******************** Required ******************** -->
-			<canvas id="leftClick" width="40" height="40" style="border:1px solid #c3c3c3;"></canvas>
-			<!-- ******************** /Required ******************** -->
+		<table class="clicks-table">
+			<thead>
+        <tr class="click-labels">
+          <th>Left</th>
+          <th>Right</th>
+        </tr>   
+      </thead>
+      <tbody>
+        <tr>
+          <td class="clicks">
+            <canvas id="left-click" class="left-click" width="40" height="40"></canvas>
+          </td>
+          <td class="clicks">
+            <canvas id="right-click" class="right-click" width="40" height="40"></canvas>
+          </td>          
+        </tr>
+        <tr>
+          <td class="fill">
+            <button class="btn btn-xs" onclick="map.fillLeft()">Fill Left</button>
+          </td>
+          <td class="fill">
+            <button class="btn btn-xs" onclick="map.fillRight()">Fill Right</button>
+          </td>
+      </tbody>
+		</table>
 
-			<label>Right:</label>
-			<!-- ******************** Required ******************** -->
-			<canvas id="rightClick" width="40" height="40" style="border:1px solid #c3c3c3;"></canvas>
-			<!-- ******************** /Required ******************** -->
-
-		</div>
-
-		<div>
-			<button onclick="map.fillLeft()">Fill with left tile</button>
-			<button onclick="map.fillRight()">Fill with right tile</button>
-		</div> 
+    <div class="checks">
+      <div class="checkbox">
+        <label><input type="checkbox" id="CHK-bottom"/>Bottom</label>
+      </div>
+ 
+      <div class="checkbox">
+        <label><input type="checkbox" id="CHK-middle"/>Middle</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox" id="CHK-upper"/>Upper</label>
+      </div>
+      <div class="checkbox">
+        <label><input type="checkbox" id="CHK-grid"/>Grid</label>
+      </div>
+   </div>
 
 		<ul class="nav nav-tabs">
-			<li class="active"><a href="#base" data-toggle="tab">Base</a></li>
-			<li><a href="#middle" data-toggle="tab">Middle</a></li>
-			<li><a href="#top" data-toggle="tab">Top</a></li>
+			<li class="active"><a onclick="setLayer('bottom')" href="#bottom" data-toggle="tab">Bottom</a></li>
+			<li><a onclick="setLayer('middle')" href="#middle" data-toggle="tab">Middle</a></li>
+			<li><a onclick="setLayer('upper')" href="#upper" data-toggle="tab">Upper</a></li>
 			<li><a href="#options" data-toggle="tab">Options</a></li>
 		</ul>
 
 		<div class="tab-content">
-			<div class="tab-pane active" id="base">
-
-				<!-- ******************** Required ******************** -->
-				<div id="choosers">Loading....</div>
-				<!-- ******************** /Required ******************** -->
-
-				<!-- ******************** Required ******************** -->
-				<div id="position"></div>
-				<!-- ******************** /Required ******************** -->
-			</div>
-			<div class="tab-pane" id="middle">
-				Middle Stuff.
-			</div>
-			<div class="tab-pane" id="top">
-				Top Stuff
-			</div>
+			<div class="tab-pane active" id="bottom">Loading....</div>
+			<div class="tab-pane" id="middle">Loading....</div>
+			<div class="tab-pane" id="upper">Loading....</div>
 			<div class="tab-pane" id="options">
-				<div class="show-grid-check">
-					<input id="showGridCHK" type="checkbox" /><label>Show Grid</label>
-				</div>
 				<div class="zoom-options">
-					<button onclick="map.zoomIn()">Zoom In</button> 
-					<button onclick="map.zoomOut()">Zoom Out</button>
-					<button onclick="map.setCanvaTileSize(40)">Reset Zoom</button>
+					<button class="btn btn-primary options" onclick="map.zoomIn()">Zoom In</button> 
+					<button class="btn btn-primary options" onclick="map.zoomOut()">Zoom Out</button>
+        </div>                        
+        <div>  
+					<button class="btn btn-primary options reset" onclick="map.setCanvaTileSize(40)">Reset Zoom</button>
 				</div>                        
 				<div>
-					<button onclick="map.moveUp()">Move Up</button>
-					<button onclick="map.moveDown()">Move Down</button>
+					<button class="btn btn-primary options" onclick="map.moveUp()">Move Up</button>
+					<button class="btn btn-primary options" onclick="map.moveDown()">Move Down</button>
 				</div>
 				<div>
-					<button onclick="map.moveLeft()">Move Left</button>
-					<button onclick="map.moveRight()">Move Right</button>
+					<button class="btn btn-primary options" onclick="map.moveLeft()">Move Left</button>
+					<button class="btn btn-primary options" onclick="map.moveRight()">Move Right</button>
 				</div>  
 				<div>
-					<button onclick="map.increaseSelectSize()">Increase Select Size</button>
-					<button onclick="map.decreaseSelectSize()">Decrease Select Size</button>
+					<button class="btn btn-primary options" onclick="map.increaseSelectSize()">Increase Select Size</button>
+					<button class="btn btn-primary options" onclick="map.decreaseSelectSize()">Decrease Select Size</button>
 				</div>
 				<div>
-					<button onclick="map.increaseMapWidth()">Increase Map Width</button>
-					<button onclick="map.increaseMapHeight()">Increase Map Height</button>
+					<button class="btn btn-primary options" onclick="map.increaseMapWidth()">Increase Map Width</button>
+					<button class="btn btn-primary options" onclick="map.increaseMapHeight()">Increase Map Height</button>
 				</div>
 				<div>
-					<button onclick="map.decreaseMapWidth()">Decrease Map Width</button>
-					<button onclick="map.decreaseMapHeight()">Decrease Map Height</button>
+					<button class="btn btn-primary options" onclick="map.decreaseMapWidth()">Decrease Map Width</button>
+					<button class="btn btn-primary options" onclick="map.decreaseMapHeight()">Decrease Map Height</button>
 				</div>
 			</div>
 		</div>
-
-		<!--<button onclick="map.logJSON();">Log Map JSON</button>-->
-
-		<!--                <div style="margin-top: 20px;">
-							<img src="" id="mapPreview" style="border:1px solid #c3c3c3;"/>
-						</div>-->
 
 	</div>
 	<div class="map-div">
@@ -102,6 +102,7 @@
 		<canvas id="map" width="700" height="500" style="border:1px solid #c3c3c3;"></canvas>
 		<!-- ******************** /Required ******************** -->
 	</div>
+  <div style="clear:left"></div>
 	<div>
 		<label id="save-time"></label>
 	</div>
@@ -109,8 +110,12 @@
     <!--Alan's JavaScript -->
     <!-- ******************** Required ******************** --> 
     <!-- ================================================== --> 
-    <script src="javascripts/mapEditor/Choosers.js"></script>
     <script src="javascripts/mapEditor/Map.js"></script>
+
+    <script src="javascripts/mapEditor/config.js"></script>
+    <script src="javascripts/mapEditor/autoSave.js"></script>
     <script src="javascripts/mapEditor/mapEditor.js"></script>
+    <script src="javascripts/mapEditor/tiles.js"></script>
+    <script src="javascripts/mapEditor/init.js"></script>
     <!-- ******************** /Required ******************** -->
 </div>

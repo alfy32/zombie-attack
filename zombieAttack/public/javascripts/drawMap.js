@@ -1,8 +1,15 @@
 
-var spriteImage = new Image();
-spriteImage.src = '/images/bottom.png';
+var image = {
+    bottom: new Image(),
+    middle: new Image(),
+    upper: new Image()
+}
 
-function drawMap(canvasId, spriteImage, map) {
+image.bottom.src = '/images/bottom.png';
+image.middle.src = '/images/middle.png';
+image.upper.src = '/images/upper.png';
+
+function drawMap(canvasId, map) {
     var canvas = document.getElementById(canvasId);
     var context = canvas.getContext('2d');
 
@@ -24,23 +31,25 @@ function drawMap(canvasId, spriteImage, map) {
     };
 
     clearCanvas();
-    drawLayer(map.data.bottom, context);
+    drawLayer(map, context, 'bottom');
+    drawLayer(map, context, 'middle');
+    drawLayer(map, context, 'upper');
 
     function clearCanvas() {
         context.fillStyle = "grey";
         context.fillRect(0,0,canvas.width, canvas.height);
     }
 
-    function drawLayer(layer, context) {
-        for(var row in layer) {
-            for(var col in layer[row]) {
-                var imageNumber = +layer[row][col];
-                drawTile(imageNumber, row, col);
+    function drawLayer(map, context, layer) {
+        for(var row in map.data[layer]) {
+            for(var col in map.data[layer][row]) {
+                var imageNumber = +map.data[layer][row][col];
+                drawTile(imageNumber, row, col, layer);
             }
         }
     }
 
-    function drawTile(imageNumber, row, col) {
+    function drawTile(imageNumber, row, col, layer) {
         var imageLoc = {
             x: imageNumber % 8 * spriteTileSize.height,
             y: Math.floor(imageNumber / 8) * spriteTileSize.width
@@ -51,7 +60,7 @@ function drawMap(canvasId, spriteImage, map) {
             y: row * canvasTileSize.width
         };
 
-        context.drawImage(spriteImage, 
+        context.drawImage(image[layer], 
                           imageLoc.x, imageLoc.y,
                           spriteTileSize.width, spriteTileSize.height,
                           canvasLoc.x, canvasLoc.y,
