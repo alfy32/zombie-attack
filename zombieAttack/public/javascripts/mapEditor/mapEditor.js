@@ -1,15 +1,14 @@
-var map = new Map();
-var saveTime = new Date();
-setSaveTime();
-var saveInterval = 15000;
 
-if (mapId !== undefined) {
-	map.setMap({width:0, height:0});
-	
+
+function initMap() {
+	if (mapId !== undefined) {
+		map.setMap({width:0, height:0});
+		
     $.get('/map/' + mapId, {}, function(data) {
-		map.setMap(data);
-        setTitle(data.title);
+			map.setMap(data);
+      setTitle(data.title);
     });
+	}
 }
 
 function refresh() {
@@ -17,100 +16,27 @@ function refresh() {
 	refreshMapEditor()
 }
 
-function setSaveTime() {
-	if(map.getChanged()) {
-		$("#save-time").html("Time: " + formatTime(new Date()) + " Last Save: " + formatTime(saveTime));
-	} else {
-		$("#save-time").html("Time: " + formatTime(new Date()) + " No Changes since: " + formatTime(saveTime));
-	}
-}
-
-function formatTime(date) {
-	var h = +date.getHours();
-	var m = +date.getMinutes();
-	var s = +date.getSeconds();
-
-	if(h > 12) {
-		h = h - 12;
-	}
-
-	if(h < 10) {
-		h = "0" + h;
-	}
-
-	if(m < 10) {
-		m = "0" + m;
-	}
-
-	if(s < 10) {
-		s = "0" + s;
-	}
-
-	return h + ":" + m + ":" + s;
-}
-
-var interval = setInterval(function(){
-	setSaveTime();
-	var time = new Date();
-
-	if((time - saveTime) >= saveInterval && map.getChanged()) {
-		$("#save-time").html("Saving...");
-		save();
-	}
-}, 1000);
-
-var choosers = new Choosers();
-
-map.showGrid(true);
-$('#showGridCHK').prop('checked', true);
-bindShowGrid();
-bindMapName();
-bindKeyDown();
-
-var tileImage = new Image();
-tileImage.src = '/images/bottom.png';//'https://raw.github.com/CS-3450-Software-Engineering/class_documents/master/other_documents/bottom.png';
-tileImage.onload = function() {
-	map.setTileImage(tileImage);
-	choosers.makeChoosers(map.getSpriteTileSize());
-	choosers.bindChooserEvents();
-
-	choosers.setLeftClickImage(22);
-	map.setLeftClick(22);
-	choosers.setRightClickImage(9);
-	map.setRightClick(9);
-};
-
-function setTitle(title) {
-    $("#map-title").val(title);
-}
-
-function backToMain() {
+function back() {
+	$('#login-form').show();
+	$('#header-buttons').empty();
 	loadMainPage();
 }
 
 function save() {
 	$.post('/map', {map: map.getMap()}, function(data) {
 		if(data.result === "success") {
-			saveTime = new Date();
-			setSaveTime();
-			map.setChanged(false);
+			onSaved();
 		} else {
 			console.log("Save failed: " + data);
 		}
 	});
 }
 
-// function autoSave() {
-// 	$.post('/updatemap', {map: map.getMap()}, function(data) {
-// 		if(data.result === "success") {
-// 			saveTime = new Date();
-// 			setSaveTime();
-// 			map.setChanged(false);
-// 		} else {
-// 			alert("Save failed: " + data.message);
-// 		}
-// 	});
-// }
+function logout() {
+	$.get('/logout');
+
+	window.location = '/';
+}
 
 function saveCopy() {
 	var m = map.getMap();
@@ -120,25 +46,44 @@ function saveCopy() {
 	
 	$.post('/map', {map: m}, function(data) {
 		if(data.result === "success") {
-			saveTime = new Date();
-			setSaveTime();
 			m._id = data.mapData.id;
 			map.setMap(m);
-			setTitle(m.title);
-			map.setChanged(false);
+			onSaved();
 		} else {
-			alert("Save failed: " + data);
+			console.log("Save failed: " + data);
 		}
 	});
 }
 
-function bindShowGrid() {
-	$('#showGridCHK').change(function() {
-		map.showGrid($('#showGridCHK').prop('checked'));
+function onSaved() {
+	saveTime = new Date();
+	setSaveTime();
+	map.setChanged(false);
+	setTitle(map.getTitle());
+}
+
+
+function bindChecks() {
+	$('#CHK-bottom').change(function() {
+		map.showLayer('bottom', $('#CHK-bottom').prop('checked'));
+	});
+	$('#CHK-middle').change(function() {
+		map.showLayer('middle', $('#CHK-middle').prop('checked'));
+	});
+	$('#CHK-upper').change(function() {
+		map.showLayer('upper', $('#CHK-upper').prop('checked'));
+	});
+	$('#CHK-grid').change(function() {
+		map.showGrid($('#CHK-grid').prop('checked'));
 	});
 }
 
-function bindMapName() {
+
+function setTitle(title) {
+    $("#map-title").val(title);
+}
+
+function bindMapTitle() {
 	$('#map-title').val(map.getTitle());
 	$('#map-title').keyup(function() {
 		map.setTitle($('#map-title').val());

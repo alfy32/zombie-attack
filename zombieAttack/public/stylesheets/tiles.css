@@ -1,0 +1,13 @@
+
+.chooser {
+	border: 2px solid #dddddd;
+	margin-right: 3px;
+}
+
+.right-click {
+	border: 2px solid blue;
+}
+
+.left-click {
+	border: 2px solid red;
+}
