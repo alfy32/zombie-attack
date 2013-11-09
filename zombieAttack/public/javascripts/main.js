@@ -75,7 +75,7 @@ function loadDelay()
  function makeActive(tableItem)
 {
 	var tableElements = document.getElementsByClassName('list-group-item active');
-	tableElements.className = "list-group-item";
+	$('.active').attr('class','list-group-item');
 	tableItem.className = "list-group-item active";
     drawMap('canvas', spriteImage, $(tableItem).data());
 }
@@ -161,9 +161,86 @@ function deleteMap()
 	console.log("delete");
 }
 
+/*
 $('#make-map-submit-btn').click(function(){
 	$('.modal-backdrop').click();
 	setTimeout(function(){
     	startMap();
 	}, 500);
+});
+*/
+
+$('#make-map-submit-btn').click(function() {
+    var fail = false;
+    console.log('make map button pressed');
+    var name = $('#new-map-name');
+    var height = $('#new-map-height');
+    var width = $('#new-map-width');
+
+    var re = /[0-9]+/;
+    if (!re.test(height.val()))
+    {
+        height.val('');
+        height.attr('placeholder', 'Invalid Height');
+        height.addClass('btn-danger');
+        fail = true;
+    }
+    else
+    {
+        height.attr('placeholder', 'Height');
+        height.removeClass('btn-danger');
+    }
+
+    if (!re.test(width.val()))
+    {
+        width.val('');
+        width.attr('placeholder', 'Invalid Width');
+        width.addClass('btn-danger');
+        fail = true;
+    }
+    else
+    {
+        width.attr('placeholder', 'Width');
+        width.removeClass('btn-danger');
+    }
+
+    if (name.val() === "")
+    {
+        name.addClass('btn-danger');
+        name.attr('placeholder', 'Must Enter A Name');
+        fail = true;
+    }
+    else
+    {
+        name.attr('placeholder', 'Name');
+        name.removeClass('btn-danger');
+    }
+
+    if (!fail) {
+        var request = {
+        };
+
+/*
+        $.post("/newuserrequest", request, function(data) {
+            if (data.result === "Success") {
+                console.log('successfully submitted new user')
+                name.val('');
+                password.val('');
+                passwordVerify.val('');
+                email.val('');
+                $('#new-request-close-btn').trigger('click');
+            }
+            else if (data.result === "User already exists")
+            {
+                console.log("user already exists");
+            }
+            else
+            {
+                console.log("failed to submit new user");
+            }
+        });
+*/
+
+    }
+
 });
