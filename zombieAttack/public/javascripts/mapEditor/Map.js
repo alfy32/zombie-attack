@@ -697,8 +697,6 @@ function Map() {
       updateMousePositionRelativeToCanvas(event);
       updateMouseButton(event);
 
-      console.log(_selectedTile.middle);
-
 			if (inMapArea()) {
 				setCurrentTiles(_selectedTile[_currentLayer][_mouse.button]);
 			}
@@ -783,6 +781,9 @@ function Map() {
 
     _map.x = box.x;
     _map.y = box.y;
+
+    _hasChanged = true;
+    pushHistory();
 
     drawMap();
   };
