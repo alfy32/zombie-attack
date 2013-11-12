@@ -3,14 +3,6 @@
   <link href="stylesheets/tiles.css" rel="stylesheet">
 
 	<div class="left-col">
-
- <!--    <form role="form" class="title-form">
-      <div class="form-group">
-        <label for="map-title">Title</label>
-        <input type="text" class="form-control" id="map-title" placeholder="Map Title">
-      </div>
-    </form> -->
-
 		<table class="clicks-table">
 			<thead>
         <tr class="click-labels">
@@ -51,6 +43,17 @@
       <div class="checkbox">
         <label><input type="checkbox" id="CHK-grid"/>Grid</label>
       </div>
+   </div>
+
+   <div class="player">
+    <div class="checkbox">
+      <label><input type="checkbox" id="CHK-player"/>Player</label>
+    </div>
+    <img src="/images/player.png" 
+         id="player" 
+         draggable="true"
+         ondragStart="dragStart(event)"
+         >
    </div>
 
 		<ul class="nav nav-tabs">
@@ -99,7 +102,13 @@
 	<div class="map-div">
 
 		<!-- ******************** Required ******************** -->
-		<canvas id="map" width="700" height="500" style="border:1px solid #c3c3c3;"></canvas>
+		<canvas 
+        id="map" 
+        width="700" 
+        height="500" 
+        style="border:1px solid #c3c3c3;"
+        ondrop="map.drop(event)"
+        ondragover="map.dragOver(event)"></canvas>
 		<!-- ******************** /Required ******************** -->
 	</div>
   <div style="clear:left"></div>

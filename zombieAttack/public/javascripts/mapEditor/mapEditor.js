@@ -1,4 +1,7 @@
 
+function dragStart(e) {
+
+}
 
 function initMap() {
 	if (mapId !== undefined) {
@@ -75,6 +78,9 @@ function bindChecks() {
 	});
 	$('#CHK-grid').change(function() {
 		map.showGrid($('#CHK-grid').prop('checked'));
+	});
+	$('#CHK-player').change(function() {
+		map.showPlayer($('#CHK-player').prop('checked'));
 	});
 }
 

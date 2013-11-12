@@ -2,12 +2,14 @@
 var image = {
     bottom: new Image(),
     middle: new Image(),
-    upper: new Image()
+    upper: new Image(),
+    player: new Image()
 }
 
 image.bottom.src = '/images/bottom.png';
 image.middle.src = '/images/middle.png';
 image.upper.src = '/images/upper.png';
+image.player.src = '/images/player.png';
 
 function drawMap(canvasId, map) {
     var canvas = document.getElementById(canvasId);
@@ -34,6 +36,7 @@ function drawMap(canvasId, map) {
     drawLayer(map, context, 'bottom');
     drawLayer(map, context, 'middle');
     drawLayer(map, context, 'upper');
+    drawTile(0, map.y, map.x, 'player');
 
     function clearCanvas() {
         context.fillStyle = "grey";
@@ -60,10 +63,12 @@ function drawMap(canvasId, map) {
             y: row * canvasTileSize.width
         };
 
-        context.drawImage(image[layer], 
-                          imageLoc.x, imageLoc.y,
-                          spriteTileSize.width, spriteTileSize.height,
-                          canvasLoc.x, canvasLoc.y,
-                          canvasTileSize.width, canvasTileSize.height);
+        context.drawImage(
+                image[layer], 
+                imageLoc.x, imageLoc.y,
+                spriteTileSize.width, spriteTileSize.height,
+                canvasLoc.x, canvasLoc.y,
+                canvasTileSize.width, canvasTileSize.height
+            );
     }   
 }
