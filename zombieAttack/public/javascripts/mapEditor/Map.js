@@ -97,16 +97,26 @@ function Map() {
 		}
 	}
 
-	var _copyArea;
+	var _copyArea = {
+		bottom: [[]],
+		middle: [[]],
+		upper:  [[]]
+	};
 
 	this.copy = function() {
 		var curr = currentBox();
 
-		_copyArea = [];
+		_copyArea.bottom = [];
+		_copyArea.middle = [];
+		_copyArea.upper = [];
 		for(var row = 0; row < curr.height; row++) {
-			_copyArea[row] = [];
+			_copyArea.bottom[row] = [];
+			_copyArea.middle[row] = [];
+			_copyArea.upper[row] = [];
 			for(var col = 0; col < curr.width; col++) {
-				_copyArea[row][col] = _map.data.bottom[curr.y+row][curr.x+col];
+				_copyArea.bottom[row][col] = _map.data.bottom[curr.y+row][curr.x+col];
+				_copyArea.middle[row][col] = _map.data.middle[curr.y+row][curr.x+col];
+				_copyArea.upper[row][col]  = _map.data.upper[curr.y+row][curr.x+col];
 			}
 		}
 	};
@@ -115,10 +125,11 @@ function Map() {
 		var curr = currentBox();
 
 		if(curr.width && curr.height) {
-
-			for(var row = 0; row < _copyArea.length; row++) {
-				for(var col = 0; col < _copyArea[row].length; col++) {
-					_map.data.bottom[curr.y+row][curr.x+col] = _copyArea[row][col];
+			for(var row = 0; row < _copyArea.bottom.length; row++) {
+				for(var col = 0; col < _copyArea.bottom[row].length; col++) {
+					_map.data.bottom[curr.y+row][curr.x+col] = _copyArea.bottom[row][col];
+					_map.data.middle[curr.y+row][curr.x+col] = _copyArea.middle[row][col];
+					_map.data.upper[curr.y+row][curr.x+col]  = _copyArea.upper[row][col];
 				}
 			}
 
