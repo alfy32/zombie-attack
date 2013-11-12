@@ -74,9 +74,8 @@ function loadUserInfo()
                     entry.setAttribute('onClick','makeUserActive(this)');
                     entry.setAttribute('style','text-align:center;');
                     list.appendChild(entry);
-                }        
-            });
-            $.get("/userrequests", {}, function(info) {
+                } 
+                $.get("/userrequests", {}, function(info) {
                 var list = document.getElementById('userList');
                 for(var i = 0; i < info.length; ++i)
                 {
@@ -97,6 +96,7 @@ function loadUserInfo()
                     entry.setAttribute('style','text-align:center;');
                     list.appendChild(entry);
                 }        
+            });       
             });
         }
         else
@@ -248,29 +248,35 @@ function edituser()
     var n = document.getElementById('inname').value;
     var p1 = document.getElementById('inpass').value
     var p2 = document.getElementById('inpass2').value;
-    if(p1 != p2 || p1.length < 5)
+    if(p1 != p2 || (p1.length < 5 && p1.length > 0))
     {
         console.log("Error: invalid password...");
         return;
     }
-    $.post("/editpassword", {id:selectedUser, password:p1}, function(res)
+    else if(p1.length >= 5)
     {
-        console.log("EditPass: ", res);
-    });
-    $.post("/editname", {id:selectedUser, name:n}, function(res)
+        $.post("/editpassword", {password:p1}, function(res)
+        {
+            console.log("EditPass: ", res);
+        });
+    }
+    if(n.length > 0)
     {
-        console.log("EditName: ", res);
-    });
+        $.post("/editname", {name:n}, function(res)
+        {
+            console.log("EditName: ", res);
+        });
+    }
 }
 function upgradeuser()
 {
     var a = document.getElementById('cha').checked;
     var d = document.getElementById('chd').checked;
     var p = document.getElementById('chp').checked;
-    if(a == "true")
+    if(a == true)
     {
-        d = "true";
-        p = "true";
+        d = true;
+        p = true;
     }
     $.post("/upgrade", {id:selectedUser, admin: a, player: p, designer: d}, function(res)
     {
