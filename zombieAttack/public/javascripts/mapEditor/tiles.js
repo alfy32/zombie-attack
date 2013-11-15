@@ -106,6 +106,29 @@ function initUpperTiles () {
   }
 }
 
+function initEventsTiles () {
+  var eventsDiv = $('#events');
+  $(eventsDiv).empty();
+
+  var events = ["Treasure", "Bush", "Hole", "Door", "Erase"];
+
+  var numTiles = 6;
+
+  for(var i = 0; i < numTiles; i++) {
+    var canvas = makeCanvas(i);
+    
+    $(eventsDiv).append(canvas);
+    bindClick(canvas);
+
+    if(i%8 == 7) {
+      $(eventsDiv).append('<br/>');
+    }
+   
+    drawImage(this, i, canvas);
+
+  }
+}
+
 function makeCanvas(imageIndex) {
 	var tileSize = 40;
 
