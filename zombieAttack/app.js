@@ -1,5 +1,5 @@
 //random constants and other things
-var TIMEOUT = 200000000;
+var TIMEOUT = 200000;
 
 /**
  * Module dependencies.

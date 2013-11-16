@@ -29,6 +29,3 @@ initMap();
 
 bindChecks();
 bindKeyDown();
-
-
-var events = ["Treasure", "Bush", "Hole", "Door"];

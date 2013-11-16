@@ -1,25 +1,26 @@
 
 function Map() {
-	var _canvas = document.getElementById('map');
-	var _context = _canvas.getContext('2d');
-	var _canvasTileSize = 40;
-	var _offset = {
-		x: 0,
-		y: 0
-	};
+  var _canvas = document.getElementById('map');
+  var _context = _canvas.getContext('2d');
+  var _canvasTileSize = 40;
+  var _offset = {
+    x: 0,
+    y: 0
+  };
 
   var _show = {
     grid: true,
     bottom: true,
     middle: true,
     upper: true,
+    events: true,
     player: true
   };
 
-	var _zoomAmount = 5;
+  var _zoomAmount = 5;
 
-	var _backgroundColor = "grey";
-	var _gridColor = "black";
+  var _backgroundColor = "grey";
+  var _gridColor = "black";
 
   var _mouse = {
     button: undefined,
@@ -34,185 +35,194 @@ function Map() {
     color: 'blue'
   };
 
-	var _spriteTileSize = 40;
-	var _selectedTile = {
-		bottom: { left: 22, right: 9 },
-		middle: { left: 22, right: 9 },
-		upper:  { left: 22, right: 9 }
-	};
-	var _images = {
-		bottom: new Image(),
-	 	middle: new Image(),
-	 	upper: new Image(),
+  var _spriteTileSize = 40;
+  var _selectedTile = {
+    bottom: { left: 22, right: 9 },
+    middle: { left: 22, right: 9 },
+    upper:  { left: 22, right: 9 }
+  };
+  var _images = {
+    bottom: new Image(),
+    middle: new Image(),
+    upper: new Image(),
+    events: new Image(),
     player: new Image()
-	};
-	var _initImageNumber = 22;
-	var _currentLayer = 'bottom';
+  };
+  var _initImageNumber = 22;
+  var _currentLayer = 'bottom';
 
-	var _mapHistory = [];
-	var _historyIndex = -1;
+  var _mapHistory = [];
+  var _historyIndex = -1;
 
-	var _hasChanged = false;
-	
-	var _map = {
-		title: 'NO_TITLE',
-		author: 'NO_AUTHOR',
-		width: 15,
-		height: 12,
-		x: 0,
-		y: 0,
-		events: [],
-		data: {
-			bottom: [[]],
-			middle: [[]],
-			top: [[]]
-		},
-		env: "NO_ENV"
-	};
+  var _hasChanged = false;
+  
+  var _map = {
+    title: 'NO_TITLE',
+    author: 'NO_AUTHOR',
+    width: 15,
+    height: 12,
+    x: 0,
+    y: 0,
+    events: [],
+    data: {
+      bottom: [[]],
+      middle: [[]],
+      top: [[]]
+    },
+    env: "NO_ENV"
+  };
 
-	init();
+  init();
 
-	function init() {
-		_context.font = "bold 30px sans-serif";
-		_context.fillText("Loading......", _canvas.width / 2 - 100, _canvas.height / 2);
+  function init() {
+    _context.font = "bold 30px sans-serif";
+    _context.fillText("Loading......", _canvas.width / 2 - 100, _canvas.height / 2);
 
-		bindContextMenu();
-		bindMouseDown();
-		bindMouseOver();
-		bindMouseMove();
-		bindMouseUp();
-		bindMouseOut();
+    bindContextMenu();
+    bindMouseDown();
+    bindMouseOver();
+    bindMouseMove();
+    bindMouseUp();
+    bindMouseOut();
     initMapLayer('bottom');
     initMapLayer('middle');
-		initMapLayer('upper');
-	}
+    initMapLayer('upper');
 
-	function initMapLayer(layer) {
-		_map.data[layer] = [[]];
-		for (var row = 0; row < _map.height; row++) {
-			_map.data[layer][row] = [];
-			for (var col = 0; col < _map.width; col++) {
-				_map.data[layer][row][col] = _initImageNumber;
-			}
-		}
-	}
+    _map.events = [];
+  }
 
-	var _copyArea = {
-		bottom: [[]],
-		middle: [[]],
-		upper:  [[]]
-	};
+  function initMapLayer(layer) {
+    _map.data[layer] = [[]];
+    for (var row = 0; row < _map.height; row++) {
+      _map.data[layer][row] = [];
+      for (var col = 0; col < _map.width; col++) {
+        _map.data[layer][row][col] = _initImageNumber;
+      }
+    }
+  }
 
-	this.copy = function() {
-		var curr = currentBox();
+  this.refresh = function() {
+    drawMap();
+  };
 
-		_copyArea.bottom = [];
-		_copyArea.middle = [];
-		_copyArea.upper = [];
-		for(var row = 0; row < curr.height; row++) {
-			_copyArea.bottom[row] = [];
-			_copyArea.middle[row] = [];
-			_copyArea.upper[row] = [];
-			for(var col = 0; col < curr.width; col++) {
-				_copyArea.bottom[row][col] = _map.data.bottom[curr.y+row][curr.x+col];
-				_copyArea.middle[row][col] = _map.data.middle[curr.y+row][curr.x+col];
-				_copyArea.upper[row][col]  = _map.data.upper[curr.y+row][curr.x+col];
-			}
-		}
-	};
+  var _copyArea = {
+    bottom: [[]],
+    middle: [[]],
+    upper:  [[]]
+  };
 
-	this.paste = function () {
-		var curr = currentBox();
+  this.copy = function() {
+    var curr = currentBox();
 
-		if(curr.width && curr.height) {
-			for(var row = 0; row < _copyArea.bottom.length; row++) {
-				for(var col = 0; col < _copyArea.bottom[row].length; col++) {
-					_map.data.bottom[curr.y+row][curr.x+col] = _copyArea.bottom[row][col];
-					_map.data.middle[curr.y+row][curr.x+col] = _copyArea.middle[row][col];
-					_map.data.upper[curr.y+row][curr.x+col]  = _copyArea.upper[row][col];
-				}
-			}
+    _copyArea.bottom = [];
+    _copyArea.middle = [];
+    _copyArea.upper = [];
+    for(var row = 0; row < curr.height; row++) {
+      _copyArea.bottom[row] = [];
+      _copyArea.middle[row] = [];
+      _copyArea.upper[row] = [];
+      for(var col = 0; col < curr.width; col++) {
+        _copyArea.bottom[row][col] = _map.data.bottom[curr.y+row][curr.x+col];
+        _copyArea.middle[row][col] = _map.data.middle[curr.y+row][curr.x+col];
+        _copyArea.upper[row][col]  = _map.data.upper[curr.y+row][curr.x+col];
+      }
+    }
+  };
 
-			pushHistory();
+  this.paste = function () {
+    var curr = currentBox();
 
-			drawMap();
-		}
-	};
+    if(curr.width && curr.height) {
+      for(var row = 0; row < _copyArea.bottom.length; row++) {
+        for(var col = 0; col < _copyArea.bottom[row].length; col++) {
+          _map.data.bottom[curr.y+row][curr.x+col] = _copyArea.bottom[row][col];
+          _map.data.middle[curr.y+row][curr.x+col] = _copyArea.middle[row][col];
+          _map.data.upper[curr.y+row][curr.x+col]  = _copyArea.upper[row][col];
+        }
+      }
 
-	this.getChanged = function() {
-		return _hasChanged;
-	};
+      pushHistory();
 
-	this.setChanged = function(changed) {
-		_hasChanged = changed;
-	}
-	
-	this.getHistory = function() {
-		return _mapHistory;
-	};
-	
-	this.getHistoryIndex = function() {
-		return _historyIndex;
-	};
-	
-	function pushHistory() {
-		_mapHistory.splice(_historyIndex+1,_mapHistory.length);
-		
-		_mapHistory[++_historyIndex] = JSON.stringify(_map);
-	}
-	
-	this.undo = function() {
-		_historyIndex--;
-		if(_historyIndex < 0) 
-			_historyIndex = 0;
-		
-		_map = JSON.parse(_mapHistory[_historyIndex]);
-		
-		drawMap();
-	};
-	
-	this.redo = function() {
-		_historyIndex++;
-		if(_historyIndex >= _mapHistory.length) {
-			_historyIndex = _mapHistory.length-1;
-		}
-		
-		_map = JSON.parse(_mapHistory[_historyIndex]);
-		
-		drawMap();
-	};
+      drawMap();
+    }
+  };
 
-	this.setSelected = function (selectedTile) {
-		_selectedTile = selectedTile;
-	};
+  this.getChanged = function() {
+    return _hasChanged;
+  };
 
-	this.setMap = function(map) {
-        _map = JSON.parse(JSON.stringify(map));
-		
-//		_map.title = _map.title | "";
-//		_map.author = _map.author | "";
-		_map.width = +_map.width | 0;
-		_map.height = +_map.height | 0;
-		_map.x = +_map.x | 0;
-		_map.y = +_map.y | 0;
-		
-		if(!_map.data) {
-			_map.data = {
-				bottom: [[]],
-				middle: [[]],
-				top: [[]]
-			};
-		}
+  this.setChanged = function(changed) {
+    _hasChanged = changed;
+  }
+  
+  this.getHistory = function() {
+    return _mapHistory;
+  };
+  
+  this.getHistoryIndex = function() {
+    return _historyIndex;
+  };
+  
+  function pushHistory() {
+    _mapHistory.splice(_historyIndex+1,_mapHistory.length);
+    
+    _mapHistory[++_historyIndex] = JSON.stringify(_map);
+  }
+  
+  this.undo = function() {
+    _historyIndex--;
+    if(_historyIndex < 0) 
+      _historyIndex = 0;
+    
+    _map = JSON.parse(_mapHistory[_historyIndex]);
+    
+    drawMap();
+  };
+  
+  this.redo = function() {
+    _historyIndex++;
+    if(_historyIndex >= _mapHistory.length) {
+      _historyIndex = _mapHistory.length-1;
+    }
+    
+    _map = JSON.parse(_mapHistory[_historyIndex]);
+    
+    drawMap();
+  };
+
+  this.setSelected = function (selectedTile) {
+    _selectedTile = selectedTile;
+  };
+
+  this.setMap = function(map) {
+    _map = JSON.parse(JSON.stringify(map));
+    
+//    _map.title = _map.title | "";
+//    _map.author = _map.author | "";
+    _map.width = +_map.width | 0;
+    _map.height = +_map.height | 0;
+    _map.x = +_map.x | 0;
+    _map.y = +_map.y | 0;
+
+    _map.events = _map.events || [];
+    
+    if(!_map.data) {
+      _map.data = {
+        bottom: [[]],
+        middle: [[]],
+        top: [[]]
+      };
+    }
 
     validateLayer('bottom');
     validateLayer('middle');
     validateLayer('upper');
-		
-		if(_map.width && _map.height)
-			pushHistory();
-		
-		drawMap();
-	};
+    
+    if(_map.width && _map.height)
+      pushHistory();
+    
+    drawMap();
+  };
 
   function validateLayer(layer) {
     if(!_map.data[layer]) {
@@ -233,220 +243,232 @@ function Map() {
     }
   }
 
-	this.getMap = function() {
-		return JSON.parse(JSON.stringify(_map));
-	};
+  this.getMap = function() {
+    return JSON.parse(JSON.stringify(_map));
+  };
 
-	this.setTitle = function(title) {
-		_map.title = title;
-		_hasChanged = true;
-	};
+  this.setTitle = function(title) {
+    _map.title = title;
+    _hasChanged = true;
+  };
 
-	this.getTitle = function() {
-		return _map.title;
-	};
+  this.getTitle = function() {
+    return _map.title;
+  };
 
-	this.setCanvaTileSize = function(size) {
-		_canvasTileSize = size;
-		drawMap();
-	};
-	
-	this.fillLeft = function() {
-		fill(_map.data[_currentLayer], _selectedTile[_currentLayer]['left']);
-		drawMap();
-	};
-	
-	this.fillRight = function() {
-		fill(_map.data[_currentLayer], _selectedTile[_currentLayer]['right']);
-		drawMap();
-	};
-	
-	function fill(layer, tileNumber) {
-		for(var row = 0; row < _map.height; row++) {
-			for(var col = 0; col < _map.width; col++){
-				layer[row][col] = tileNumber;
-			}
-		}
-	}
+  this.setCanvaTileSize = function(size) {
+    _canvasTileSize = size;
+    drawMap();
+  };
+  
+  this.fillLeft = function() {
+    fill(_map.data[_currentLayer], _selectedTile[_currentLayer]['left']);
+    drawMap();
+  };
+  
+  this.fillRight = function() {
+    fill(_map.data[_currentLayer], _selectedTile[_currentLayer]['right']);
+    drawMap();
+  };
+  
+  function fill(layer, tileNumber) {
+    for(var row = 0; row < _map.height; row++) {
+      for(var col = 0; col < _map.width; col++){
+        layer[row][col] = tileNumber;
+      }
+    }
+  }
 
-	this.setCurrentLayer = function(layer) {
-		_currentLayer = layer;
-	};
-	
-	this.increaseMapWidth = function() {
-		_map.width += 1;
-		
-		for(var row = 0; row < _map.height; row++) {
-			_map.data.bottom[row].push(_map.data.bottom[row][_map.width-2]);
-		}
-		
-		pushHistory();
+  this.setCurrentLayer = function(layer) {
+    _currentLayer = layer;
+  };
+  
+  this.increaseMapWidth = function() {
+    _map.width += 1;
+    
+    for(var row = 0; row < _map.height; row++) {
+      _map.data.bottom[row].push(_map.data.bottom[row][_map.width-2]);
+    }
+    
+    pushHistory();
 
-		drawMap();
-	};
-	
-	this.decreaseMapWidth = function() {
-		_map.width -= 1;
-		
-		for(var row = 0; row < _map.height; row++) {
-			_map.data.bottom[row].pop();
-		}	
-		
-		pushHistory();
+    drawMap();
+  };
+  
+  this.decreaseMapWidth = function() {
+    _map.width -= 1;
+    
+    for(var row = 0; row < _map.height; row++) {
+      _map.data.bottom[row].pop();
+    } 
+    
+    pushHistory();
 
-		drawMap();	
-	};
-	
-	this.increaseMapHeight = function() {
-		_map.height += 1;
-		
-		var row = [];
-		for(var col = 0; col < _map.width; col++) {
-			row.push(_map.data.bottom[_map.height-2][col]);
-		}
-		_map.data.bottom.push(row);
-		
-		pushHistory();
+    drawMap();  
+  };
+  
+  this.increaseMapHeight = function() {
+    _map.height += 1;
+    
+    var row = [];
+    for(var col = 0; col < _map.width; col++) {
+      row.push(_map.data.bottom[_map.height-2][col]);
+    }
+    _map.data.bottom.push(row);
+    
+    pushHistory();
 
-		drawMap();
-	};
-	
-	this.decreaseMapHeight = function() {
-		_map.height -= 1;
-		
-		_map.data.bottom.pop();	
-		
-		pushHistory();
+    drawMap();
+  };
+  
+  this.decreaseMapHeight = function() {
+    _map.height -= 1;
+    
+    _map.data.bottom.pop(); 
+    
+    pushHistory();
 
-		drawMap();
-	};
-	
-	this.increaseSelectSize = function() {
-		_select.size += 1;
-		
-		var maxDim = _map.width > _map.height ? _map.width : _map.height;
-		
-		if(_select.size > maxDim) {
-			_select.size = maxDim;
-		}
-	};
-	
-	this.decreaseSelectSize = function() {
-		_select.size -= 1;
-		
-		if(_select.size < 1) {
-			_select.size = 1;
-		}
-	};
+    drawMap();
+  };
 
-	this.zoomIn = function() {
-//		var currBox = currentBox();
-//		
-		_canvasTileSize += _zoomAmount;
-		
-//		if(inMapArea()) {
-//			var newBox = currentBox();
-//			_offset.x += newBox.x - currBox.x ;
-//			_offset.y += newBox.y - currBox.y;
-//			
-//			console.log({
-//				curr: currBox,
-//				new: newBox
-//			});
-//		}
-//		
-		drawMap();
-	};
+  this.setSelectSize = function (size) {
+    var maxDim = _map.width > _map.height ? _map.width : _map.height;
+    
+    if(_select.size > maxDim) {
+      _select.size = maxDim;
+    } else if(_select.size < 1) {
+      _select.size = 1;
+    } else {
+      _select.size = size;
+    }
+  }
+  
+  this.increaseSelectSize = function() {
+    _select.size += 1;
+    
+    var maxDim = _map.width > _map.height ? _map.width : _map.height;
+    
+    if(_select.size > maxDim) {
+      _select.size = maxDim;
+    }
+  };
+  
+  this.decreaseSelectSize = function() {
+    _select.size -= 1;
+    
+    if(_select.size < 1) {
+      _select.size = 1;
+    }
+  };
 
-	this.zoomOut = function() {
-//		var currBox = currentBox();
-//		
-		_canvasTileSize -= _zoomAmount;
-		
-		if(_canvasTileSize <= 0)
-			_canvasTileSize = _zoomAmount;
-		
-//		if(inMapArea()) {
-//			var newBox = currentBox();
-//			_offset.x += newBox.x - currBox.x;
-//			_offset.y += newBox.y - currBox.y;
-//		}
-//		
-		drawMap();
-	};
+  this.zoomIn = function() {
+//    var currBox = currentBox();
+//    
+    _canvasTileSize += _zoomAmount;
+    
+//    if(inMapArea()) {
+//      var newBox = currentBox();
+//      _offset.x += newBox.x - currBox.x ;
+//      _offset.y += newBox.y - currBox.y;
+//      
+//      console.log({
+//        curr: currBox,
+//        new: newBox
+//      });
+//    }
+//    
+    drawMap();
+  };
 
-	this.moveRight = function() {
-		_offset.x += 1;
-		drawMap();
-	};
+  this.zoomOut = function() {
+//    var currBox = currentBox();
+//    
+    _canvasTileSize -= _zoomAmount;
+    
+    if(_canvasTileSize <= 0)
+      _canvasTileSize = _zoomAmount;
+    
+//    if(inMapArea()) {
+//      var newBox = currentBox();
+//      _offset.x += newBox.x - currBox.x;
+//      _offset.y += newBox.y - currBox.y;
+//    }
+//    
+    drawMap();
+  };
 
-	this.moveLeft = function() {
-		_offset.x -= 1;
-		drawMap();
-	};
+  this.moveRight = function() {
+    _offset.x += 1;
+    drawMap();
+  };
 
-	this.moveUp = function() {
-		_offset.y -= 1;
-		drawMap();
-	};
+  this.moveLeft = function() {
+    _offset.x -= 1;
+    drawMap();
+  };
 
-	this.moveDown = function() {
-		_offset.y += 1;
-		drawMap();
-	};
+  this.moveUp = function() {
+    _offset.y -= 1;
+    drawMap();
+  };
 
-	this.logJSON = function() {
-		console.log(_map);
-	};
+  this.moveDown = function() {
+    _offset.y += 1;
+    drawMap();
+  };
 
-	this.getImage = function(args) {
-		var canvas = _canvas;
-		var context = _context;
-		var canvasTileSize = _canvasTileSize;
-		var showGrid = _show.grid;
+  this.logJSON = function() {
+    console.log(_map);
+  };
 
-		var ratio = 200;
+  this.getImage = function(args) {
+    var canvas = _canvas;
+    var context = _context;
+    var canvasTileSize = _canvasTileSize;
+    var showGrid = _show.grid;
 
-		if (args.width) {
-			ratio = _canvas.width / args.width;
-		} else if (args.height) {
-			ratio = _canvas.height / args.height;
-		}
+    var ratio = 200;
 
-		_canvas = document.createElement('canvas');
-		_context = _canvas.getContext('2d');
-		_canvas.width = canvas.width / ratio;
-		_canvas.height = canvas.height / ratio;
-		_canvasTileSize = canvasTileSize / ratio;
-		_show.grid = false;
+    if (args.width) {
+      ratio = _canvas.width / args.width;
+    } else if (args.height) {
+      ratio = _canvas.height / args.height;
+    }
 
-		$(_canvas).hide();
-		$('body').prepend(_canvas);
+    _canvas = document.createElement('canvas');
+    _context = _canvas.getContext('2d');
+    _canvas.width = canvas.width / ratio;
+    _canvas.height = canvas.height / ratio;
+    _canvasTileSize = canvasTileSize / ratio;
+    _show.grid = false;
 
-		drawMap();
-		var data = _canvas.toDataURL();
+    $(_canvas).hide();
+    $('body').prepend(_canvas);
 
-		$(_canvas).remove();
+    drawMap();
+    var data = _canvas.toDataURL();
 
-		_canvas = canvas;
-		_context = context;
-		_canvasTileSize = canvasTileSize;
-		_show.grid = showGrid;
+    $(_canvas).remove();
 
-		return data;
-	};
+    _canvas = canvas;
+    _context = context;
+    _canvasTileSize = canvasTileSize;
+    _show.grid = showGrid;
 
-	this.getSpriteTileSize = function() {
-		return _spriteTileSize;
-	};
-	this.getCanvasTileSize = function() {
-		return _canvasTileSize;
-	};
+    return data;
+  };
 
-	this.setImages = function(images) {
-		_images = images;
-		drawMap();
-	};
+  this.getSpriteTileSize = function() {
+    return _spriteTileSize;
+  };
+  this.getCanvasTileSize = function() {
+    return _canvasTileSize;
+  };
+
+  this.setImages = function(images) {
+    _images = images;
+    drawMap();
+  };
 
   this.showPlayer = function(show) {
     if (show !== undefined) {
@@ -457,14 +479,14 @@ function Map() {
     }
   };
 
-	this.showGrid = function(show) {
-		if (show !== undefined) {
-			_show.grid = show;
-			drawMap();
-		} else {
-			return _show.grid;
-		}
-	};
+  this.showGrid = function(show) {
+    if (show !== undefined) {
+      _show.grid = show;
+      drawMap();
+    } else {
+      return _show.grid;
+    }
+  };
 
   this.showLayer = function(layer, show) {
     if(show !== undefined) {
@@ -480,7 +502,7 @@ function Map() {
     drawMap();
   }
 
-	this.hideLayer = function(layer) {
+  this.hideLayer = function(layer) {
     if(layer === 'bottom' || layer === 'middle' || layer === 'upper') {
       _show[layer] = false;
     }
@@ -496,85 +518,134 @@ function Map() {
     drawMap();
   }
 
-	function changed(tileNumber, curr) {
-		
-		if(curr) {
-			for(var row = curr.y; row < curr.y+curr.height; row++) {
-				for(var col = curr.x; col < curr.x+curr.width; col++){
-					if(_map.data.bottom[row][col] != tileNumber) {
-						_hasChanged = true;
-						return true;
-					}
-				}
-			}			
-		}
-		
-		return false;
-	}
+  function changed(tileNumber, curr) {
+    
+    if(curr) {
+      for(var row = curr.y; row < curr.y+curr.height; row++) {
+        for(var col = curr.x; col < curr.x+curr.width; col++){
+          if(_map.data.bottom[row][col] != tileNumber) {
+            _hasChanged = true;
+            return true;
+          }
+        }
+      }     
+    }
+    
+    return false;
+  }
 
-	function setCurrentTiles(tileNumber) {
-		var curr = currentBox();
-		
-		if(changed(tileNumber, curr)) {
-			
-			for(var row = curr.y; row < curr.y+curr.height; row++) {
-				for(var col = curr.x; col < curr.x+curr.width; col++){
-					_map.data[_currentLayer][row][col] = tileNumber;
-				}
-			}
-			
-			if(_mouse.clicked)
-				pushHistory();
-		}
-	}
+  function setEventTile(curr, tileNumber) {
+    if(tileNumber === -1) {
+      for(var i in _map.events) {
+        if(_map.events[i].x == curr.x && _map.events[i].y == curr.y)
+          _map.events.splice(i, 1);
+      }
+    } else {
+      _map.events.push({
+        id: events[tileNumber],
+        x: curr.x,
+        y: curr.y
+      });
+    }
 
-	function drawTileImage(imageIndex, row, col, layer) {
-		if (imageIndex === -1) {
-			_context.fillStyle = "rgba(255, 255, 255, 0.0)";
-			_context.fillRect(col * _canvasTileSize, row * _canvasTileSize,
-					_canvasTileSize, _canvasTileSize);
-		} else {
-			var tileTop = Math.floor(imageIndex / 8) * _spriteTileSize;
-			var tileLeft = imageIndex % 8 * _spriteTileSize;
-			_context.drawImage(_images[layer],
-					tileLeft, tileTop,
-					_spriteTileSize, _spriteTileSize,
-					(_offset.x * _canvasTileSize) + col * _canvasTileSize, (_offset.y * _canvasTileSize) + row * _canvasTileSize,
-					_canvasTileSize, _canvasTileSize);
-		}
-	}
+    _hasChanged = true;
+  }
 
-	function drawMap() {
-		_context.clearRect(0, 0, _canvas.width, _canvas.height);
+  function setCurrentTiles(tileNumber) {
+    var curr = currentBox();
 
-		drawBackground();
+    if(_currentLayer === "events") {
+      setEventTile(curr, tileNumber);
+    } else {    
+      if(changed(tileNumber, curr)) {
+        
+        for(var row = curr.y; row < curr.y+curr.height; row++) {
+          for(var col = curr.x; col < curr.x+curr.width; col++){
+            _map.data[_currentLayer][row][col] = tileNumber;
+          }
+        }
+        
+        if(_mouse.clicked)
+          pushHistory();
+      }
+    }
+  }
+
+  function drawTileImage(imageIndex, row, col, layer) {
+    if (imageIndex === -1) {
+      _context.fillStyle = "rgba(255, 255, 255, 0.0)";
+      _context.fillRect(col * _canvasTileSize, row * _canvasTileSize,
+          _canvasTileSize, _canvasTileSize);
+    } else {
+
+      var tile = {
+        top: Math.floor(imageIndex / 8) * _spriteTileSize,
+        left: imageIndex % 8 * _spriteTileSize,
+        width: _spriteTileSize,
+        height: _spriteTileSize
+      };
+
+      var canvas = {
+        top: (_offset.y + row) * _canvasTileSize,
+        left: (_offset.x + col) * _canvasTileSize,
+        width: _canvasTileSize,
+        height: _canvasTileSize
+      };
+
+      _context.drawImage(_images[layer],
+          tile.left, tile.top,
+          tile.width, tile.height,
+          canvas.left, canvas.top,
+          canvas.width, canvas.height);
+    }
+  }
+
+  function drawMap() {
+    _context.clearRect(0, 0, _canvas.width, _canvas.height);
+
+    drawBackground();
 
     if(_show.bottom) {
       drawLayer('bottom');
     }
     if(_show.middle) {
       drawLayer('middle');
-		}
+    }
     if(_show.upper) {
       drawLayer('upper');
     }
-		if(_show.grid) {
-			drawGrid();
-		}
+    if(_show.events) {
+      drawEvents();
+    }
+    if(_show.grid) {
+      drawGrid();
+    }
     if(_show.player) {
       drawPlayer();
     }
-		drawMouseSquare();
-	}
+    drawMouseSquare();
+  }
 
-	function drawLayer(layer) {
-		for (var row = 0; row < _map.height; row++) {
-			for (var col = 0; col < _map.width; col++) {
-				if (_map.data[layer][row][col] !== undefined)
-					drawTileImage(_map.data[layer][row][col], row, col, layer);
-			}
-		}
-	}
+  function drawLayer(layer) {
+    for (var row = 0; row < _map.height; row++) {
+      for (var col = 0; col < _map.width; col++) {
+        if (_map.data[layer][row][col] !== undefined)
+          drawTileImage(_map.data[layer][row][col], row, col, layer);
+      }
+    }
+  }
+
+  function drawEvents() {
+    for(var index in _map.events) {
+      var e = {
+        id: eventsMap[_map.events[index].id],
+        x: _map.events[index].x,
+        y: _map.events[index].y
+      };
+     
+      drawTileImage(e.id, e.y, e.x, 'events');
+    }
+  }
 
   function drawPlayer() {
     _context.drawImage(_images.player, 
@@ -584,190 +655,190 @@ function Map() {
         _canvasTileSize, _canvasTileSize);
   }
 
-	function drawBackground() {
-		_context.fillStyle = _backgroundColor;
-		_context.fillRect(0, 0, _canvas.width, _canvas.height);
-	}
+  function drawBackground() {
+    _context.fillStyle = _backgroundColor;
+    _context.fillRect(0, 0, _canvas.width, _canvas.height);
+  }
 
-	function drawGrid() {
-		_context.strokeStyle = _gridColor;
-		_context.beginPath();
+  function drawGrid() {
+    _context.strokeStyle = _gridColor;
+    _context.beginPath();
 
-		var width = _map.width * _canvasTileSize;
-		var height = _map.height * _canvasTileSize;
-		
-		var top = _offset.y * _canvasTileSize;
-		var bottom = top + height;
-		
-		var left = _offset.x * _canvasTileSize;
-		var right = left + width;
+    var width = _map.width * _canvasTileSize;
+    var height = _map.height * _canvasTileSize;
+    
+    var top = _offset.y * _canvasTileSize;
+    var bottom = top + height;
+    
+    var left = _offset.x * _canvasTileSize;
+    var right = left + width;
 
-		for (var i = left; i <= right; i += _canvasTileSize) {
-			_context.moveTo(i, top);
-			_context.lineTo(i, bottom);
-		}
+    for (var i = left; i <= right; i += _canvasTileSize) {
+      _context.moveTo(i, top);
+      _context.lineTo(i, bottom);
+    }
 
-		for (var i = top; i <= bottom; i += _canvasTileSize) {
-			_context.moveTo(left, i);
-			_context.lineTo(right, i);
-		}
+    for (var i = top; i <= bottom; i += _canvasTileSize) {
+      _context.moveTo(left, i);
+      _context.lineTo(right, i);
+    }
 
-		_context.stroke();
-	}
+    _context.stroke();
+  }
 
-	function drawMouseSquare() {
-		if (_mouse.over && inMapArea()) {
-			_context.strokeStyle = _select.color;
-			
-			var currBox = currentBox();
-			
-			if(currBox) {
-				var top = (_offset.x + currBox.x) * _canvasTileSize;
-				var left = (_offset.y + currBox.y) * _canvasTileSize;
-				var width = currBox.width * _canvasTileSize;
-				var height = currBox.height * _canvasTileSize;
-			
-				_context.strokeRect(top, left, width, height);
-			}
-		}
-	}
-	
-	function currentBox() {
-		var x = Math.floor(_mouse.x / _canvasTileSize) - _offset.x;
-		var y = Math.floor(_mouse.y / _canvasTileSize) - _offset.y;
-		var width = _select.size;
-		var height = _select.size;
+  function drawMouseSquare() {
+    if (_mouse.over && inMapArea()) {
+      _context.strokeStyle = _select.color;
+      
+      var currBox = currentBox();
+      
+      if(currBox) {
+        var top = (_offset.x + currBox.x) * _canvasTileSize;
+        var left = (_offset.y + currBox.y) * _canvasTileSize;
+        var width = currBox.width * _canvasTileSize;
+        var height = currBox.height * _canvasTileSize;
+      
+        _context.strokeRect(top, left, width, height);
+      }
+    }
+  }
+  
+  function currentBox() {
+    var x = Math.floor(_mouse.x / _canvasTileSize) - _offset.x;
+    var y = Math.floor(_mouse.y / _canvasTileSize) - _offset.y;
+    var width = _select.size;
+    var height = _select.size;
 
-		if (x < 0 || x >= _map.width || y < 0 || y >= _map.height) 
-			return undefined;
-				
-		// center the box.
-		x -= Math.floor((width)/2) + width % 2 - 1;
-		y -= Math.floor((height)/2) + height % 2 - 1;
-		
-		// shrink right side if off map
-		if( (x + width) > _map.width) 
-			width = _map.width - x;
-		
-		// shrink bottom if off map.
-		if( (y + height) > _map.height)
-			height = _map.height - y;
-		
-		// shrink left if off map
-		if(x < 0) {
-			width += x;
-			x = 0;
-		}
-		
-		// shrink top if off map
-		if(y < 0) {
-			height += y;
-			y = 0;
-		}
-		
-		return {
-			x: x,
-			y: y,
-			width: width,
-			height: height
-		};		
-	}
-	
-	function bindContextMenu() {
-		$(_canvas).bind("contextmenu", function(e) {
-			e.preventDefault();
-		});
-	}
+    if (x < 0 || x >= _map.width || y < 0 || y >= _map.height) 
+      return undefined;
+        
+    // center the box.
+    x -= Math.floor((width)/2) + width % 2 - 1;
+    y -= Math.floor((height)/2) + height % 2 - 1;
+    
+    // shrink right side if off map
+    if( (x + width) > _map.width) 
+      width = _map.width - x;
+    
+    // shrink bottom if off map.
+    if( (y + height) > _map.height)
+      height = _map.height - y;
+    
+    // shrink left if off map
+    if(x < 0) {
+      width += x;
+      x = 0;
+    }
+    
+    // shrink top if off map
+    if(y < 0) {
+      height += y;
+      y = 0;
+    }
+    
+    return {
+      x: x,
+      y: y,
+      width: width,
+      height: height
+    };    
+  }
+  
+  function bindContextMenu() {
+    $(_canvas).bind("contextmenu", function(e) {
+      e.preventDefault();
+    });
+  }
 
-	function updateMousePositionRelativeToCanvas(event) {
-		var position = $(event.target).offset();
+  function updateMousePositionRelativeToCanvas(event) {
+    var position = $(event.target).offset();
 
-		_mouse.x = event.pageX - Math.round(position.left);
-		_mouse.y = event.pageY - Math.round(position.top);
+    _mouse.x = event.pageX - Math.round(position.left);
+    _mouse.y = event.pageY - Math.round(position.top);
 
-		if (_mouse.x > _canvas.width)
-			_mouse.x = _canvas.width;
-		if (_mouse.y > _canvas.height)
-			_mouse.y = _canvas.height;
-	}
+    if (_mouse.x > _canvas.width)
+      _mouse.x = _canvas.width;
+    if (_mouse.y > _canvas.height)
+      _mouse.y = _canvas.height;
+  }
 
-	function inMapArea() {
-		return currentBox() ? true : false;
-	}
+  function inMapArea() {
+    return currentBox() ? true : false;
+  }
 
   function updateMouseButton(e) {
     _mouse.button =  e.which === 1 ? "left" : e.which === 3 ? 'right' : undefined;
   }
 
-	function bindMouseDown() {
-		$(_canvas).mousedown(function(event) {
+  function bindMouseDown() {
+    $(_canvas).mousedown(function(event) {
 
-			_mouse.clicked = true;
-			_mouse.over = true;
+      _mouse.clicked = true;
+      _mouse.over = true;
 
       updateMousePositionRelativeToCanvas(event);
       updateMouseButton(event);
 
-			if (inMapArea()) {
-				setCurrentTiles(_selectedTile[_currentLayer][_mouse.button]);
-			}
+      if (inMapArea()) {
+        setCurrentTiles(_selectedTile[_currentLayer][_mouse.button]);
+      }
 
       drawMap();
-		});
-	}
+    });
+  }
 
-	function bindMouseMove() {
-		$(_canvas).mousemove(function(event) {
-			
-			_mouse.over = true;
+  function bindMouseMove() {
+    $(_canvas).mousemove(function(event) {
+      
+      _mouse.over = true;
 
-			updateMousePositionRelativeToCanvas(event);
+      updateMousePositionRelativeToCanvas(event);
       updateMouseButton(event);
 
-			if (_mouse.clicked && inMapArea()) {
-				setCurrentTiles(_selectedTile[_currentLayer][_mouse.button]);
-			}
+      if (_mouse.clicked && inMapArea() && _currentLayer !== "events") {
+        setCurrentTiles(_selectedTile[_currentLayer][_mouse.button]);
+      }
 
       drawMap();
-		});
-	}
-	
-	function bindMouseOver() {
-		$(_canvas).mouseover(function(event) {
+    });
+  }
+  
+  function bindMouseOver() {
+    $(_canvas).mouseover(function(event) {
 
-			_mouse.over = true;
+      _mouse.over = true;
 
-			updateMousePositionRelativeToCanvas(event);
+      updateMousePositionRelativeToCanvas(event);
       updateMouseButton(event);
 
-			drawMap();
-		});
-	}
+      drawMap();
+    });
+  }
 
-	function bindMouseUp() {
-		$(_canvas).mouseup(function(event) {
+  function bindMouseUp() {
+    $(_canvas).mouseup(function(event) {
 
-			_mouse.clicked = false;
-			_mouse.over = true;
+      _mouse.clicked = false;
+      _mouse.over = true;
 
-			updateMousePositionRelativeToCanvas(event);
+      updateMousePositionRelativeToCanvas(event);
       updateMouseButton(event);
 
-			if (inMapArea()) {
-				setCurrentTiles(_selectedTile[_currentLayer][_mouse.button]);
-			}
+      // if (inMapArea()) {
+      //  setCurrentTiles(_selectedTile[_currentLayer][_mouse.button]);
+      // }
 
-			drawMap();
-		});
-	}
+      // drawMap();
+    });
+  }
 
-	function bindMouseOut() {
-		$(_canvas).mouseout(function(event) {
-			_mouse.over = false;
+  function bindMouseOut() {
+    $(_canvas).mouseout(function(event) {
+      _mouse.over = false;
 
-			drawMap();
-		});
-	}
+      drawMap();
+    });
+  }
 
   this.dragOver =  function(e) {
     e.preventDefault();

@@ -7,11 +7,19 @@ function unselectTile(whichButton) {
 
 function selectTile(id, whichButton) {
   selectedTile[currentLayer][whichButton] = id;
+
+  if(currentLayer === 'events') {
+    eventSelected(id, whichButton);
+  }
   
   $('#' + currentLayer + " #" + id).addClass(whichButton + '-click');
 
   drawImage(image[currentLayer], id, $('#' + whichButton + '-click'));
   map.setCurrentLayer(currentLayer);
+}
+
+function eventSelected(id, whichButton) {
+  console.log("Event selected  id:" + id + " which: " + whichButton);
 }
 
 function bindClick(canvas) {
@@ -32,6 +40,10 @@ function bindClick(canvas) {
 
 function setLayer(layer) {
   currentLayer = layer;
+
+  if(layer === 'events') {
+    map.setSelectSize(1);
+  }
 
   selectTile(selectedTile[currentLayer]['left'], 'left');
   selectTile(selectedTile[currentLayer]['right'], 'right');
@@ -62,6 +74,8 @@ function initBottomTiles () {
 
   selectTile(selectedTile[currentLayer]['left'], 'left');
   selectTile(selectedTile[currentLayer]['right'], 'right');
+
+  map.refresh();
 }
 
 function initMiddleTiles () {
@@ -83,6 +97,8 @@ function initMiddleTiles () {
     drawImage(this, i, canvas);
 
   }
+
+  map.refresh();
 }
 
 function initUpperTiles () {
@@ -104,17 +120,17 @@ function initUpperTiles () {
     drawImage(this, i, canvas);
 
   }
+
+  map.refresh();
 }
 
 function initEventsTiles () {
   var eventsDiv = $('#events');
   $(eventsDiv).empty();
 
-  var events = ["Treasure", "Bush", "Hole", "Door", "Erase"];
+  var numTiles = 4;
 
-  var numTiles = 6;
-
-  for(var i = 0; i < numTiles; i++) {
+  for(var i = -1; i < numTiles; i++) {
     var canvas = makeCanvas(i);
     
     $(eventsDiv).append(canvas);
@@ -127,6 +143,8 @@ function initEventsTiles () {
     drawImage(this, i, canvas);
 
   }
+
+  map.refresh();
 }
 
 function makeCanvas(imageIndex) {

@@ -18,3 +18,11 @@ var selectColor = {
   left: 'red',
   right: 'green'
 };
+
+var events = ["Treasure", "Bush", "Hole", "Door"];
+var eventsMap = {
+  "Treasure": 0, 
+  "Bush": 1, 
+  "Hole": 2, 
+  "Door": 3
+}

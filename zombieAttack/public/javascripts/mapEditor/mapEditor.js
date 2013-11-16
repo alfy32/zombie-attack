@@ -121,12 +121,22 @@ function bindKeyDown() {
 			case 109:
 				map.zoomOut();
 				break;
-			case 67: //c
-				map.copy();
-				break;
-			case 86: //v
-				map.paste();
-				break;
+		}
+		if(e.ctrlKey) {
+			switch(e.which) {
+				case 67: //c
+					map.copy();
+					break;
+				case 86: //v
+					map.paste();
+					break;
+				case 90: //z
+					map.undo();
+					break;
+				case 89: //y
+					map.redo();
+					break;
+			}
 		}
 	});
 }
