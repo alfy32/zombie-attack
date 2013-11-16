@@ -57,10 +57,10 @@ function drawMap(canvasId, map) {
 
     function drawEvents() {
         var eventsMap = {
-          "Treasure": 0, 
-          "Bush": 1, 
-          "Hole": 2, 
-          "Door": 3
+          "treasure": 0, 
+          "bush": 1, 
+          "hole": 2, 
+          "door": 3
         };
 
         for(var index in map.events) {

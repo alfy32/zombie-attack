@@ -26,6 +26,7 @@ function back() {
 }
 
 function save() {
+	map.setChanged(false);
 	$.post('/map', {map: map.getMap()}, function(data) {
 		if(data.result === "success") {
 			onSaved();

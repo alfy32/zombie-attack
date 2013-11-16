@@ -17,6 +17,15 @@ function Map() {
     player: true
   };
 
+  var _eventsOptions = {
+    treasure: 0,
+    destination: {
+      id: -1,
+      x: 0,
+      y: 0
+    }
+  };
+
   var _zoomAmount = 5;
 
   var _backgroundColor = "grey";
@@ -534,6 +543,10 @@ function Map() {
     return false;
   }
 
+  this.eventsOptions = function(options) {
+    _eventsOptions = options;
+  };
+
   function setEventTile(curr, tileNumber) {
     if(tileNumber === -1) {
       for(var i in _map.events) {
@@ -541,11 +554,38 @@ function Map() {
           _map.events.splice(i, 1);
       }
     } else {
-      _map.events.push({
-        id: events[tileNumber],
-        x: curr.x,
-        y: curr.y
-      });
+      if(tileNumber == 0) {
+        _map.events.push({
+          id:   "treasure",
+          x:    curr.x,   // the x location of the treasure box
+          y:    curr.y,   // the y location of the treasure box
+          item: _eventsOptions.treasure // the item the treasure box contains
+        });
+      } else if(tileNumber == 1) {
+        _map.events.push({
+          id:   "bush",
+          x:    curr.x,  // the x location of the bush
+          y:    curr.y   // the y location of the bush
+        });
+      } else if(tileNumber == 2) {
+        _map.events.push({
+          id:   "hole",
+          x:    curr.x,  // the x location of the hole
+          y:    curr.y,  // the y location of the hole
+          d_id: _eventsOptions.destination.id,  // the destination id of the map to send you to
+          d_x:  _eventsOptions.destination.x,   // the destination x of where it sends you
+          d_y:  _eventsOptions.destination.y    // the destination y of where it sends you
+        });
+      } else if(tileNumber == 3) {
+        _map.events.push({
+          id:   "door",
+          x:    curr.x,  // the x location of the door
+          y:    curr.y,  // the y location of the door
+          d_id: _eventsOptions.destination.id,  // the destination id of the map to send you to
+          d_x:  _eventsOptions.destination.x,   // the destination x of where it sends you
+          d_y:  _eventsOptions.destination.y    // the destination y of where it sends you
+        });
+      }
     }
 
     _hasChanged = true;
@@ -642,7 +682,6 @@ function Map() {
         x: _map.events[index].x,
         y: _map.events[index].y
       };
-     
       drawTileImage(e.id, e.y, e.x, 'events');
     }
   }

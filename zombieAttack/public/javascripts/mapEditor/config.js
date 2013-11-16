@@ -19,10 +19,21 @@ var selectColor = {
   right: 'green'
 };
 
-var events = ["Treasure", "Bush", "Hole", "Door"];
+var events = ["treasure", "bush", "hole", "door"];
 var eventsMap = {
-  "Treasure": 0, 
-  "Bush": 1, 
-  "Hole": 2, 
-  "Door": 3
+  "treasure": 0, 
+  "bush": 1, 
+  "hole": 2, 
+  "door": 3
 }
+
+var eventsOptions = {
+  treasure: 1,
+  destination: {
+    id: -1,
+    x: 0,
+    y: 0
+  }
+};
+
+map.eventsOptions(eventsOptions);

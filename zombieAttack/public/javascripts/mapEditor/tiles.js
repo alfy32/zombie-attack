@@ -7,19 +7,11 @@ function unselectTile(whichButton) {
 
 function selectTile(id, whichButton) {
   selectedTile[currentLayer][whichButton] = id;
-
-  if(currentLayer === 'events') {
-    eventSelected(id, whichButton);
-  }
   
   $('#' + currentLayer + " #" + id).addClass(whichButton + '-click');
 
   drawImage(image[currentLayer], id, $('#' + whichButton + '-click'));
   map.setCurrentLayer(currentLayer);
-}
-
-function eventSelected(id, whichButton) {
-  console.log("Event selected  id:" + id + " which: " + whichButton);
 }
 
 function bindClick(canvas) {
@@ -143,8 +135,51 @@ function initEventsTiles () {
     drawImage(this, i, canvas);
 
   }
+  
+  initEventsOptions();
 
   map.refresh();
+}
+
+function initEventsOptions() {
+  $('#events').append(
+    $('<div>').load('/events.html', function() {
+      $('#treasure-which').change(function(){
+        eventsOptions.treasure = +$(this).val();
+      });
+      $('#destination-id').change(function(){
+        eventsOptions.destination.id = $(this).val();
+      });
+      $('#destination-x').bind('keyup click', function(){
+        if(+$(this).val() > +$(this).attr('max')) 
+          $(this).val($(this).attr('max'));
+        eventsOptions.destination.x = +$(this).val();
+      });
+      $('#destination-y').bind('keyup click', function(){
+        eventsOptions.destination.y = +$(this).val();
+      });
+    })
+  );
+
+  getMaps();
+}
+
+function getMaps() {
+  $.get('/mapsrequest', function(data){
+    for(var index in data) {
+      var map = data[index].value;
+
+      var option = $('<option>');
+      $(option).html(map.title);
+      $(option).val(map._id);
+
+
+      $('#destination-id').append(option);
+
+      $('#destination-x').attr("max", map.width);
+      $('#destination-y').attr("max", map.height);
+    }
+  });
 }
 
 function makeCanvas(imageIndex) {
