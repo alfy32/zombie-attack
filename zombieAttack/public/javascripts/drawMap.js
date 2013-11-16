@@ -3,12 +3,14 @@ var image = {
     bottom: new Image(),
     middle: new Image(),
     upper: new Image(),
+    events: new Image(),
     player: new Image()
 }
 
 image.bottom.src = '/images/bottom.png';
 image.middle.src = '/images/middle.png';
 image.upper.src = '/images/upper.png';
+image.events.src = '/images/events.png';
 image.player.src = '/images/player.png';
 
 function drawMap(canvasId, map) {
@@ -36,6 +38,7 @@ function drawMap(canvasId, map) {
     drawLayer(map, context, 'bottom');
     drawLayer(map, context, 'middle');
     drawLayer(map, context, 'upper');
+    drawEvents();
     drawTile(0, map.y, map.x, 'player');
 
     function clearCanvas() {
@@ -51,6 +54,25 @@ function drawMap(canvasId, map) {
             }
         }
     }
+
+    function drawEvents() {
+        var eventsMap = {
+          "Treasure": 0, 
+          "Bush": 1, 
+          "Hole": 2, 
+          "Door": 3
+        };
+
+        for(var index in map.events) {
+          var e = {
+            id: eventsMap[map.events[index].id],
+            x: map.events[index].x,
+            y: map.events[index].y
+          };
+         
+          drawTile(e.id, e.y, e.x, 'events');
+        }
+      }
 
     function drawTile(imageNumber, row, col, layer) {
         var imageLoc = {
