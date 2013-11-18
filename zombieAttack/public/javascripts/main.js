@@ -129,26 +129,6 @@ function playMap()
                 $(".play-area").focus();
         });
         console.log("play");
-        /*
-	var mapID = $("#mainList .active").attr('mapid');
-    var mapHeight = $('#mainList .active').attr('mapHeight');
-    var mapWidth = $('#mainList .active').attr('mapWidth');
-	$('#load-stuff-here').load('playmap.html', function(){
-		var request = {
-			mapid : mapID
-		};
-		$.post("/playMap", request, function(info)
-		{
-			console.log(info);
-			$(".play-area").attr('src',info.url);
-            $(".play-area").attr('height',mapHeight*40 + 10);
-            $(".play-area").attr('width',mapWidth*40 + 10);
-            $(".play-area").focus();
-			console.log(info.url, " loaded");
-		});
-		console.log("play");
-	});
- */
 }
 
 function editMap()
@@ -158,51 +138,35 @@ function editMap()
 
 function deleteMap()
 {
+    var mapID = $(".active").data("_id");
+
+    var request = {
+            id: mapID
+        };
+
+    $.post('/deletemap',request,function(data)
+    {
+        if(data.result === "success")
+        {
+            console.log('successfully deleted map');
+            $(".active").remove();
+            drawMap('canvas', {
+                width: 0,
+                height: 0
+            });
+        }
+        else
+        {
+            console.log('flip! there was an error.');
+        }
+    });
 	console.log("delete");
 }
-
-/*
-$('#make-map-submit-btn').click(function(){
-	$('.modal-backdrop').click();
-	setTimeout(function(){
-    	startMap();
-	}, 500);
-});
-*/
 
 $('#make-map-submit-btn').click(function() {
     var fail = false;
     console.log('make map button pressed');
     var name = $('#new-map-name');
-    var height = $('#new-map-height');
-    var width = $('#new-map-width');
-
-    var re = /[0-9]+/;
-    if (!re.test(height.val()))
-    {
-        height.val('');
-        height.attr('placeholder', 'Invalid Height');
-        height.addClass('btn-danger');
-        fail = true;
-    }
-    else
-    {
-        height.attr('placeholder', 'Height');
-        height.removeClass('btn-danger');
-    }
-
-    if (!re.test(width.val()))
-    {
-        width.val('');
-        width.attr('placeholder', 'Invalid Width');
-        width.addClass('btn-danger');
-        fail = true;
-    }
-    else
-    {
-        width.attr('placeholder', 'Width');
-        width.removeClass('btn-danger');
-    }
 
     if (name.val() === "")
     {
@@ -218,16 +182,13 @@ $('#make-map-submit-btn').click(function() {
 
     if (!fail) {
         var request = {
+            name: name.val()
         };
 
-/*
-        $.post("/newuserrequest", request, function(data) {
+        $.post("/newmap", request, function(data) {
             if (data.result === "Success") {
-                console.log('successfully submitted new user')
+                console.log('successfully created new map');
                 name.val('');
-                password.val('');
-                passwordVerify.val('');
-                email.val('');
                 $('#new-request-close-btn').trigger('click');
             }
             else if (data.result === "User already exists")
@@ -239,7 +200,6 @@ $('#make-map-submit-btn').click(function() {
                 console.log("failed to submit new user");
             }
         });
-*/
 
     }
 

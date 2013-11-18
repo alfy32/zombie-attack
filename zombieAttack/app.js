@@ -198,7 +198,7 @@ app.get('/map/:id?', checkAuth, checkDesigner,function(req, res) {
 
 
 
-app.delete('/map', checkAuth, checkDesigner, function(request, response){
+app.post('/deletemap', checkAuth,checkAdmin, function(request, response){
 	maps.remove(request.body.id,function(error,res){
 		if(error)
 		{
