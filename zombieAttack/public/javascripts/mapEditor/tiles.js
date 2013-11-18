@@ -171,7 +171,7 @@ function getMaps() {
 
       var option = $('<option>');
       $(option).html(map.title);
-      $(option).val(map._id);
+      $(option).val(map.title);
 
 
       $('#destination-id').append(option);

@@ -1,0 +1,38 @@
+
+int f(int, a, int b, int c, int d, int e)
+{
+	return a+b+c+d+e;
+}
+
+f(1,2,3,4,5);
+
+
+
+li $a0,1
+li $a1,2
+li $a2,3
+li $a3,4
+li $8,5
+sw $8, -4($sp)
+addi $sp, -4
+jal f
+
+
+f_prolog:
+	addi, $sp,-8
+	sw $fp, 0($sp)
+	sw $ra, 4($sp)
+	mv $fp, $sp
+
+	add $a0, $a0, $a1
+	add $a0, $a0, $a2
+	add $a0, $a0, $a3
+	lw $7, 8($fp)
+	add $v0, $a0, $7
+f_epilog:
+	lw $ra,4($fp)
+	lw $fp, 0($fp)
+	addi $sp, 8
+	jr $ra
+
+
