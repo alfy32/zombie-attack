@@ -76,7 +76,6 @@ app.post('/', function(req,res)
                     response.user = req.body.email;
 					res.json(response);
 				}
-
 			});
 		}
 	});
@@ -209,9 +208,35 @@ app.delete('/map', checkAuth, checkDesigner, function(request, response){
 			response.json({"result":"success"});
 		}
 	});
-
 });
 
+app.post('/newmap', checkAuth, checkDesigner, function(request, response){
+	maps.get('default',function(error,res){
+		if(error){
+			console.log("error bad things happening with the database");
+		}
+		else
+		{
+			delete res._id ;
+			delete res._rev;
+			console.log(request.body.name);
+			res.title = request.body.name;
+			res.author = request.session.user.name;
+
+			console.log (request);
+			maps.save(res,function(erro, resp){
+				if(erro)
+					console.log('problems');
+				else
+				{
+					resp.result = 'success';
+
+					response.json(resp);
+				}
+			});
+		}
+	});
+});
 
 //done
 app.post('/playMap', checkAuth, checkPlayer, function(req, res){
@@ -389,9 +414,10 @@ app.post('/createUser',checkAuth,checkAdmin, function(req,res){
 app.post('/editpassword',checkAuth,function(request, response){
 	var password = request.body.password;
 	var user = request.session.user;
-
+	//console.log(password);
 	bcrypt.hash(password, null, null, function(err,hash){
 			user.password = hash;
+			//console.log(hash);
 			users.save(user._id, user._rev,user, function(er, re){
 				if(er)
 				{
