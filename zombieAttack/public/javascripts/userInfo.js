@@ -38,67 +38,67 @@ function loadUserInfo()
     pageName = "userInfo";
     $.post('/updatePage',{page:'userInfo'},function(info){});
 
-    $('#login-form').html("<table><tr><td><button id=\"logout-text\"> Logout </button></td><td><button id=\"userInfo-text\"> UserInfo </button></td></tr></table>");
+    $('#login-form').html("<table><tr><td><button id=\"logout-text\" class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
     $('#userInfo-text').html("Go Back");
     bindBackToMain();
 
-    $('#load-stuff-here').load('userinfo.html');
-    $.get("/currentuser", {}, function(user)
-    {
-        selectedUser = user._id;
-        currentUser = user._id;
-        setUserUI(user._id, user.name, user.admin, user.designer, user.player);
-        if(user.admin)
+    $('#load-stuff-here').load('userinfo.html', function(){
+        $.get("/currentuser", {}, function(user)
         {
-            $('#userSidePanel').hide();
-            setMe();
-            $.get("/users", {}, function(info) {
-                var list = document.getElementById('userList');
-                for(var i = 0; i < info.length; ++i)
-                {
-                    var name = info[i].value.name;
-                    var entry = document.createElement('li');
-                    entry.appendChild(document.createTextNode(name));
-                    if(info[i].value._id == currentUser)
+            selectedUser = user._id;
+            currentUser = user._id;
+            setUserUI(user._id, user.name, user.admin, user.designer, user.player);
+            if(user.admin)
+            {
+                $('#userSidePanel').hide();
+                setMe();
+                $.get("/users", {}, function(info) {
+                    var list = document.getElementById('userList');
+                    for(var i = 0; i < info.length; ++i)
                     {
-                        entry.setAttribute('class','list-group-item active');
-                    }
-                    else
+                        var name = info[i].value.name;
+                        var entry = document.createElement('li');
+                        entry.appendChild(document.createTextNode(name));
+                        if(info[i].value._id == currentUser)
+                        {
+                            entry.setAttribute('class','list-group-item active');
+                        }
+                        else
+                        {
+                            entry.setAttribute('class','list-group-item');
+                        }
+                        entry.setAttribute('userId', info[i].value._id);
+                        entry.setAttribute('userName', info[i].value.name);
+                        entry.setAttribute('userA', info[i].value.admin);
+                        entry.setAttribute('userD', info[i].value.designer);
+                        entry.setAttribute('userP', info[i].value.player);
+                        entry.setAttribute('approvedUser', true);
+                        entry.setAttribute('onClick','makeUserActive(this)');
+                        entry.setAttribute('style','text-align:center;');
+                        list.appendChild(entry);
+                    } 
+                    $.get("/userrequests", {}, function(info) {
+                    var list = document.getElementById('userList');
+                    for(var i = 0; i < info.length; ++i)
                     {
-                        entry.setAttribute('class','list-group-item');
-                    }
-                    entry.setAttribute('userId', info[i].value._id);
-                    entry.setAttribute('userName', info[i].value.name);
-                    entry.setAttribute('userA', info[i].value.admin);
-                    entry.setAttribute('userD', info[i].value.designer);
-                    entry.setAttribute('userP', info[i].value.player);
-                    entry.setAttribute('approvedUser', true);
-                    entry.setAttribute('onClick','makeUserActive(this)');
-                    entry.setAttribute('style','text-align:center;');
-                    list.appendChild(entry);
-                } 
-                $.get("/userrequests", {}, function(info) {
-                var list = document.getElementById('userList');
-                for(var i = 0; i < info.length; ++i)
-                {
-                    var name = info[i].value.name;
-                    var entry = document.createElement('li');
-                    entry.appendChild(document.createTextNode(name + "<--request"));
-                    if(info[i].value._id == list)
-                    {
-                        entry.setAttribute('class','list-group-item active');
-                    }
-                    else
-                    {
-                        entry.setAttribute('class','list-group-item');
-                    }
-                    entry.setAttribute('userId', info[i].value._id);
-                    entry.setAttribute('approvedUser', "false");
-                    entry.setAttribute('onClick','makeUserActive(this)');
-                    entry.setAttribute('style','text-align:center;');
-                    list.appendChild(entry);
-                }        
-            });       
+                        var name = info[i].value.name;
+                        var entry = document.createElement('li');
+                        entry.appendChild(document.createTextNode(name + "<--request"));
+                        if(info[i].value._id == list)
+                        {
+                            entry.setAttribute('class','list-group-item active');
+                        }
+                        else
+                        {
+                            entry.setAttribute('class','list-group-item');
+                        }
+                        entry.setAttribute('userId', info[i].value._id);
+                        entry.setAttribute('approvedUser', "false");
+                        entry.setAttribute('onClick','makeUserActive(this)');
+                        entry.setAttribute('style','text-align:center;');
+                        list.appendChild(entry);
+                    }        
+                });       
             });
         }
         else
@@ -108,7 +108,7 @@ function loadUserInfo()
         }
 
     });
-    
+    });
 }
 
  function bindBackToMain()
