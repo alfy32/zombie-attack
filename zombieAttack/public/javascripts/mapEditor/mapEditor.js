@@ -4,7 +4,9 @@ function dragStart(e) {
 }
 
 function initMap() {
-	if (mapId !== undefined) {
+	var mapId = window.location.hash.split('/')[3];
+
+	if (mapId) {
 		map.setMap({width:0, height:0});
 		
     $.get('/map/' + mapId, {}, function(data) {
@@ -20,8 +22,11 @@ function refresh() {
 }
 
 function back() {
-	$('#login-form').show();
-	$('#header-buttons').empty();
+	$('#main-header').show();
+	$('#editor-header').hide();
+
+	$.post('/updatePage',{page:'home'},function(info){});
+	window.location = '';
 	loadMainPage();
 }
 

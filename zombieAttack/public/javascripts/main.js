@@ -3,8 +3,8 @@
 function loadMainPage()
 {
     pageName = "main";
+    $('#login-form').html("<table><tr><td><button id=\"logout-text\" class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
     $.post('/updatePage',{page:'main'},function(info){});
-    $('#login-form').html("<table><tr><td><button id=\"logout-text\"> Logout </button></td><td><button id=\"userInfo-text\"> UserInfo </button></td></tr></table>");
     bindLogout();
     bindUserInfo();
     
@@ -15,16 +15,16 @@ function loadMainPage()
             var tr = $("<tr>");
             if(info.player)
             {
-                $(tr).append('<td><button href="#play-map-modal" data-toggle="modal" onclick="playMap()">PLAY</button></td>');
+                $(tr).append('<td><button href="#play-map-modal" onclick="playMap()" class="btn btn-primary">PLAY</button></td>');
             }
             if(info.designer)
             {
                 $("#mainList").append('<a class="list-group-item" onmouseover="" href="#make-map-modal" data-toggle="modal" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>');
-                $(tr).append('<td><button onclick="editMap()">EDIT</button></td>');
+                $(tr).append('<td><button onclick="editMap()" class="btn btn-primary">EDIT</button></td>');
             }
             if(info.admin)
             {
-                $(tr).append('<td><button onclick="deleteMap()">DELETE</button></td>');
+                $(tr).append('<td><button onclick="deleteMap()" class="btn btn-primary">DELETE</button></td>');
             }
             $("#load-table").append(tr);
             $.get("/mapsrequest", {}, function(info) {
@@ -86,11 +86,9 @@ function startMap(id)
 	pageName = "editor";
         $.post('/updatePage',{page:'editor'},function(info){});
 
-        mapId = id;
+    window.location.hash = '/edit/map/'+id;
 	$('#load-stuff-here').load('mapEditor.html');
 }
-
-
 
 function refreshMapEditor()
 {
@@ -120,6 +118,13 @@ function loadStartup()
 function playMap()
 {
     var mapID = $(".active").data("_id");
+    if(mapID === null)
+    {
+        console.log('crao');
+    }
+    else
+    {
+        $('#play-map-modal').modal('show');
         $(".modal-title").html($(".active").data("title"));
         console.log(mapID);
         var request = {
@@ -132,80 +137,64 @@ function playMap()
                 $(".play-area").focus();
         });
         console.log("play");
-        /*
-	var mapID = $("#mainList .active").attr('mapid');
-    var mapHeight = $('#mainList .active').attr('mapHeight');
-    var mapWidth = $('#mainList .active').attr('mapWidth');
-	$('#load-stuff-here').load('playmap.html', function(){
-		var request = {
-			mapid : mapID
-		};
-		$.post("/playMap", request, function(info)
-		{
-			console.log(info);
-			$(".play-area").attr('src',info.url);
-            $(".play-area").attr('height',mapHeight*40 + 10);
-            $(".play-area").attr('width',mapWidth*40 + 10);
-            $(".play-area").focus();
-			console.log(info.url, " loaded");
-		});
-		console.log("play");
-	});
- */
+    }
 }
 
 function editMap()
 {
-    startMap($('.active').data('_id'));
+    var mapID = $(".active").data("_id");
+    if(mapID === null)
+    {
+
+    }
+    else
+    {
+        startMap(mapID); 
+    }
 }
 
 function deleteMap()
 {
-	console.log("delete");
-}
+    var mapID = $(".active").data("_id");
+    if(mapID === null)
+    {
 
-/*
-$('#make-map-submit-btn').click(function(){
-	$('.modal-backdrop').click();
-	setTimeout(function(){
-    	startMap();
-	}, 500);
-});
-*/
+    }
+    else
+    {
+        var request = {
+                id: mapID
+            };
+
+        $.post('/deletemap',request,function(data)
+        {
+            if(data.result === "success")
+            {
+                $(".active").remove();
+                try
+                {
+                    drawMap('canvas', {
+                        width: 0,
+                        height: 0
+                    });
+                }
+                catch(e)
+                {
+                    console.log('successfully deleted map');
+                }
+            }
+            else
+            {
+                console.log('flip! there was an error.');
+            }
+        });
+    }
+}
 
 $('#make-map-submit-btn').click(function() {
     var fail = false;
     console.log('make map button pressed');
     var name = $('#new-map-name');
-    var height = $('#new-map-height');
-    var width = $('#new-map-width');
-
-    var re = /[0-9]+/;
-    if (!re.test(height.val()))
-    {
-        height.val('');
-        height.attr('placeholder', 'Invalid Height');
-        height.addClass('btn-danger');
-        fail = true;
-    }
-    else
-    {
-        height.attr('placeholder', 'Height');
-        height.removeClass('btn-danger');
-    }
-
-    if (!re.test(width.val()))
-    {
-        width.val('');
-        width.attr('placeholder', 'Invalid Width');
-        width.addClass('btn-danger');
-        fail = true;
-    }
-    else
-    {
-        width.attr('placeholder', 'Width');
-        width.removeClass('btn-danger');
-    }
 
     if (name.val() === "")
     {
@@ -221,29 +210,29 @@ $('#make-map-submit-btn').click(function() {
 
     if (!fail) {
         var request = {
+            name: name.val()
         };
 
-/*
-        $.post("/newuserrequest", request, function(data) {
-            if (data.result === "Success") {
-                console.log('successfully submitted new user')
+        $.post("/newmap", request, function(data) {
+            if (data.result === "success") {
+                console.log('successfully created new map');
                 name.val('');
-                password.val('');
-                passwordVerify.val('');
-                email.val('');
+                console.log(data);
                 $('#new-request-close-btn').trigger('click');
-            }
-            else if (data.result === "User already exists")
-            {
-                console.log("user already exists");
+                setTimeout(function()
+                {
+                    startMap(data.id);
+                }, 500);
             }
             else
             {
-                console.log("failed to submit new user");
+                console.log('error creating map');
             }
         });
-*/
 
     }
-
+    else
+    {
+        console.log('map failed');
+    }
 });
