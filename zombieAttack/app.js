@@ -74,6 +74,7 @@ app.post('/', function(req,res)
 					req.session.lastActivity = new Date().getTime();
 					response.result = "Success";
                     response.user = req.body.email;
+                    req.session.curPage = 'main'
 					res.json(response);
 				}
 			});
@@ -83,9 +84,21 @@ app.post('/', function(req,res)
 });
 
 //done
-app.get('/currentuser', checkAuth, function(req,res){
-	console.log("getting current user");
-	res.json(req.session.user);
+app.get('/currentuser', function(req,res){
+	if(req.session.user)
+	{
+		var response = req.session.user;
+		response.page = req.session.curPage;
+		delete response.password;
+		res.json(response);
+	}
+	else
+		res.json({result:"failure"});
+});
+
+app.post('/updatePage', checkAuth, function(req,res){
+	req.session.curPage = req.body.page;
+	res.json({result:'success'});
 });
 
 // ------------ MAP REQUESTS --------------- //

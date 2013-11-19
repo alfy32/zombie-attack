@@ -4,6 +4,7 @@ function loadMainPage()
 {
     pageName = "main";
     $('#login-form').html("<table><tr><td><button id=\"logout-text\" class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
+    $.post('/updatePage',{page:'main'},function(info){});
     bindLogout();
     bindUserInfo();
     
@@ -55,7 +56,7 @@ function loadDelay()
  {
     $('#logout-text').click(function() {
     
-    $.post('/logout', {}, function(info)
+    $.get('/logout', {}, function(info)
         {
             
         });
@@ -83,6 +84,8 @@ function loadDelay()
 function startMap(id)
 {
 	pageName = "editor";
+        $.post('/updatePage',{page:'editor'},function(info){});
+
         mapId = id;
 	$('#load-stuff-here').load('mapEditor.html');
 }
@@ -90,6 +93,8 @@ function startMap(id)
 function refreshMapEditor()
 {
 	pageName = "editor";
+    $.post('/updatePage',{page:'editor'},function(info){});
+
 	loadDelay();
 	$('#load-stuff-here').load('mapEditor.html');
 }
@@ -103,6 +108,8 @@ function loadStartup()
 	else
 	{
 		pageName = "home";
+        $.post('/updatePage',{page:'home'},function(info){});
+
 		loadDelay();
 		$('#load-stuff-here').load('startup.html');
 	}

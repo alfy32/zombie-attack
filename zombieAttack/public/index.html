@@ -10,7 +10,7 @@
     <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="bootstrap/examples/jumbotron/jumbotron.css" rel="stylesheet">
     <link href="stylesheets/style.css" rel="stylesheet">
-    <script>var pageName = "home";</script>
+    <script>var pageName ;</script>
   </head>
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -48,11 +48,34 @@
     <script type="text/javascript">
     $(function ()
      {
-        $("[rel='tooltip']").tooltip();
-        $(document).ready(function()
-        { 
-          $('#load-stuff-here').load('startup.html');
-        });
+          $.get('/currentuser',function(data)
+          {
+            if(data.result=='failure')
+            {
+              console.log('loading startup');
+              $('#load-stuff-here').load('startup.html');
+            }
+            else
+            {
+              console.log('loading other');
+
+              if(data.page == 'main' )
+              {
+                $('#load-stuff-here').load('main.html');
+                loadMainPage();
+              }
+              else if(data.page == 'editor')
+              {
+                $('#load-stuff-here').load('mapEditor.html');
+              }
+              else if(data.page== 'userInfo')
+              {
+                loadUserInfo();
+              }
+
+            }
+          })
+        //});
     });
     </script>
     <script src="javascripts/userInfo.js"></script>
