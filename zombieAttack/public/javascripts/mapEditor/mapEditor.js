@@ -25,7 +25,8 @@ function back() {
 	$('#main-header').show();
 	$('#editor-header').hide();
 
-	window.location.hash = '';
+	$.post('/updatePage',{page:'home'},function(info){});
+	window.location = '';
 	loadMainPage();
 }
 
