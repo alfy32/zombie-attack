@@ -192,6 +192,10 @@ app.post('/updatemap', checkDesigner, function(req, res) {
 });
 
 
+app.post('/uploadImage',checkAuth,function(req,res){
+	console.log(request.body);
+	res.json({result:'success'});
+});
 
 //done
 app.get('/map/:id?', checkAuth, checkDesigner,function(req, res) {

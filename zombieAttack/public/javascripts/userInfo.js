@@ -33,16 +33,29 @@ function setOther()
     $('#permTable').show();
     $('#editTable').hide();
 }
+function setUpFileUpload()
+{
+       $('#uploadFile').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo(document.body);
+            });
+        }
+    
+});
+}
 function loadUserInfo()
 {
     pageName = "userInfo";
     $.post('/updatePage',{page:'userInfo'},function(info){});
 
-    $('#login-form').html("<table><tr><td><button id=\"logout-text\" class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
+    $('#login-form').html("<table><tr><td><a href=\"\/logout\" class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
     $('#userInfo-text').html("Go Back");
     bindBackToMain();
 
     $('#load-stuff-here').load('userinfo.html', function(){
+        setUpFileUpload();
         $.get("/currentuser", {}, function(user)
         {
             selectedUser = user._id;

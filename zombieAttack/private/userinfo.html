@@ -1,4 +1,42 @@
 <div id="userSettings">
+
+
+	<div id="imageUploadModal" class="modal fade">
+	  <div class="modal-dialog">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h4 class="modal-title">Zombie Attack User Login Request</h4>
+		  </div>
+		  <form id = "new-user-request">     
+		  <div class="modal-body">
+			 <span class="btn btn-success fileinput-button">
+			        <i class="glyphicon glyphicon-plus"></i>
+			        <span>Select files...</span>
+			        <!-- The file input field used as target for the file upload widget -->
+			        <input id="fileupload" type="file" name="files[]" single>
+			    </span>
+			    <br>
+			    <br>
+			    <!-- The global progress bar -->
+			    <div id="progress" class="progress">
+			        <div class="progress-bar progress-bar-success"></div>
+			    </div>
+			    <!-- The container for the uploaded files -->
+			    <div id="files" class="files"></div>       
+		  </div>
+		  
+		  <div class="modal-footer">
+			<button type="button" id = "new-image-close-btn" class="btn btn-default" data-dismiss="modal">Close</button>
+		  </div>
+		  
+		  </form>
+		</div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+
+
+
 	<div class="col-sm-1"></div>
 	<div class="col-sm-3" style="top:60px;">
 		<div class="panel panel-info" id="adminSidePanel">
@@ -33,8 +71,8 @@
 									<tr>
 										<td>Password Again: </td><td><input type="password" name="pass2" id="inpass2"></td>
 									</tr>
-  								</table>
-  								<table id="permTable">
+								</table>
+								<table id="permTable">
 									<tr>
 										<td>User Type: </td><td></td>
 									</tr>
@@ -47,18 +85,19 @@
 									<tr>
 										<td><input type="checkbox" name="perm" value="Player" id="chp"></td><td>Player</td>
 									</tr> 
-  								</table>
+								</table>
 							</td>
 						</tr>
 					</table>
 				</td>
 			</tr>
 			<tr>
-				<td id="editUserData"><button onclick="edituser()">Edit Name/Password</button></td>
-				<td id="upgradeUserData"><button onclick="upgradeuser()">Upgrade Permissions</button></td>
-				<td id="deleteUserData"><button onclick="deleteUser()">Delete User</button></td>
+				<td id="editUserData"><button onclick="edituser()" class='btn btn-primary'>Edit Name/Password</button></td>
+				<td id="upgradeUserData"><button onclick="upgradeuser()" class='btn btn-primary'>Upgrade Permissions</button></td>
+				<td id="deleteUserData"><button onclick="deleteUser()" class='btn btn-primary'>Delete User</button></td>
 				<td id="approveUserData"><button onclick="approveUser()">Approve User</button></td>
-				<td id="denyUserData"><button onclick="denyUser()">Deny User</button></td>
+				<td id="denyUserData"><button onclick="denyUser()" class='btn btn-primary'>Deny User</button></td>
+				<td id="imageUpload"><a href="#imageUploadModal" class='btn btn-primary' data-toggle= "modal">Upload image</button></td>
 			</tr>
 		</table>
 	</div>
