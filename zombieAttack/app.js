@@ -203,6 +203,7 @@ app.get('/map/:id?', checkAuth, checkDesigner,function(req, res) {
 		}
 		else
 		{
+			req.session.user.currentMap = mapId;
 			res.json(map);
 		}
 	});
