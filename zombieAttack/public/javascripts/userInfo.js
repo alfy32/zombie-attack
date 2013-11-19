@@ -36,7 +36,9 @@ function setOther()
 function loadUserInfo()
 {
     pageName = "userInfo";
-    
+    $.post('/updatePage',{page:'userInfo'},function(info){});
+
+    $('#login-form').html("<table><tr><td><button id=\"logout-text\"> Logout </button></td><td><button id=\"userInfo-text\"> UserInfo </button></td></tr></table>");
     $('#userInfo-text').html("Go Back");
     bindBackToMain();
 
