@@ -3,7 +3,7 @@
 function loadMainPage()
 {
     pageName = "main";
-    $('#login-form').html("<table><tr><td><button id=\"logout-text\"> Logout </button></td><td><button id=\"userInfo-text\"> UserInfo </button></td></tr></table>");
+    $('#login-form').html("<table><tr><td><button id=\"logout-text\" class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
     bindLogout();
     bindUserInfo();
     
@@ -14,16 +14,16 @@ function loadMainPage()
             var tr = $("<tr>");
             if(info.player)
             {
-                $(tr).append('<td><button href="#play-map-modal" data-toggle="modal" onclick="playMap()">PLAY</button></td>');
+                $(tr).append('<td><button href="#play-map-modal" onclick="playMap()" class="btn btn-primary">PLAY</button></td>');
             }
             if(info.designer)
             {
                 $("#mainList").append('<a class="list-group-item" onmouseover="" href="#make-map-modal" data-toggle="modal" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>');
-                $(tr).append('<td><button onclick="editMap()">EDIT</button></td>');
+                $(tr).append('<td><button onclick="editMap()" class="btn btn-primary">EDIT</button></td>');
             }
             if(info.admin)
             {
-                $(tr).append('<td><button onclick="deleteMap()">DELETE</button></td>');
+                $(tr).append('<td><button onclick="deleteMap()" class="btn btn-primary">DELETE</button></td>');
             }
             $("#load-table").append(tr);
             $.get("/mapsrequest", {}, function(info) {
@@ -84,13 +84,7 @@ function startMap(id)
 {
 	pageName = "editor";
         mapId = id;
-	newMapModal();
 	$('#load-stuff-here').load('mapEditor.html');
-}
-
-function newMapModal()
-{
-
 }
 
 function refreshMapEditor()
@@ -117,6 +111,13 @@ function loadStartup()
 function playMap()
 {
     var mapID = $(".active").data("_id");
+    if(mapID === null)
+    {
+        console.log('crao');
+    }
+    else
+    {
+        $('#play-map-modal').modal('show');
         $(".modal-title").html($(".active").data("title"));
         console.log(mapID);
         var request = {
@@ -129,38 +130,58 @@ function playMap()
                 $(".play-area").focus();
         });
         console.log("play");
+    }
 }
 
 function editMap()
 {
-    startMap($('.active').data('_id'));
+    var mapID = $(".active").data("_id");
+    if(mapID === null)
+    {
+
+    }
+    else
+    {
+        startMap(mapID); 
+    }
 }
 
 function deleteMap()
 {
     var mapID = $(".active").data("_id");
-
-    var request = {
-            id: mapID
-        };
-
-    $.post('/deletemap',request,function(data)
+    if(mapID === null)
     {
-        if(data.result === "success")
+
+    }
+    else
+    {
+        var request = {
+                id: mapID
+            };
+
+        $.post('/deletemap',request,function(data)
         {
-            console.log('successfully deleted map');
-            $(".active").remove();
-            drawMap('canvas', {
-                width: 0,
-                height: 0
-            });
-        }
-        else
-        {
-            console.log('flip! there was an error.');
-        }
-    });
-	console.log("delete");
+            if(data.result === "success")
+            {
+                $(".active").remove();
+                try
+                {
+                    drawMap('canvas', {
+                        width: 0,
+                        height: 0
+                    });
+                }
+                catch(e)
+                {
+                    console.log('successfully deleted map');
+                }
+            }
+            else
+            {
+                console.log('flip! there was an error.');
+            }
+        });
+    }
 }
 
 $('#make-map-submit-btn').click(function() {
@@ -186,21 +207,25 @@ $('#make-map-submit-btn').click(function() {
         };
 
         $.post("/newmap", request, function(data) {
-            if (data.result === "Success") {
+            if (data.result === "success") {
                 console.log('successfully created new map');
                 name.val('');
+                console.log(data);
                 $('#new-request-close-btn').trigger('click');
-            }
-            else if (data.result === "User already exists")
-            {
-                console.log("user already exists");
+                setTimeout(function()
+                {
+                    startMap(data.id);
+                }, 500);
             }
             else
             {
-                console.log("failed to submit new user");
+                console.log('error creating map');
             }
         });
 
     }
-
+    else
+    {
+        console.log('map failed');
+    }
 });
