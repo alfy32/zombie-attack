@@ -86,7 +86,7 @@ function startMap(id)
 	pageName = "editor";
         $.post('/updatePage',{page:'editor'},function(info){});
 
-        mapId = id;
+    window.location.hash = '/edit/map/'+id;
 	$('#load-stuff-here').load('mapEditor.html');
 }
 

@@ -1,9 +1,9 @@
 
-$('#login-form').hide();
-$('#header-buttons').load('/mapEditorHeader.html', function() {
+$('#main-header').hide();
+$('#editor-header').load('/mapEditorHeader.html', function() {
 	bindMapTitle();
 });
-$('#header-buttons').show();
+$('#editor-header').show();
 
 var image = {
 	bottom: new Image(),
