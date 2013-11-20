@@ -193,7 +193,7 @@ app.post('/updatemap', checkDesigner, function(req, res) {
 
 
 app.post('/uploadImage',checkAuth,function(req,res){
-	console.log(request.body);
+	console.log("UPLOADE IMAGE: " + request.body);
 	res.json({result:'success'});
 });
 

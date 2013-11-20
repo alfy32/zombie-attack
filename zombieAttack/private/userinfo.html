@@ -10,20 +10,22 @@
 		  </div>
 		  <form id = "new-user-request">     
 		  <div class="modal-body">
-			 <span class="btn btn-success fileinput-button">
-			        <i class="glyphicon glyphicon-plus"></i>
-			        <span>Select files...</span>
-			        <!-- The file input field used as target for the file upload widget -->
-			        <input id="fileupload" type="file" name="files[]" single>
-			    </span>
-			    <br>
-			    <br>
-			    <!-- The global progress bar -->
-			    <div id="progress" class="progress">
-			        <div class="progress-bar progress-bar-success"></div>
-			    </div>
-			    <!-- The container for the uploaded files -->
-			    <div id="files" class="files"></div>       
+			<!-- The fileinput-button span is used to style the file input field as button -->
+    		<span class="btn btn-success fileinput-button">
+    		    <i class="glyphicon glyphicon-plus"></i>
+    		    <span>Select files...</span>
+    		    <!-- The file input field used as target for the file upload widget -->
+    		    <input id="fileupload" type="file" name="files[]" multiple>
+    		</span>
+    		<br>
+    		<br>
+    		<!-- The global progress bar -->
+    		<div id="progress" class="progress">
+    		    <div class="progress-bar progress-bar-success"></div>
+    		</div>
+    		<!-- The container for the uploaded files -->
+    		<div id="files" class="files"></div>
+    		<br>       
 		  </div>
 		  
 		  <div class="modal-footer">
@@ -52,7 +54,7 @@
 	<div class="col-sm-1" style="top:60px;">
 		<table class="table table-bordered" style="width:600px;">
 			<tr>
-				<td colspan="5">
+				<td colspan="6">
 					<table>
 						<tr style="width:600px">
 							<td>Email: </td><td id="tdemail"></td>
@@ -95,11 +97,44 @@
 				<td id="editUserData"><button onclick="edituser()" class='btn btn-primary'>Edit Name/Password</button></td>
 				<td id="upgradeUserData"><button onclick="upgradeuser()" class='btn btn-primary'>Upgrade Permissions</button></td>
 				<td id="deleteUserData"><button onclick="deleteUser()" class='btn btn-primary'>Delete User</button></td>
-				<td id="approveUserData"><button onclick="approveUser()">Approve User</button></td>
+				<td id="approveUserData"><button onclick="approveUser()" class='btn btn-primary'>Approve User</button></td>
 				<td id="denyUserData"><button onclick="denyUser()" class='btn btn-primary'>Deny User</button></td>
 				<td id="imageUpload"><a href="#imageUploadModal" class='btn btn-primary' data-toggle= "modal">Upload image</button></td>
 			</tr>
 		</table>
 	</div>
+	
+	<script src="jqueryfileupload/js/vendor/jquery.ui.widget.js"></script>
+	<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+	<script src="jqueryfileupload/js/jquery.iframe-transport.js"></script>
+	<!-- The basic File Upload plugin -->
+	<script src="jqueryfileupload/js/jquery.fileupload.js"></script>
+	<script>
+	/*jslint unparam: true */
+	/*global window, $ */
+	$(function () {
+	    //'use strict';
+	    // Change this to the location of your server-side upload handler:
+	    var url = "/uploadImage";
+	    console.log("FIRST DESIRED LOG TAG...");
+	    $('#fileupload').fileupload({
+	        url: url,
+	        dataType: 'json',
+	        done: function (e, data) {
+	            $.each(data.result.files, function (index, file) {
+	                $('<p/>').text(file.name).appendTo('#files');
+	            });
+	        },
+	        progressall: function (e, data) {
+	            var progress = parseInt(data.loaded / data.total * 100, 10);
+	            $('#progress .progress-bar').css(
+	                'width',
+	                progress + '%'
+	            );
+	        }
+	    }).prop('disabled', !$.support.fileInput)
+	        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+	});
+	</script>
 	<script src="javascripts/userInfo.js"></script>
 </div>
