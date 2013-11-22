@@ -7,7 +7,9 @@
   },
   "dependencies": {
     "express": "3.3.7",
-    "ejs": "*",
-    "stylus": "*"
+    "request": "~2.27.0",
+    "bcrypt-nodejs": "0.0.3",
+    "cradle": "~0.6.6",
+    "nodemailer": "~0.5.8"
   }
 }
