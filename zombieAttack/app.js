@@ -20,14 +20,12 @@ var userFunctions = require('./usefulscripts/adduser');
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser('zombiesarefun'));
 app.use(express.session());
 app.use(app.router);
-app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(checkAuth);
 app.use(express.static(path.join(__dirname, 'private')));
