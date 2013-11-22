@@ -7,9 +7,11 @@ function setMe()
     $('#upgradeUserData').hide();
     $('#deleteUserData').hide();
     $('#editUserData').show();
+    $('#imageUpload').show();
 
     $('#permTable').hide();
     $('#editTable').show();
+
 }
 function setRequest()
 {
@@ -18,6 +20,7 @@ function setRequest()
     $('#upgradeUserData').hide();
     $('#deleteUserData').hide();
     $('#editUserData').hide();
+    $('#imageUpload').hide();
 
     $('#permTable').hide();
     $('#editTable').hide();
@@ -29,6 +32,7 @@ function setOther()
     $('#upgradeUserData').show();
     $('#deleteUserData').show();
     $('#editUserData').hide();
+    $('#imageUpload').hide();
 
     $('#permTable').show();
     $('#editTable').hide();

@@ -29,6 +29,7 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(checkAuth);
 app.use(express.static(path.join(__dirname, 'private')));
+app.use(express.bodyParser({uploadDir:'/testTemp'}));
 
 // development only
 if ('development' === app.get('env')) {
@@ -42,6 +43,7 @@ var connection = new(cradle.Connection)('apt7r.us',3005,
 var users = connection.database('users');
 var userRequests_db = connection.database('user_requests');
 var maps = connection.database('maps');
+
 
 //done
 app.post('/', function(req,res)
@@ -191,7 +193,7 @@ app.post('/updatemap', checkDesigner, function(req, res) {
 
 
 app.post('/uploadImage',checkAuth,function(req,res){
-	console.log(request.body);
+	console.log("UPLOADE IMAGE: " + request.body);
 	res.json({result:'success'});
 });
 

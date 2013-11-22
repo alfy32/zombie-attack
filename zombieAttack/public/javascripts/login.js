@@ -11,6 +11,8 @@ $('#form-login-button').click(function() {
         if (data.result === "Success") {
             loadMainPage();
         }
+        else
+            location.reload();
     });
     //$('#load-stuff-here').fadeOut(1000);
 });
