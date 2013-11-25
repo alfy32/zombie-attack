@@ -161,7 +161,7 @@ function loadUserInfo()
     {
         setRequest();
     }
-    console.log(selectedUser + " " + currentUser);
+    //console.log(selectedUser + " " + currentUser);
     if(selectedUser == currentUser)
     {
         setMe();
@@ -230,35 +230,35 @@ function setUserUI(id, name, admin, designer, player)
 {
     $('#tdemail').html(id);
     $('#inname').val(name);
-    console.log("Admin: ", admin);
+    //console.log("Admin: ", admin);
     if(admin == "true")
     {
-        console.log("Admin true");
+        //console.log("Admin true");
         $('#cha').prop("checked", true);
     }
     else
     {
-        console.log("Admin false");
+        //console.log("Admin false");
         $('#cha').prop("checked", false);
     }
     if(designer == "true")
     {
-        console.log("Des true");
+        //console.log("Des true");
         $('#chd').prop("checked", true);
     }
     else
     {
-        console.log("Des false");
+        //console.log("Des false");
         $('#chd').prop("checked", false);
     }
     if(player == "true")
     {
-        console.log("Play true");
+        //console.log("Play true");
         $('#chp').prop("checked", true);
     }
     else
     {
-        console.log("Play false");
+        //console.log("Play false");
         $('#chp').prop("checked", false);
     }
 }
@@ -269,21 +269,21 @@ function edituser()
     var p2 = document.getElementById('inpass2').value;
     if(p1 != p2 || (p1.length < 5 && p1.length > 0))
     {
-        console.log("Error: invalid password...");
+        //console.log("Error: invalid password...");
         return;
     }
     else if(p1.length >= 5)
     {
         $.post("/editpassword", {password:p1}, function(res)
         {
-            console.log("EditPass: ", res);
+            //console.log("EditPass: ", res);
         });
     }
     if(n.length > 0)
     {
         $.post("/editname", {name:n}, function(res)
         {
-            console.log("EditName: ", res);
+            //console.log("EditName: ", res);
         });
     }
 }
@@ -299,6 +299,6 @@ function upgradeuser()
     }
     $.post("/upgrade", {id:selectedUser, admin: a, player: p, designer: d}, function(res)
     {
-        console.log("upgrade: ", res);
+        //console.log("upgrade: ", res);
     });
 }

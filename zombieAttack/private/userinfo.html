@@ -63,43 +63,5 @@
 			</tr>
 		</table>
 	</div>
-	
-	<script src="jqueryfileupload/js/vendor/jquery.ui.widget.js"></script>
-	<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-	<script src="jqueryfileupload/js/jquery.iframe-transport.js"></script>
-	<!-- The basic File Upload plugin -->
-	<script src="jqueryfileupload/js/jquery.fileupload.js"></script>
-	<script>
-	/*jslint unparam: true */
-	/*global window, $ */
-	$(function () {
-	    'use strict';
-	    // Change this to the location of your server-side upload handler:
-	    var url = window.location.hostname === 'blueimp.github.io' ?
-                '//jquery-file-upload.appspot.com/' : 'server/php/';
-	    console.log("URL: " + url);
-	    console.log("FIRST DESIRED LOG TAG...");
-	    $('#fileupload').fileupload({
-	        url: url,
-	        dataType: 'json',
-	        done: function (e, data) {
-	        	console.log("FOURTH LOG TAG...");
-	            $.each(data.result.files, function (index, file) {
-	            	console.log("THIRD LOG TAG...");
-	                $('<p/>').text(file.name).appendTo('#files');
-	            });
-	        },
-	        progressall: function (e, data) {
-	        	console.log("SECOND LOG TAG...");
-	            var progress = parseInt(data.loaded / data.total * 100, 10);
-	            $('#progress .progress-bar').css(
-	                'width',
-	                progress + '%'
-	            );
-	        }
-	    }).prop('disabled', !$.support.fileInput)
-	        .parent().addClass($.support.fileInput ? undefined : 'disabled');
-	});
-	</script>
 	<script src="javascripts/userInfo.js"></script>
 </div>
