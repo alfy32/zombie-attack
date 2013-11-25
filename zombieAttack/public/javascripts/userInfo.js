@@ -64,6 +64,10 @@ function loadUserInfo()
         {
             selectedUser = user._id;
             currentUser = user._id;
+            
+    var avatar = get_gravatar_image_url(selectedUser,300);
+    $('#gravatar').attr('src',avatar);
+    $('#gravatar').attr('title','No image? create a gravatar ');
             setUserUI(user._id, user.name, user.admin, user.designer, user.player);
             if(user.admin)
             {
