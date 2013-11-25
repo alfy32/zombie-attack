@@ -89,7 +89,6 @@ app.get('/currentuser', function(req,res){
 	{
 		var response = req.session.user;
 		response.page = req.session.curPage;
-		delete response.password;
 		res.json(response);
 	}
 	else
@@ -550,7 +549,7 @@ function checkAuth(req, res, next) {
   	{
   		delete req.session.user;
   		delete req.session.lastActivity;
-  		res.send('you have been logged out due to innactivity, please login again');
+  		res.redirect('/');
   	}
   	else
   	{
