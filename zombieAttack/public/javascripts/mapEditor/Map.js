@@ -679,8 +679,8 @@ function Map() {
     for(var index in _map.events) {
       var e = {
         id: eventsMap[_map.events[index].id],
-        x: _map.events[index].x,
-        y: _map.events[index].y
+        x: +_map.events[index].x,
+        y: +_map.events[index].y
       };
       drawTileImage(e.id, e.y, e.x, 'events');
     }
