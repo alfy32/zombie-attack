@@ -406,6 +406,24 @@ function Map() {
     drawMap();
   };
 
+  this.getWidth = function() {
+    return _map.width;
+  };
+
+  this.getHeight = function() {
+    return _map.height;
+  };
+
+  this.setXOffset = function(offset) {
+    _offset.x = offset;
+    drawMap();
+  };
+
+  this.setYOffset = function(offset) {
+    _offset.y = offset;
+    drawMap();
+  };
+
   this.moveRight = function() {
     _offset.x += 1;
     drawMap();
