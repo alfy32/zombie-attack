@@ -53,11 +53,11 @@ function drawSpatter(imageIndex) {
     s.css('width', width);
     s.css('opacity', '.8');
 
-    if(loc.x + s.width() > window.innerWidth)
-        loc.x = window.innerWidth - s.width();
+    if(loc.x + s.width() + 10 > window.innerWidth)
+        loc.x = window.innerWidth - s.width() - 10;
 
-    if(loc.y + s.height() > window.innerHeight)
-        loc.y = window.innerHeight - s.height();
+    if(loc.y + s.height() + 10 > window.innerHeight)
+        loc.y = window.innerHeight - s.height() - 10;
 
     s.css('top', loc.y + 'px');
     s.css('left', loc.x + 'px');
