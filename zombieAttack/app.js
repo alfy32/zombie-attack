@@ -38,8 +38,11 @@ if ('development' === app.get('env')) {
 
 //setup the users database//
 
-var connection = new(cradle.Connection)('apt7r.us',3005,
- 			{auth:{username:'zombie',password:'eatbrains'}});
+// var connection = new(cradle.Connection)('apt7r.us',3005,
+//  			{auth:{username:'zombie',password:'eatbrains'}});
+
+var connection = new(cradle.Connection)("162.248.11.179",5983,
+ 			{auth:{username:'acm',password:'foobar'}});
 var users = connection.database('users');
 var userRequests_db = connection.database('user_requests');
 var maps = connection.database('maps');
