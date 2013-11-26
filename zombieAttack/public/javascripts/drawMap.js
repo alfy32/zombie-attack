@@ -27,11 +27,11 @@ function drawMap(canvasId, map) {
         y: map.height ? canvas.height/map.height : 40
     };
 
-    var minScale = scale.x < scale.y ? scale.x : scale.y;
+    var maxScale = scale.x > scale.y ? scale.x : scale.y;
 
     var canvasTileSize = {
-        width: minScale, 
-        height: minScale
+        width: maxScale, 
+        height: maxScale
     };
 
     clearCanvas();
