@@ -105,28 +105,25 @@ function bindMapTitle() {
 function bindKeyDown() {
 	$(document).unbind("keydown");
 	
-	$(document).keydown(function(e) {
+	$(document).keydown(function(e) {	
 		switch (e.which) {
 			case 37: //left
+				e.preventDefault();
 				map.moveLeft();
 				break;
 			case 38: //up
+				e.preventDefault();
 				map.moveUp();
 				break;
 			case 40: //down
+				e.preventDefault();
 				map.moveDown();
 				break;
 			case 39: //right
+				e.preventDefault();
 				map.moveRight();
 				break;
-			case 187: //plus
-			case 107:
-				map.zoomIn();
-				break;
-			case 189: //minus
-			case 109:
-				map.zoomOut();
-				break;
+			
 		}
 		if(e.ctrlKey) {
 			switch(e.which) {
@@ -142,7 +139,75 @@ function bindKeyDown() {
 				case 89: //y
 					map.redo();
 					break;
+			case 187: //plus
+			case 107:
+				e.preventDefault();
+				map.zoomIn();
+				break;
+			case 189: //minus
+			case 109:
+				e.preventDefault();
+				map.zoomOut();
+				break;
 			}
 		}
 	});
 }
+
+
+
+var style = {
+	top: {
+		padding: 80
+	},
+	left: {
+		width: 400,
+		padding: 20,
+		closed: false
+	}
+};
+
+setMapSize();
+
+function slide() {
+	if(style.left.closed) {
+		openLeft();
+		$('.slide').attr('class', 'slide glyphicon glyphicon-chevron-left');
+	}
+	else {
+		closeLeft();
+		$('.slide').attr('class', 'slide glyphicon glyphicon-chevron-right');
+	}
+}
+
+function closeLeft() {
+	$('.left-side').animate({left: -style.left.width + 'px'}, "slow");
+	$('.slide').animate({left: 0 + 'px'}, "slow");
+	$('#map').animate({ left: 20 + 'px'}, 'slow');
+	style.left.closed = true;
+	setMapSize();
+}
+
+function openLeft() {
+	$('.left-side').animate({'left': 0 + 'px'}, "slow");
+	$('.slide').animate({left: 420 + 'px'}, "slow");
+	$('#map').animate({ left: 20 + style.left.padding + style.left.width + 'px'}, 'slow', setMapSize);
+	style.left.closed = false;
+	
+}
+
+function setMapSize() {
+	var width = window.innerWidth - style.left.padding - style.left.width;
+	var height = window.innerHeight - style.top.padding;
+
+	if(style.left.closed) {
+		width = window.innerWidth;
+	}
+	$('#map').attr('width', width);
+	$('#map').attr('height', height);
+	$('.slide').css('height', height);
+	$('.left-side').css('height', height);
+	map.refresh();
+}
+
+$(window).resize(setMapSize);

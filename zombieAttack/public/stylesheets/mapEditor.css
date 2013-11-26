@@ -1,4 +1,103 @@
 
+body {
+  min-width: 1080px;
+}
+
+#map-title {
+  position: fixed;
+  z-index: 10001;
+  top: 5px;
+  left: 5px;
+  width: 300px;
+}
+
+.page-controls {
+  position: fixed;
+  z-index: 10001;
+  right: 5px;
+  top: 5px;
+}
+
+#save-time {
+  position: absolute;
+  left: 5px;
+  top: 45px;
+  background-color: rgba(255,255,255,.4);
+  color: black;
+  border-radius: 5px;
+  padding: 3px;
+}
+
+.left-side {
+  position: fixed;
+  left: 0px;
+  top: 80px;
+  padding-left: 20px;
+  background-color: rgba(255,255,255,.3);
+}
+
+.slide {
+  position: fixed;
+  height: 400px;
+  width: 22px;
+  left: 420px;
+  top: 80px;
+  border: 2px solid #dff0d8;
+  background-color: #5cb85c;
+}
+
+#map {
+  position: fixed;
+  left: 440px;
+  top: 80px;
+  border: 2px solid #dff0d8;
+}
+
+
+/*********** Left Col Inner Stuff *************/
+
+.left-col {
+  width: 400px;
+}
+
+.checks {
+  display: inline-block;
+  margin-left: 30px;
+}
+
+.player {
+  display: inline-block;
+  margin-left: 30px;
+}
+
+.clicks-table {
+  display: inline-block;
+}
+
+.click-labels th {
+  text-align: center;
+}
+
+#left-click, #right-click {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.fill {
+  text-align: center;
+}
+
+.options {
+  width: 49%;
+  margin-top: 5px;
+}
+
+.reset {
+  width: 99%;
+}
+
+
+/*
 .tab-content {
 	display: inline-block;
 	margin-top: -3px;
@@ -11,12 +110,13 @@
 	border-bottom: none;
 }
 
-.left-col {
-  float: left;
-  width: 400px;
-  margin-left: 0px;  
-  margin-top: 30px;
+.left-side {
+  position: fixed;
+  left: 20px;
+  top: 80px;
 }
+
+
 
 .map-info {
     margin-top: 5px;
@@ -37,36 +137,22 @@
   display: inline-block;
   margin-top: 30px;
   float: right;
+
+  position: fixed;
+  left: 420px;
 }
 
 .tab-pane div {
 	margin-top: 5px;
 }
 
-.options {
-	width: 49%;
-}
 
-.reset {
-	width: 99%;
-}
 
-.clicks-table {
-	display: inline-block;
-}
 
-.click-labels th {
-	text-align: center;
-}
 
-#left-click, #right-click {
-	margin-left: 20px;
-	margin-right: 20px;
-}
 
-.fill {
-	text-align: center;
-}
+
+
 
 .clear-layer {
 	text-align: center;
@@ -96,3 +182,4 @@
 .editor-nav {
   margin: 8px 3px;
 }
+*/
