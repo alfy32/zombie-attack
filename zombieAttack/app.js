@@ -239,15 +239,27 @@ app.post('/newmap', checkAuth, checkDesigner, function(request, response){
 			console.log(request.body.name);
 			res.title = request.body.name;
 			res.author = request.session.user.name;
+			console.log(res);
+				if(request.body.random ==='true'){
+					var b = res.data.bottom;
+					console.log(b);
+					for(var j = 0; j<b.length; ++j){
+						for(var i = 0; i<b[j].length; ++i)
+						{
+							b[j][i] =Math.floor(Math.random()*43);
+						}
+					}
+				}
 
-			console.log (request);
+
+			//console.log (request);
 			maps.save(res,function(erro, resp){
 				if(erro)
 					console.log('problems');
 				else
 				{
 					resp.result = 'success';
-
+					
 					response.json(resp);
 				}
 			});
