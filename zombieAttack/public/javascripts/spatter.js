@@ -51,6 +51,7 @@ function drawSpatter(imageIndex) {
         loc.y = window.innerHeight - width;
 
     s.css('position', 'absolute');
+    s.css('pointer-events', 'none');
     s.css('width', width);
     s.css('top', loc.y + 'px');
     s.css('left', loc.x + 'px');
