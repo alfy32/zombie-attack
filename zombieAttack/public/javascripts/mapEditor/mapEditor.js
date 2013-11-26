@@ -239,6 +239,8 @@ function centerMap() {
 	if(cols < h)
 		offset = 0;
 
+	offset = Math.floor(offset);
+
 	map.setYOffset(offset);
 }
 

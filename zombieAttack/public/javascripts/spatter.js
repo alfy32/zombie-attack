@@ -2,7 +2,7 @@ var spatter = {
     images: [],
     index: 0,
     time: 2000,
-    size: 4,       
+    size: 6,       
     width: {
         min: 100,
         range: 100
