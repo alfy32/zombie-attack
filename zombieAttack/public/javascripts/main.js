@@ -3,9 +3,8 @@
 function loadMainPage()
 {
     pageName = "main";
-    $('#login-form').html("<table><tr><td><button id=\"logout-text\" class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
+    $('#login-form').html("<table><tr><td><button id='logout-text' onclick='logout()' class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
     $.post('/updatePage',{page:'main'},function(info){});
-    bindLogout();
     bindUserInfo();
     
 
@@ -52,18 +51,11 @@ function loadDelay()
     $('#load-stuff-here').delay().fadeIn(500);
 }
 
- function bindLogout()
- {
-    $('#logout-text').click(function() {
-    
-    $.get('/logout', {}, function(info)
-        {
-            
-        });
-    window.location.href = "/";
-    });
-    return false;
- }
+ function logout() {
+    $.get('/logout');
+
+    window.location = '/';
+}
 
  function bindUserInfo()
  {
@@ -93,7 +85,7 @@ function makeStatic(){
             context = canvas.getContext('2d');
             context.clearRect(0,0,canvas.width,canvas.height);
             setTimeout(function(){
-                drawMap('canvas', currentData);
+                    drawMap('canvas', currentData);
             },Math.floor(Math.random()*300));
         }
     }, Math.floor(Math.random()*3000) + 300);
@@ -166,7 +158,8 @@ function editMap()
 
     }
     else
-    {
+    {  
+        stopTV();
         startMap(mapID); 
     }
 }
@@ -191,10 +184,7 @@ function deleteMap()
                 $(".active").remove();
                 try
                 {
-                    drawMap('canvas', {
-                        width: 0,
-                        height: 0
-                    });
+                    stopTV();
                 }
                 catch(e)
                 {
@@ -229,14 +219,13 @@ $('#make-map-submit-btn').click(function() {
     if (!fail) {
         var request = {
             name: name.val(),
-            random: documet.getElementById('new-random-map').checked
+            random: document.getElementById('new-random-map').checked
         };
-
+        stopTV();
         $.post("/newmap", request, function(data) {
             if (data.result === "success") {
                 console.log('successfully created new map');
                 name.val('');
-                console.log(data);
                 $('#new-request-close-btn').trigger('click');
                 setTimeout(function()
                 {
@@ -255,3 +244,12 @@ $('#make-map-submit-btn').click(function() {
         console.log('map failed');
     }
 });
+
+function stopTV()
+{
+    clearInterval(clearVar);
+    canvas = document.getElementById('canvas');
+    context = canvas.getContext('2d');
+    context.clearRect(0,0,canvas.width,canvas.height);
+    clearVar = null;
+}

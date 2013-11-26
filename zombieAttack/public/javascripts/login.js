@@ -4,13 +4,14 @@ $('#form-login-button').click(function() {
         email: $('#login-email').val(),
         password: $('#login-password').val()
     };
-
-    $.post("/", formdata, function(data) {
+        $.post("/", formdata, function(data) {
         if (data.result === "Success") {
             loadMainPage();
         }
-        else
-            location.reload();
+        else{
+            $('#login-email').addClass('btn-danger');
+            $('#login-password').addClass('btn-danger');
+        }
     });
     //$('#load-stuff-here').fadeOut(1000);
 });
