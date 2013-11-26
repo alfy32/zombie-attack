@@ -88,12 +88,14 @@ var currentData;
 
 function makeStatic(){
     clearVar = setInterval(function(){
-        canvas = document.getElementById('canvas');
-        context = canvas.getContext('2d');
-        context.clearRect(0,0,canvas.width,canvas.height);
-        setTimeout(function(){
-            drawMap('canvas', currentData);
-        },Math.floor(Math.random()*300));
+        if(pageName == "main") {
+            canvas = document.getElementById('canvas');
+            context = canvas.getContext('2d');
+            context.clearRect(0,0,canvas.width,canvas.height);
+            setTimeout(function(){
+                drawMap('canvas', currentData);
+            },Math.floor(Math.random()*300));
+        }
     }, Math.floor(Math.random()*3000) + 300);
 }
 

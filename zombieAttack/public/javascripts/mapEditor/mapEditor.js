@@ -182,7 +182,7 @@ function slide() {
 
 function closeLeft() {
 	$('.left-side').animate({left: -style.left.width + 'px'}, "slow");
-	$('.slide').animate({left: 0 + 'px'}, "slow");
+	$('.slide').animate({left: 0 + 'px'}, 'slow');
 	$('#map').animate({ left: 20 + 'px'}, 'slow');
 	style.left.closed = true;
 	setMapSize();
@@ -192,8 +192,18 @@ function openLeft() {
 	$('.left-side').animate({'left': 0 + 'px'}, "slow");
 	$('.slide').animate({left: 420 + 'px'}, "slow");
 	$('#map').animate({ left: 20 + style.left.padding + style.left.width + 'px'}, 'slow', setMapSize);
-	style.left.closed = false;
-	
+	style.left.closed = false;	
+}
+
+function progress(animation, progress, milsLeft) {
+	console.log(Math.floor(progress*100) % 5)
+	if(Math.floor(progress*100) % 5 == 0) {
+		if(style.left.closed) {
+			map.moveRight();
+		} else {
+			map.moveLeft();
+		}
+	}
 }
 
 function setMapSize() {
@@ -207,7 +217,29 @@ function setMapSize() {
 	$('#map').attr('height', height);
 	$('.slide').css('height', height);
 	$('.left-side').css('height', height);
+
 	map.refresh();
+}
+
+function centerMap() {
+	var tileSize = map.getCanvasTileSize();
+	var rows = Math.floor($('#map').width()/tileSize); 
+	var w = map.getWidth();
+	var offset = (rows-w)/2;
+
+	if(rows < w)
+		offset = 0;
+
+	map.setXOffset(offset);
+
+	var cols = Math.floor($('#map').height()/tileSize); 
+	var h = map.getHeight();
+	var offset = (cols-h)/2;
+
+	if(cols < h)
+		offset = 0;
+
+	map.setYOffset(offset);
 }
 
 $(window).resize(setMapSize);
