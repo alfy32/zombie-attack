@@ -2,7 +2,7 @@
 .tab-content {
 	display: inline-block;
 	margin-top: -3px;
-	border: 1px solid #dddddd;
+	border: none;
 	padding: 5px;
 }
 
