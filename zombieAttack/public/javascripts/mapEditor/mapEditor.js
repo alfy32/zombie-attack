@@ -216,6 +216,7 @@ function setMapSize() {
 	$('#map').attr('width', width);
 	$('#map').attr('height', height);
 	$('.slide').css('height', height);
+	$('.slide').css('padding-top', height/2);
 	$('.left-side').css('height', height);
 
 	map.refresh();
