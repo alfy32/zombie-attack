@@ -553,8 +553,8 @@ function checkAuth(req, res, next) {
 	//console.log(lastActivity);
   if (!req.session.user) {
   	//console.log(lastActivity);
+  		res.redirect('/');
   
-    res.send('You are not authorized to view this page');
   } 
   else {
   	if(lastActivity>TIMEOUT)
