@@ -5,8 +5,6 @@ $('#form-login-button').click(function() {
         password: $('#login-password').val()
     };
 
-    $('#login-form').html('<p>Loading...</p>').css('color', 'white');
-
     $.post("/", formdata, function(data) {
         if (data.result === "Success") {
             loadMainPage();
