@@ -37,18 +37,7 @@ function setOther()
     $('#permTable').show();
     $('#editTable').hide();
 }
-function setUpFileUpload()
-{
-       $('#uploadFile').fileupload({
-        dataType: 'json',
-        done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo(document.body);
-            });
-        }
-    
-});
-}
+
 function loadUserInfo()
 {
     pageName = "userInfo";
@@ -59,11 +48,14 @@ function loadUserInfo()
     bindBackToMain();
 
     $('#load-stuff-here').load('userinfo.html', function(){
-        setUpFileUpload();
         $.get("/currentuser", {}, function(user)
         {
             selectedUser = user._id;
             currentUser = user._id;
+            
+    var avatar = get_gravatar_image_url(selectedUser,300);
+    $('#gravatar').attr('src',avatar);
+    $('#gravatar').attr('title','No image? create a gravatar ');
             setUserUI(user._id, user.name, user.admin, user.designer, user.player);
             if(user.admin)
             {
@@ -153,6 +145,10 @@ function loadUserInfo()
     var pl = tableItem.getAttribute("userP");
     var apr = tableItem.getAttribute("approvedUser");
     setUserUI(selectedUser, nm, ad, des, pl);
+    var avatar = get_gravatar_image_url(selectedUser,300);
+    $('#gravatar').attr('src',avatar);
+    $('#gravatar').attr('title','No image? create a gravatar ');
+
     if(apr == "true")
     {
         setOther();
@@ -161,7 +157,7 @@ function loadUserInfo()
     {
         setRequest();
     }
-    console.log(selectedUser + " " + currentUser);
+    //console.log(selectedUser + " " + currentUser);
     if(selectedUser == currentUser)
     {
         setMe();
@@ -230,35 +226,35 @@ function setUserUI(id, name, admin, designer, player)
 {
     $('#tdemail').html(id);
     $('#inname').val(name);
-    console.log("Admin: ", admin);
+    //console.log("Admin: ", admin);
     if(admin == "true")
     {
-        console.log("Admin true");
+        //console.log("Admin true");
         $('#cha').prop("checked", true);
     }
     else
     {
-        console.log("Admin false");
+        //console.log("Admin false");
         $('#cha').prop("checked", false);
     }
     if(designer == "true")
     {
-        console.log("Des true");
+        //console.log("Des true");
         $('#chd').prop("checked", true);
     }
     else
     {
-        console.log("Des false");
+        //console.log("Des false");
         $('#chd').prop("checked", false);
     }
     if(player == "true")
     {
-        console.log("Play true");
+        //console.log("Play true");
         $('#chp').prop("checked", true);
     }
     else
     {
-        console.log("Play false");
+        //console.log("Play false");
         $('#chp').prop("checked", false);
     }
 }
@@ -270,7 +266,6 @@ function edituser()
     if(p1 != p2 || (p1.length < 5 && p1.length > 0))
     {
         console.log("Error: invalid password...");
-        return;
     }
     else if(p1.length >= 5)
     {
@@ -284,6 +279,7 @@ function edituser()
         $.post("/editname", {name:n}, function(res)
         {
             console.log("EditName: ", res);
+            loadUserInfo();
         });
     }
 }
@@ -299,6 +295,19 @@ function upgradeuser()
     }
     $.post("/upgrade", {id:selectedUser, admin: a, player: p, designer: d}, function(res)
     {
-        console.log("upgrade: ", res);
+        //console.log("upgrade: ", res);
     });
+}
+
+
+
+function get_gravatar_image_url (email, size, default_image, allowed_rating, force_default)
+{
+    email = typeof email !== 'undefined' ? email : 'john.doe@example.com';
+    size = (size >= 1 && size <= 2048) ? size : 80;
+    default_image = typeof default_image !== 'undefined' ? default_image : 'mm';
+    allowed_rating = typeof allowed_rating !== 'undefined' ? allowed_rating : 'x';
+    force_default = force_default === true ? 'y' : 'n';
+    
+    return ("https://secure.gravatar.com/avatar/" + md5(email.toLowerCase().trim()) + "?size=" + size + "&default=" + encodeURIComponent(default_image) + "&rating=" + allowed_rating + (force_default === 'y' ? "&forcedefault=" + force_default : ''));
 }
