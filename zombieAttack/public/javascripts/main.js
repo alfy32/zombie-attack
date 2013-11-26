@@ -210,7 +210,8 @@ $('#make-map-submit-btn').click(function() {
 
     if (!fail) {
         var request = {
-            name: name.val()
+            name: name.val(),
+            random: document.getElementById('new-random-map').checked
         };
 
         $.post("/newmap", request, function(data) {

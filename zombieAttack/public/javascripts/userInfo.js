@@ -37,18 +37,7 @@ function setOther()
     $('#permTable').show();
     $('#editTable').hide();
 }
-function setUpFileUpload()
-{
-       $('#uploadFile').fileupload({
-        dataType: 'json',
-        done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo(document.body);
-            });
-        }
-    
-});
-}
+
 function loadUserInfo()
 {
     pageName = "userInfo";
@@ -59,7 +48,6 @@ function loadUserInfo()
     bindBackToMain();
 
     $('#load-stuff-here').load('userinfo.html', function(){
-        setUpFileUpload();
         $.get("/currentuser", {}, function(user)
         {
             selectedUser = user._id;
@@ -277,21 +265,21 @@ function edituser()
     var p2 = document.getElementById('inpass2').value;
     if(p1 != p2 || (p1.length < 5 && p1.length > 0))
     {
-        //console.log("Error: invalid password...");
-        return;
+        console.log("Error: invalid password...");
     }
     else if(p1.length >= 5)
     {
         $.post("/editpassword", {password:p1}, function(res)
         {
-            //console.log("EditPass: ", res);
+            console.log("EditPass: ", res);
         });
     }
     if(n.length > 0)
     {
         $.post("/editname", {name:n}, function(res)
         {
-            //console.log("EditName: ", res);
+            console.log("EditName: ", res);
+            loadUserInfo();
         });
     }
 }
