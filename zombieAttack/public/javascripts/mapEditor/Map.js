@@ -643,7 +643,7 @@ function Map() {
   function drawMap() {
     _context.clearRect(0, 0, _canvas.width, _canvas.height);
 
-    drawBackground();
+   // drawBackground();
 
     if(_show.bottom) {
       drawLayer('bottom');
