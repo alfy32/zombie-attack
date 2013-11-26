@@ -15,16 +15,16 @@ function loadMainPage()
             var tr = $("<tr>");
             if(info.player)
             {
-                $(tr).append('<td><button href="#play-map-modal" onclick="playMap()" class="btn btn-primary">PLAY</button></td>');
+                $(tr).append('<td><button href="#play-map-modal" onclick="playMap()" class="btn btn-danger" style="position: relative; left: 572px; bottom: 450px;">PLAY</button></td>');
             }
             if(info.designer)
             {
                 $("#mainList").append('<a class="list-group-item" onmouseover="" href="#make-map-modal" data-toggle="modal" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>');
-                $(tr).append('<td><button onclick="editMap()" class="btn btn-primary">EDIT</button></td>');
+                $(tr).append('<td><button onclick="editMap()" class="btn btn-danger" style="position: relative;left: 356px;bottom: 395px;">EDIT</button></td>');
             }
             if(info.admin)
             {
-                $(tr).append('<td><button onclick="deleteMap()" class="btn btn-primary">DELETE</button></td>');
+                $(tr).append('<td><button onclick="deleteMap()" class="btn btn-danger" style="position: relative;left: 140px;bottom: 340px;">DELETE</button></td>');
             }
             $("#load-table").append(tr);
             $.get("/mapsrequest", {}, function(info) {
