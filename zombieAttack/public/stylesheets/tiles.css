@@ -4,8 +4,12 @@
 	margin-right: 3px;
 }
 
+.chooser:hover {
+  border: 2px solid blue;
+}
+
 .right-click {
-	border: 2px solid blue;
+	border: 2px solid green;
 }
 
 .left-click {
