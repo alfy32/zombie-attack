@@ -2,7 +2,11 @@ var spatter = {
     images: [],
     index: 0,
     time: 2000,
-    size: 4
+    size: 4,       
+    width: {
+        min: 100,
+        range: 100
+    }
 };
 
 for(var i = 0; i < spatter.size; i++) {
@@ -42,20 +46,21 @@ function drawSpatter(imageIndex) {
     s.show();
 
     var loc = chooseLocation();
-    var width = Math.floor(Math.random()*100+100);
-
-    if(loc.x + width > window.innerWidth)
-        loc.x = window.innerWidth - width;
-
-    if(loc.y + width > window.innerHeight)
-        loc.y = window.innerHeight - width;
+    var width = Math.floor(Math.random()*spatter.width.min+spatter.width.range);
 
     s.css('position', 'absolute');
     s.css('pointer-events', 'none');
     s.css('width', width);
+    s.css('opacity', '.8');
+
+    if(loc.x + s.width() > window.innerWidth)
+        loc.x = window.innerWidth - s.width();
+
+    if(loc.y + s.height() > window.innerHeight)
+        loc.y = window.innerHeight - s.height();
+
     s.css('top', loc.y + 'px');
     s.css('left', loc.x + 'px');
-    s.css('opacity', '.8');
 
     s.fadeOut(spatter.time);
 }
