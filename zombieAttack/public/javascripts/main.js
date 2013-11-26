@@ -72,13 +72,29 @@ function loadDelay()
         return false;
     });  
  }
-
+var clearVar;
+var currentData;
  function makeActive(tableItem)
 {
 	var tableElements = document.getElementsByClassName('list-group-item active');
 	$('.active').attr('class','list-group-item');
 	tableItem.className = "list-group-item active";
+    currentData = $(tableItem).data();
     drawMap('canvas', $(tableItem).data());
+    if(!clearVar){
+        makeStatic();
+    }
+}
+
+function makeStatic(){
+    clearVar = setInterval(function(){
+        canvas = document.getElementById('canvas');
+        context = canvas.getContext('2d');
+        context.clearRect(0,0,canvas.width,canvas.height);
+        setTimeout(function(){
+            drawMap('canvas', currentData);
+        },Math.floor(Math.random()*300));
+    }, Math.floor(Math.random()*3000) + 300);
 }
 
 function startMap(id)
@@ -211,7 +227,7 @@ $('#make-map-submit-btn').click(function() {
     if (!fail) {
         var request = {
             name: name.val(),
-            random: document.getElementById('new-random-map').checked
+            random: documet.getElementById('new-random-map').checked
         };
 
         $.post("/newmap", request, function(data) {
