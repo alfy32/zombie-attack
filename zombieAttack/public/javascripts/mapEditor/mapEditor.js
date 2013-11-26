@@ -105,7 +105,8 @@ function bindMapTitle() {
 function bindKeyDown() {
 	$(document).unbind("keydown");
 	
-	$(document).keydown(function(e) {	
+	$(document).keydown(function(e) {
+	
 		switch (e.which) {
 			case 37: //left
 				e.preventDefault();
@@ -123,11 +124,28 @@ function bindKeyDown() {
 				e.preventDefault();
 				map.moveRight();
 				break;
-			
+			case 27: //escape
+				e.preventDefault();
+				if($('.help').length) closeHelp();
+				else back();
+				break;			
+			case 8: //backspace
+				e.preventDefault();
+				back();
+				break;
+			case 112: //F1
+				e.preventDefault();
+				if($('.help').length) closeHelp();
+				else help();
+				break;
 		}
 		if(e.ctrlKey) {
 			switch(e.which) {
-				case 67: //c
+				case 83: //s
+					e.preventDefault();
+					save();
+					break;
+				case 67: //cg
 					map.copy();
 					break;
 				case 86: //v
@@ -139,16 +157,16 @@ function bindKeyDown() {
 				case 89: //y
 					map.redo();
 					break;
-			case 187: //plus
-			case 107:
-				e.preventDefault();
-				map.zoomIn();
-				break;
-			case 189: //minus
-			case 109:
-				e.preventDefault();
-				map.zoomOut();
-				break;
+				case 187: //plus
+				case 107:
+					e.preventDefault();
+					map.zoomIn();
+					break;
+				case 189: //minus
+				case 109:
+					e.preventDefault();
+					map.zoomOut();
+					break;
 			}
 		}
 	});
@@ -246,3 +264,30 @@ function centerMap() {
 }
 
 $(window).resize(setMapSize);
+
+function help() {
+	var div = $('<div>');
+
+	div.addClass('help');
+	div.load('help.html', showHelp(div));
+
+	div.css('left', window.innerWidth/2-150);
+}
+
+function showHelp(div) {
+	return function() {
+		$('#map-editor').append(div);
+
+		var top = window.innerHeight/2-div.height()/2;
+		var left = window.innerWidth/2-div.width()/2;
+
+		div.animate({
+			top: 20,
+			left: left 
+		});
+	}
+}
+
+function closeHelp() {
+	$('.help').remove();
+}

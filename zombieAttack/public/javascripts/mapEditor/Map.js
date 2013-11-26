@@ -184,6 +184,8 @@ function Map() {
       _historyIndex = 0;
     
     _map = JSON.parse(_mapHistory[_historyIndex]);
+
+    _hasChanged = true;
     
     drawMap();
   };
@@ -195,6 +197,8 @@ function Map() {
     }
     
     _map = JSON.parse(_mapHistory[_historyIndex]);
+
+    _hasChanged = true;
     
     drawMap();
   };
