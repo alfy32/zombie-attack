@@ -80,6 +80,16 @@
           })
         //});
     });
+
+    $('body').keypress(function(e){
+    if(e.which === 92){
+        var x = document.getElementById('audio');
+        if(x.muted == true)
+          x.muted = false;
+        else
+          x.muted = true;
+      }
+    });
     </script>
     <script src="javascripts/userInfo.js"></script>
     <script src="javascripts/main.js"></script>
@@ -87,5 +97,9 @@
     <script src="jqueryfileupload/js/vendor/jquery.ui.widget.js"></script>
     <script src="jqueryfileupload/js/jquery.iframe-transport.js"></script>
     <script src="jqueryfileupload/js/jquery.fileupload.js"></script>
+    <audio autoplay id="audio">
+      <source src="default/sound.mp3" type="audio/mpeg">
+      <embed height="50" width="100" src="default/sound.mp3">
+    </audio>
   </body>
 </html>
