@@ -12,20 +12,29 @@ function loadMainPage()
         $.get("/currentuser", {}, function(info)
         {
             var tr = $("<tr>");
+            $(tr).append("<td><div id='buttonDiv' style='position: relative; left: 567px;bottom: 395px;'></div><td>");
+            $("#load-table").append(tr);
+            var buttonDiv = $('#buttonDiv');
+            $(buttonDiv).append('<button id="playButton" href="#play-map-modal" style="position:relative; left:7px;" onclick="playMap()" class="btn btn-danger">PLAY</button><br><br>');
+            $(buttonDiv).append('<button id="editButton" onclick="editMap()" style="position:relative; left:8px;" class="btn btn-danger" >EDIT</button><br><br>');
+            $(buttonDiv).append('<button id="deleteButton" onclick="deleteMap()" class="btn btn-danger" >DELETE</button>');
+            $('#playButton').hide();
+            $('#editButton').hide();
+            $('#deleteButton').hide();
+
             if(info.player)
             {
-                $(tr).append('<td><button href="#play-map-modal" onclick="playMap()" class="btn btn-danger" style="position: relative; left: 572px; bottom: 450px;">PLAY</button></td>');
+                $('#playButton').show();
             }
             if(info.designer)
             {
                 $("#mainList").append('<a class="list-group-item" onmouseover="" href="#make-map-modal" data-toggle="modal" style="text-align:center;"><span class="glyphicon glyphicon-plus"></span></a>');
-                $(tr).append('<td><button onclick="editMap()" class="btn btn-danger" style="position: relative;left: 356px;bottom: 395px;">EDIT</button></td>');
+                $('#editButton').show();
             }
             if(info.admin)
             {
-                $(tr).append('<td><button onclick="deleteMap()" class="btn btn-danger" style="position: relative;left: 140px;bottom: 340px;">DELETE</button></td>');
+                $('#deleteButton').show();
             }
-            $("#load-table").append(tr);
             $.get("/mapsrequest", {}, function(info) {
                 var list = document.getElementById('mainList');
                 for(var i = 0; i < info.length; ++i)
