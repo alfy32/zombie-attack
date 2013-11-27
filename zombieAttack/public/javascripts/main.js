@@ -221,6 +221,7 @@ $('#make-map-submit-btn').click(function() {
             name: name.val(),
             random: document.getElementById('new-random-map').checked
         };
+        console.log(request);
         stopTV();
         $.post("/newmap", request, function(data) {
             if (data.result === "success") {

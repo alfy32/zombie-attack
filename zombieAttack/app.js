@@ -242,10 +242,11 @@ app.post('/newmap', checkAuth, checkDesigner, function(request, response){
 			console.log(request.body.name);
 			res.title = request.body.name;
 			res.author = request.session.user.name;
-			console.log(res);
+
 				if(request.body.random ==='true'){
+					console.log('random');
 					var b = res.data.bottom;
-					console.log(b);
+					// console.log(b);
 					for(var j = 0; j<b.length; ++j){
 						for(var i = 0; i<b[j].length; ++i)
 						{
@@ -420,8 +421,9 @@ app.post('/deny', checkAuth, checkAdmin, function(request, response){
 
 //done
 app.get('/logout', function(req,res){
-	delete req.session.user;
-	delete req.session.lastActivity;
+	req.session.destroy();
+	// delete req.session.user;
+	// delete req.session.lastActivity;
 	res.redirect('/');
 });
 

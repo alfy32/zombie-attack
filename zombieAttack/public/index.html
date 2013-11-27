@@ -17,7 +17,7 @@
   </head>
   <body style="background:url('images/background.jpg'); background-size: cover;">
     <div class="navbar navbar-inverse navbar-fixed-top" style="background: none; border:none;">
-      <div class="container" id="main-header">
+      <div class="container" id="main-header" hidden = 'true'>
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="icon-bar"></span>
@@ -56,6 +56,8 @@
     <script type="text/javascript">
     $(function ()
      {
+        
+
           $.get('/currentuser',function(data)
           {
             if(data.result=='failure')
@@ -82,7 +84,8 @@
               }
 
             }
-          })
+            $('#main-header').show();
+          });
         //});
     });
 

@@ -53,7 +53,7 @@ function loadUserInfo()
             selectedUser = user._id;
             currentUser = user._id;
             
-    var avatar = get_gravatar_image_url(selectedUser,300);
+    var avatar = get_gravatar_image_url(selectedUser,175);
     $('#gravatar').attr('src',avatar);
     $('#gravatar').attr('title','No image? create a gravatar ');
             setUserUI(user._id, user.name, user.admin, user.designer, user.player);
@@ -145,7 +145,7 @@ function loadUserInfo()
     var pl = tableItem.getAttribute("userP");
     var apr = tableItem.getAttribute("approvedUser");
     setUserUI(selectedUser, nm, ad, des, pl);
-    var avatar = get_gravatar_image_url(selectedUser,300);
+    var avatar = get_gravatar_image_url(selectedUser,175);
     $('#gravatar').attr('src',avatar);
     $('#gravatar').attr('title','No image? create a gravatar ');
 
@@ -224,7 +224,8 @@ function deleteUser()
 }
 function setUserUI(id, name, admin, designer, player)
 {
-    $('#tdemail').html(id);
+    $('#tdemail').val(id);
+    $('#tdemail2').val(id);
     $('#inname').val(name);
     //console.log("Admin: ", admin);
     if(admin == "true")
@@ -260,18 +261,28 @@ function setUserUI(id, name, admin, designer, player)
 }
 function edituser()
 {
+    console.log("editing user");
     var n = document.getElementById('inname').value;
     var p1 = document.getElementById('inpass').value
     var p2 = document.getElementById('inpass2').value;
     if(p1 != p2 || (p1.length < 5 && p1.length > 0))
     {
+         // document.getElementById('inpass').attr('class = btn-danger');
+         // document.getElementById('inpass2').attr('class = btn-danger');
+         $('#inpass').attr('class','form-control btn-danger');
+         $('#inpass2').attr('class','form-control btn-danger');
+
         console.log("Error: invalid password...");
     }
     else if(p1.length >= 5)
     {
         $.post("/editpassword", {password:p1}, function(res)
         {
+            $('#inpass').attr('class','form-control btn-success');
+         $('#inpass2').attr('class','form-control btn-success');
+
             console.log("EditPass: ", res);
+            return false;
         });
     }
     if(n.length > 0)
@@ -280,9 +291,12 @@ function edituser()
         {
             console.log("EditName: ", res);
             loadUserInfo();
+            return false;
         });
     }
+    return false;
 }
+
 function upgradeuser()
 {
     var a = document.getElementById('cha').checked;
