@@ -2,7 +2,7 @@ var spatter = {
     images: [],
     index: 0,
     time: 2000,
-    size: 6,       
+    size: 4,       
     width: {
         min: 100,
         range: 100
@@ -22,7 +22,7 @@ function doSpatter() {
         spatter.index++;
         if(spatter.index >= spatter.images.length)
             spatter.index = 0; 
-    }, spatter.time);
+    }, spatter.time`);
 }
 
 function chooseLocation() {
