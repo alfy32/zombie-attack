@@ -76,6 +76,7 @@ function loadUserInfo()
                         {
                             entry.setAttribute('class','list-group-item');
                         }
+                        entry.setAttribute('id', md5(info[i].value._id.toLowerCase().trim()));
                         entry.setAttribute('userId', info[i].value._id);
                         entry.setAttribute('userName', info[i].value.name);
                         entry.setAttribute('userA', info[i].value.admin);
@@ -285,12 +286,14 @@ function edituser()
             return false;
         });
     }
-    if(n.length > 0)
+    if(n.length > 0 )
     {
         $.post("/editname", {name:n}, function(res)
         {
             console.log("EditName: ", res);
-            loadUserInfo();
+            var user = $('#'+ md5(selectedUser.toLowerCase().trim()));
+            user.attr('username',n);
+            user.text(n);
             return false;
         });
     }

@@ -5,12 +5,17 @@ $('#form-login-button').click(function() {
         password: $('#login-password').val()
     };
         $.post("/", formdata, function(data) {
+            console.log(data);
         if (data.result === "Success") {
             loadMainPage();
         }
         else{
+
             $('#login-email').addClass('btn-danger');
+            $('#login-email').val('');
             $('#login-password').addClass('btn-danger');
+            $('#login-password').val('');
+
         }
     });
     //$('#load-stuff-here').fadeOut(1000);

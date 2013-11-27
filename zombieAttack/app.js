@@ -1,6 +1,6 @@
 //random constants and other things
-var TIMEOUT = 200000;
-
+var TIMEOUT = 1200000;
+	//TIMEOUT = 10000
 /**
  * Module dependencies.
  */
@@ -65,12 +65,6 @@ app.post('/', function(req,res)
 		else{
 			var newhash=doc.password;
 			bcrypt.compare(pass,newhash,function(err,result){
-				if(err){
-					console.log('failed to compare');
-					response.result = "Invalid userName or password";
-					res.json(response);
-				}
-
 				if(result){
 					console.log("successfully authenticated " + doc._id);
 					req.session.user = doc;
@@ -80,10 +74,14 @@ app.post('/', function(req,res)
                     req.session.curPage = 'main'
 					res.json(response);
 				}
+				else{
+					console.log('failed to compare');
+					response.result = "Invalid userName or password";
+					res.json(response);
+				}
 			});
 		}
 	});
-
 });
 
 //done
@@ -470,7 +468,7 @@ app.post('/editname',checkAuth,function(request, response){
 	var user = request.session.user;
 
 	user.name =  request.body.name;
-	users.save(user._id, user._rev,user, function(er, re){
+	users.merge(user._id, {name:user.name}, function(er, re){
 		if(er)
 		{
 			response.json({"result":"failure"});
@@ -558,15 +556,14 @@ function checkAuth(req, res, next) {
 	//console.log(lastActivity);
   if (!req.session.user) {
   	//console.log(lastActivity);
-  		res.redirect('/');
+  		res.redirect('/logout');
   
   } 
   else {
   	if(lastActivity>TIMEOUT)
   	{
-  		delete req.session.user;
-  		delete req.session.lastActivity;
-  		res.redirect('/');
+  		req.session.destroy();
+  		res.redirect('/logout');
   	}
   	else
   	{

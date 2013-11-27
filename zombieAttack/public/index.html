@@ -53,6 +53,7 @@
      {
           $.get('/currentuser',function(data)
           {
+             $('#login-form').html(' <div class="form-group"><input type="text" id = "login-email" placeholder="Email" name = "email" class="form-control"></div><div class="form-group"><input type="password" id = "login-password" placeholder="Password" name = "password" class="form-control"></div><button type="button" id="form-login-button" class="btn btn-success">Sign in</button>');
             if(data.result=='failure')
             {
               console.log('loading startup');
@@ -75,9 +76,13 @@
               {
                 loadUserInfo();
               }
+              else
+              {
+                console.log('interestingthingsforreasons');
+              }
 
             }
-          })
+          });
         //});
     });
 
