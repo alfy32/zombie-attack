@@ -15,7 +15,18 @@ $('#form-login-button').click(function() {
             $('#login-email').val('');
             $('#login-password').addClass('btn-danger');
             $('#login-password').val('');
+            $('#login-email').fadeOut(1000,function(){
+                console.log('gone');
+                $('#login-email').attr('class','form-control');
+                $('#login-email').attr('style','');
 
+            });
+            $('#login-password').fadeOut(1000,function(){
+                console.log('gone');
+                $('#login-password').attr('class','form-control');
+                $('#login-password').attr('style','');
+
+            });
         }
     });
     //$('#load-stuff-here').fadeOut(1000);
