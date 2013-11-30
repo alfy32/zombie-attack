@@ -1,8 +1,9 @@
-Technologies and libraries:
-StackOverflow.com
-Node.js
-jquerry
-twitter bootstrap
-couchdb (iriscouch.com)
-bcrypt (password hashing)
-cradle (library for talking with couch)
+Technologies and libraries: <br>
+StackOverflow.com<br>
+Node.js<br>
+jquerry<br>
+twitter bootstrap<br>
+couchdb (iriscouch.com)<br>
+bcrypt (password hashing)<br>
+cradle (library for talking with couch)<br>
+Node Mailer (library for sending emails)<br>
