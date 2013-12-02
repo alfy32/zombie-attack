@@ -43,7 +43,7 @@ function loadUserInfo()
     pageName = "userInfo";
     $.post('/updatePage',{page:'userInfo'},function(info){});
 
-    $('#login-form').html("<table><tr><td><a href=\"\/logout\" class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
+    $('#login-form').html("<table><tr><td><button onclick='logout()' class='btn btn-success'> Logout </button></td><td><button id=\"userInfo-text\" class='btn btn-success'> UserInfo </button></td></tr></table>");
     $('#userInfo-text').html("Go Back");
     bindBackToMain();
 
