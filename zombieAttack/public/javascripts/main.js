@@ -61,9 +61,11 @@ function loadDelay()
 }
 
  function logout() {
-    $.get('/logout');
-
+    $.get('/logout',function(info){
+        
     window.location = '/';
+    });
+
 }
 
  function bindUserInfo()

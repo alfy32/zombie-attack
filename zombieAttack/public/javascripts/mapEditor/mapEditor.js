@@ -41,11 +41,6 @@ function save() {
 	});
 }
 
-function logout() {
-	$.get('/logout');
-
-	window.location = '/';
-}
 
 function saveCopy() {
 	var m = map.getMap();

@@ -422,7 +422,8 @@ app.get('/logout', function(req,res){
 	req.session.destroy();
 	// delete req.session.user;
 	// delete req.session.lastActivity;
-	res.redirect('/');
+	res.json({result:"logged out"})
+	// res.redirect('');
 });
 
 
