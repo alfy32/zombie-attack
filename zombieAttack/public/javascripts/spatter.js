@@ -22,7 +22,7 @@ function doSpatter() {
         spatter.index++;
         if(spatter.index >= spatter.images.length)
             spatter.index = 0; 
-    }, spatter.time`);
+    }, spatter.time);
 }
 
 function chooseLocation() {
