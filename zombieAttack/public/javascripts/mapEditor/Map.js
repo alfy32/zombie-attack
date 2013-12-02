@@ -301,6 +301,8 @@ function Map() {
     
     for(var row = 0; row < _map.height; row++) {
       _map.data.bottom[row].push(_map.data.bottom[row][_map.width-2]);
+      _map.data.middle[row].push(_map.data.middle[row][_map.width-2]);
+      _map.data.upper[row].push(_map.data.upper[row][_map.width-2]);
     }
     
     pushHistory();
@@ -313,6 +315,8 @@ function Map() {
     
     for(var row = 0; row < _map.height; row++) {
       _map.data.bottom[row].pop();
+      _map.data.middle[row].pop();
+      _map.data.upper[row].pop();
     } 
     
     pushHistory();
@@ -322,22 +326,30 @@ function Map() {
   
   this.increaseMapHeight = function() {
     _map.height += 1;
-    
-    var row = [];
-    for(var col = 0; col < _map.width; col++) {
-      row.push(_map.data.bottom[_map.height-2][col]);
-    }
-    _map.data.bottom.push(row);
+
+    addRow('bottom', _map.height-2);
+    addRow('middle', _map.height-2);
+    addRow('upper', _map.height-2);
     
     pushHistory();
 
     drawMap();
   };
+
+  function addRow(layer, row) {
+    var newRow = [];
+    for(var col = 0; col < _map.width; col++) {
+      newRow.push(_map.data[layer][row][col]);
+    }
+    _map.data[layer].push(newRow);
+  }
   
   this.decreaseMapHeight = function() {
     _map.height -= 1;
     
     _map.data.bottom.pop(); 
+    _map.data.middle.pop(); 
+    _map.data.upper.pop(); 
     
     pushHistory();
 

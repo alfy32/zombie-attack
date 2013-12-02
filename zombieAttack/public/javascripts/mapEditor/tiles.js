@@ -91,7 +91,7 @@ function initMiddleTiles () {
   }
 
   map.refresh();
-  centerMap();
+  //centerMap();
 }
 
 function initUpperTiles () {
